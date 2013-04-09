@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of demo_es_sampling</title>
+  <meta name="keywords" content="demo_es_sampling">
+  <meta name="description" content="Demo script for thermodynamically feasible elasticity sampling">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">demo</a> &gt; demo_es_sampling.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for demo&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>demo_es_sampling
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Demo script for thermodynamically feasible elasticity sampling</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Demo script for thermodynamically feasible elasticity sampling</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../es/es_default_options.html" class="code" title="function [es_options,es_constraints] = es_default_options(N)">es_default_options</a>	[es_options, es_constraints] = es_default_options(N)</li><li><a href="../es/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>	result = es_sample_model(N, W, ind_ext, es_constraints, es_options)</li><li><a href="../es/es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>	[output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)</li><li><a href="../es/es_significant_differences.html" class="code" title="function res = es_significant_differences(output1, output2, n_per, fdr)">es_significant_differences</a>	es_significant_differences(output1,output2)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Demo script for thermodynamically feasible elasticity sampling</span>
+0002 
+0003 cd /home/wolfram/matlab/projects/elasticity_sampling/elasticity_sampling/es/demo
+0004 
+0005 
+0006 <span class="comment">% ------------------------------------------------------</span>
+0007 <span class="comment">% Load network model</span>
+0008 
+0009 <span class="comment">% Alternative SBML: network = sbml2network('data/ecoli_glycolysis_network.xml');</span>
+0010 
+0011 network = sbtab_to_network(<span class="string">'data/ecoli_glycolysis'</span>);
+0012 network = netgraph_make_graph(network);
+0013 network = netgraph_read_positions(network,<span class="string">'data/ecoli_glycolysis_Positions.tsv'</span>);
+0014 
+0015 N       = network.N;                  <span class="comment">% stoichiometric matrix</span>
+0016 W       = network.regulation_matrix;  <span class="comment">% allosteric regulation matrix</span>
+0017 ind_ext = find(network.external);     <span class="comment">% external metabolites (indices)</span>
+0018 
+0019 K = full(network_analyse(network));   <span class="comment">% stationary fluxes</span>
+0020 v = K(:,1) * sign(K(1));              
+0021 
+0022 
+0023 <span class="comment">% ------------------------------------------------------</span>
+0024 <span class="comment">% Run single elasticity sampling</span>
+0025 
+0026 [es_options,es_constraints] = <a href="../es/es_default_options.html" class="code" title="function [es_options,es_constraints] = es_default_options(N)">es_default_options</a>(N);
+0027 
+0028 es_constraints.v_fix = v;
+0029 
+0030 result = <a href="../es/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>(network.N, W, ind_ext, es_constraints, es_options);
+0031 
+0032 
+0033 <span class="comment">% ------------------------------------------------------</span>
+0034 <span class="comment">% Run multiple elasticity sampling (condition 1)</span>
+0035 
+0036 es_options.n_samples         = 10;
+0037 es_options.set_alpha_to_half = 0;
+0038 
+0039 <span class="comment">% sum of squares of all flux control coefficients</span>
+0040 output_function      = inline(<span class="string">'sum(result.control.CJ .^2)'</span>,<span class="string">'result'</span>,<span class="string">'other'</span>);
+0041 
+0042 es_options.kinetic_law = <span class="string">'cs'</span>;
+0043 output1 = <a href="../es/es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>(N, W, ind_ext, es_constraints, es_options, output_function);
+0044 
+0045 es_options.kinetic_law = <span class="string">'ms'</span>;
+0046 output2 = <a href="../es/es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>(N, W, ind_ext, es_constraints, es_options, output_function);
+0047 
+0048 
+0049 <span class="comment">% ------------------------------------------------------</span>
+0050 <span class="comment">% Find significant differences between both conditions</span>
+0051 
+0052 false_discovery_rate = 0.05;
+0053 
+0054 res = <a href="../es/es_significant_differences.html" class="code" title="function res = es_significant_differences(output1, output2, n_per, fdr)">es_significant_differences</a>(output1, output2, false_discovery_rate);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 17:37:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

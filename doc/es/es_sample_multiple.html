@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_sample_multiple</title>
+  <meta name="keywords" content="es_sample_multiple">
+  <meta name="description" content="[output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">es</a> &gt; es_sample_multiple.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for es&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>es_sample_multiple
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>[output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)
+
+ Run elasticity sampling repeatedly, compute every time an output function 
+ (any kind of matlab variable), and return a list of the output values.
+
+ If a 'select_function' is provided, only samples that yield a non-zero value
+ of this function will be considered
+
+ If a score function (e.g., a log likelihood) is provided, it is evaluated every time 
+ for each sample and the values are used for Metropolis sampling instead of simple 
+ repeated sampling
+
+ Currently, there is no direct way to run the sampling in parallel for two scenarios
+ with *the same* random values used for saturation constants
+
+ If the output function is numeric, output contains all values as a row vector (for scalars), 
+ matrix (for row or column vectors), or tensor (for matrices)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>	result = es_sample_model(N, W, ind_ext, es_constraints, es_options)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../demo/demo_es_sampling.html" class="code" title="">demo_es_sampling</a>	Demo script for thermodynamically feasible elasticity sampling</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)</a>
+0002 
+0003 <span class="comment">% [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Run elasticity sampling repeatedly, compute every time an output function</span>
+0006 <span class="comment">% (any kind of matlab variable), and return a list of the output values.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% If a 'select_function' is provided, only samples that yield a non-zero value</span>
+0009 <span class="comment">% of this function will be considered</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% If a score function (e.g., a log likelihood) is provided, it is evaluated every time</span>
+0012 <span class="comment">% for each sample and the values are used for Metropolis sampling instead of simple</span>
+0013 <span class="comment">% repeated sampling</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Currently, there is no direct way to run the sampling in parallel for two scenarios</span>
+0016 <span class="comment">% with *the same* random values used for saturation constants</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% If the output function is numeric, output contains all values as a row vector (for scalars),</span>
+0019 <span class="comment">% matrix (for row or column vectors), or tensor (for matrices)</span>
+0020 
+0021 <span class="comment">% test script: test_es_sample_multiple.m</span>
+0022 
+0023 
+0024 eval(default(<span class="string">'select_function'</span>,<span class="string">'[]'</span>,<span class="string">'score_function'</span>,<span class="string">'[]'</span>,<span class="string">'function_args'</span>,<span class="string">'[]'</span>));
+0025 
+0026 <span class="keyword">if</span> es_options.set_alpha_to_half,
+0027   warning(<span class="string">'Attempted ensemble sampling with fixed saturation values'</span>);
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="comment">% -----------------------------------------------</span>
+0031 <span class="comment">% run sampling algorithm</span>
+0032 
+0033 old_score = -inf;
+0034 
+0035 es_options.seed = nan;
+0036 
+0037 <span class="keyword">for</span> it = 1:es_options.n_samples,
+0038   display(sprintf(<span class="string">'\nSample %d/%d'</span>,it,es_options.n_samples));
+0039   my_result = <a href="es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>(N,W,ind_ext,es_constraints,es_options);
+0040   <span class="keyword">if</span> ~isempty(select_function),
+0041     accept = feval(select_function,my_result,function_args);
+0042     <span class="keyword">while</span> ~accept,
+0043       display(<span class="string">' Invalid sample; drawing another sample'</span>);
+0044       my_result = <a href="es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>(N,W,ind_ext,es_constraints,es_options);
+0045       accept = feval(select_function,my_result,function_args);
+0046     <span class="keyword">end</span>
+0047   <span class="keyword">end</span>
+0048   my_output = feval(output_function,my_result,function_args);
+0049   <span class="keyword">if</span> isempty(score_function),
+0050     output_list{it} = my_output;
+0051   <span class="keyword">else</span>
+0052     my_score = feval(score_function,my_result,function_args);
+0053     <span class="keyword">if</span> [my_score &gt; old_score] + [rand &lt; exp(my_score - old_score)] 
+0054       output_list{it} = my_output;
+0055       my_score = old_score;
+0056     <span class="keyword">else</span>,
+0057       output_list{it} = output_list{it-1};
+0058     <span class="keyword">end</span>
+0059   <span class="keyword">end</span>
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% -----------------------------------------------</span>
+0063 <span class="comment">% put the output list into a vector / matrix / tensor</span>
+0064 
+0065 output = [];
+0066 
+0067 <span class="keyword">if</span> isscalar(output_list{1}),
+0068 
+0069   <span class="keyword">for</span> it = 1:length(output_list),
+0070     output(it,:) = output_list{it};
+0071   <span class="keyword">end</span>
+0072 
+0073 <span class="keyword">else</span>
+0074 
+0075   <span class="keyword">if</span> isvector(output_list{1}),
+0076     <span class="keyword">if</span> size(output_list{1},2) ==1,
+0077       <span class="keyword">for</span> it = 1:length(output_list),
+0078         output(:,it) = output_list{it};
+0079       <span class="keyword">end</span>
+0080     <span class="keyword">else</span>
+0081       <span class="keyword">for</span> it = 1:length(output_list),
+0082         output(:,it) = output_list{it};
+0083       <span class="keyword">end</span>
+0084     <span class="keyword">end</span>
+0085   
+0086   <span class="keyword">else</span> <span class="comment">% tensor</span>
+0087 
+0088     <span class="keyword">if</span> isnumeric(output_list{1}),
+0089       <span class="keyword">for</span> it = 1:length(output_list),
+0090         output(:,:,it) = output_list{it};
+0091       <span class="keyword">end</span>
+0092     <span class="keyword">end</span>
+0093   <span class="keyword">end</span>
+0094 
+0095 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 17:37:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

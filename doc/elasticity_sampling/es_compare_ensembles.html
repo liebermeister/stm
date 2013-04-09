@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_compare_ensembles</title>
+  <meta name="keywords" content="es_compare_ensembles">
+  <meta name="description" content="ES_COMPARE_ENSEMBLES - Compare the output function for two model ensembles">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">elasticity_sampling</a> &gt; es_compare_ensembles.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for elasticity_sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>es_compare_ensembles
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>ES_COMPARE_ENSEMBLES - Compare the output function for two model ensembles</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ES_COMPARE_ENSEMBLES - Compare the output function for two model ensembles
+
+ res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)
+ 
+ Significance test for model outputs obtained from multiple elasticity sampling
+
+ Significant differences are computed from the outputs of a previous multiple 
+ elasticity sampling for two model variants (see 'es_sample_multiple').
+ Both model variants must have the same number of metabolites and reactions.
+
+ Inputs
+   output1  - Matrix or tensor from 1st model variant (from 'es_sample_multiple')
+   output2  - Matrix or tensor from 2nd model variant (from 'es_sample_multiple')
+   n_per    - Number of samples in permutation test
+   fdr      - False discovery rate
+
+ Output: Data structure 'res' with fields
+
+   res.mean_total               - Mean value for all samples (total mean)
+   res.mean_a                   - Mean value for 1st variant
+   res.mean_b                   - Mean value for 2nd variant
+   res.mean_delta               - Difference between values for both variants
+
+   res.p_value_mean_total       - p value of [mean value for all samples ~= total mean]
+   res.p_value_mean_a           - p value of [mean value for 1st variant ~= total mean]
+   res.p_value_mean_b           - p value of [mean value for 2nd variant ~= total mean]
+   res.p_value_mean_delta       - p value of [difference between values for both variants
+                                - ~= difference between values from shuffled variants]
+                                
+   res.mean_total_significant   - Significant elements for mean value for all samples
+   res.mean_a_significant       - Significant elements for mean value for 1st variant
+   res.mean_b_significant       - Significant elements for mean value for 2nd variant
+   res.mean_delta_significant   - Significant elements for difference between variants
+                                - Values: 1 (significantly high),  -1 (significantly low)
+
+   res.n_mean_total_significant - # significant elements for mean value for all samples
+   res.n_mean_a_significant     - # significant elements for mean value for 1st variant
+   res.n_mean_b_significant     - # significant elements for mean value for 2nd variant
+   res.n_mean_delta_significant - # significant elements for difference between variants</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../elasticity_sampling/es_utils/influence_anova.html" class="code" title="function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)">influence_anova</a>	function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../demo/es_demo.html" class="code" title="">es_demo</a>	ES_DEMO Demo script for thermodynamically feasible elasticity sampling</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)</a>
+0002 
+0003 <span class="comment">% ES_COMPARE_ENSEMBLES - Compare the output function for two model ensembles</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Significance test for model outputs obtained from multiple elasticity sampling</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Significant differences are computed from the outputs of a previous multiple</span>
+0010 <span class="comment">% elasticity sampling for two model variants (see 'es_sample_multiple').</span>
+0011 <span class="comment">% Both model variants must have the same number of metabolites and reactions.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Inputs</span>
+0014 <span class="comment">%   output1  - Matrix or tensor from 1st model variant (from 'es_sample_multiple')</span>
+0015 <span class="comment">%   output2  - Matrix or tensor from 2nd model variant (from 'es_sample_multiple')</span>
+0016 <span class="comment">%   n_per    - Number of samples in permutation test</span>
+0017 <span class="comment">%   fdr      - False discovery rate</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Output: Data structure 'res' with fields</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   res.mean_total               - Mean value for all samples (total mean)</span>
+0022 <span class="comment">%   res.mean_a                   - Mean value for 1st variant</span>
+0023 <span class="comment">%   res.mean_b                   - Mean value for 2nd variant</span>
+0024 <span class="comment">%   res.mean_delta               - Difference between values for both variants</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%   res.p_value_mean_total       - p value of [mean value for all samples ~= total mean]</span>
+0027 <span class="comment">%   res.p_value_mean_a           - p value of [mean value for 1st variant ~= total mean]</span>
+0028 <span class="comment">%   res.p_value_mean_b           - p value of [mean value for 2nd variant ~= total mean]</span>
+0029 <span class="comment">%   res.p_value_mean_delta       - p value of [difference between values for both variants</span>
+0030 <span class="comment">%                                - ~= difference between values from shuffled variants]</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%   res.mean_total_significant   - Significant elements for mean value for all samples</span>
+0033 <span class="comment">%   res.mean_a_significant       - Significant elements for mean value for 1st variant</span>
+0034 <span class="comment">%   res.mean_b_significant       - Significant elements for mean value for 2nd variant</span>
+0035 <span class="comment">%   res.mean_delta_significant   - Significant elements for difference between variants</span>
+0036 <span class="comment">%                                - Values: 1 (significantly high),  -1 (significantly low)</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%   res.n_mean_total_significant - # significant elements for mean value for all samples</span>
+0039 <span class="comment">%   res.n_mean_a_significant     - # significant elements for mean value for 1st variant</span>
+0040 <span class="comment">%   res.n_mean_b_significant     - # significant elements for mean value for 2nd variant</span>
+0041 <span class="comment">%   res.n_mean_delta_significant - # significant elements for difference between variants</span>
+0042 
+0043 
+0044 eval(default(<span class="string">'n_per'</span>,<span class="string">'100'</span>,<span class="string">'fdr'</span>,<span class="string">'0.05'</span>, <span class="string">'verbose'</span>, <span class="string">'0'</span>));
+0045 
+0046 <span class="keyword">if</span> norm(size(output1)-size(output1)), 
+0047   error(<span class="string">'function arguments output1 and output2 must have the same size'</span>); 
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="keyword">switch</span> length(size(output1)),
+0051   
+0052   <span class="keyword">case</span> 2,
+0053     D(:,:,1) = output1;
+0054     D(:,:,2) = output2;
+0055     res = <a href="../elasticity_sampling/es_utils/influence_anova.html" class="code" title="function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)">influence_anova</a>(D, n_per, fdr, [], verbose);
+0056   
+0057   <span class="keyword">case</span> 3,
+0058     D(:,:,:,1) = output1;
+0059     D(:,:,:,1) = output2;
+0060     res = interaction_anova(D, n_per, fdr, [], verbose);
+0061 
+0062 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 09-Apr-2013 09:29:24 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_align_models</title>
+  <meta name="keywords" content="es_align_models">
+  <meta name="description" content="[metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list] = es_align_models(model_list,field_metabolite_id,field_reaction_id)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">es</a> &gt; <a href="index.html">es_utils</a> &gt; es_align_models.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for es/es_utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_align_models
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list] = es_align_models(model_list,field_metabolite_id,field_reaction_id)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function r = es_align_models(model_list, field_metabolite_id, field_reaction_id, how) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list] = es_align_models(model_list,field_metabolite_id,field_reaction_id)
+ 
+ fields of 'r': [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list]
+ how: 'union' or 'intersection'
+ 'intersection' -&gt; items common to all models
+ 'union'        -&gt; items appearing in any model</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="es_align_models.html" class="code" title="function r = es_align_models(model_list, field_metabolite_id, field_reaction_id, how)">es_align_models</a>	[metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list] = es_align_models(model_list,field_metabolite_id,field_reaction_id)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="es_align_models.html" class="code" title="function r = es_align_models(model_list, field_metabolite_id, field_reaction_id, how)">es_align_models</a>	[metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list] = es_align_models(model_list,field_metabolite_id,field_reaction_id)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function r = es_align_models(model_list, field_metabolite_id, field_reaction_id, how)</a>
+0002 
+0003 <span class="comment">% [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list] = es_align_models(model_list,field_metabolite_id,field_reaction_id)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% fields of 'r': [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list]</span>
+0006 <span class="comment">% how: 'union' or 'intersection'</span>
+0007 <span class="comment">% 'intersection' -&gt; items common to all models</span>
+0008 <span class="comment">% 'union'        -&gt; items appearing in any model</span>
+0009 
+0010 eval(default(<span class="string">'how'</span>,<span class="string">'''intersection'''</span>)); <span class="comment">%% alternative: 'union'</span>
+0011 
+0012 
+0013 <span class="keyword">if</span> 0,
+0014   model_name      = <span class="string">'eccm'</span>; 
+0015   condition_name  = <span class="string">'ishii_growth_07'</span>;
+0016   filenames       = elasticity_sampling_filenames(model_name,condition_name); 
+0017   cd([filenames.es_dir]); load(filenames.model_data_file);
+0018   model2 = network;
+0019   
+0020   model_name      = <span class="string">'bscm'</span>; 
+0021   condition_name  = <span class="string">'glucose'</span>;
+0022   filenames       = elasticity_sampling_filenames(model_name,condition_name); 
+0023   cd([filenames.es_dir]); load(filenames.model_data_file);
+0024   model1 = network;
+0025   
+0026   model_name      = <span class="string">'ycm'</span>; 
+0027   condition_name  = <span class="string">'diauxic_glucose'</span>;
+0028   filenames       = elasticity_sampling_filenames(model_name,condition_name); 
+0029   cd([filenames.es_dir]); load(filenames.model_data_file);
+0030   model3 = network;
+0031   
+0032   model_list = {model1, model2, model3};
+0033   field_metabolite_id = <span class="string">'metabolite_KEGGID'</span>;
+0034   field_reaction_id   = <span class="string">'reaction_KEGGID'</span>;
+0035   
+0036   r = <a href="es_align_models.html" class="code" title="function r = es_align_models(model_list, field_metabolite_id, field_reaction_id, how)">es_align_models</a>(model_list,field_metabolite_id,field_reaction_id);
+0037 
+0038 <span class="keyword">end</span>
+0039 
+0040 
+0041 <span class="comment">% -----------------------------------------------------------------------------</span>
+0042 
+0043 metabolite_ids   = {};
+0044 metabolite_names = {};
+0045 
+0046 <span class="keyword">for</span> it = 1:length(model_list),
+0047   my_metabolite_ids = getfield(model_list{it},field_metabolite_id);
+0048   my_metabolite_names = model_list{it}.metabolites;
+0049   ind_ok = find(cellfun(<span class="string">'length'</span>,my_metabolite_ids));
+0050   my_metabolite_ids = my_metabolite_ids(ind_ok);
+0051   my_metabolite_names = my_metabolite_names(ind_ok);
+0052   <span class="keyword">for</span> itt = 1:length(my_metabolite_ids),
+0053     <span class="keyword">if</span> ~ismember(my_metabolite_ids{itt},metabolite_ids),
+0054       metabolite_ids    = [metabolite_ids; my_metabolite_ids{itt}];
+0055       metabolite_names  = [metabolite_names; my_metabolite_names{itt}];
+0056     <span class="keyword">end</span>
+0057   <span class="keyword">end</span>
+0058 <span class="keyword">end</span>
+0059 
+0060 
+0061 <span class="comment">% -----------------------------------------------------------------------------</span>
+0062 
+0063 reaction_ids   = {};
+0064 reaction_names = {};
+0065 
+0066 <span class="keyword">for</span> it = 1:length(model_list),
+0067   my_reaction_ids = getfield(model_list{it},field_reaction_id);
+0068   my_reaction_names = model_list{it}.actions;
+0069   ind_ok = find(cellfun(<span class="string">'length'</span>,my_reaction_ids));
+0070   my_reaction_ids   = my_reaction_ids(ind_ok);
+0071   my_reaction_names = my_reaction_names(ind_ok);
+0072   <span class="keyword">for</span> itt = 1:length(my_reaction_ids),
+0073     <span class="keyword">if</span> ~ismember(my_reaction_ids{itt},reaction_ids),
+0074       reaction_ids    = [reaction_ids; my_reaction_ids{itt}];
+0075       reaction_names  = [reaction_names; my_reaction_names{itt}];
+0076     <span class="keyword">end</span>
+0077   <span class="keyword">end</span>
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">% -----------------------------------------------------------------------------</span>
+0081 
+0082 <span class="keyword">for</span> it = 1:length(model_list),
+0083   my_metabolite_ids = getfield(model_list{it},field_metabolite_id);
+0084   metabolite_indices_list(:,it) = label_names(metabolite_ids , my_metabolite_ids);
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="keyword">for</span> it = 1:length(model_list),
+0088   my_reaction_ids = getfield(model_list{it},field_reaction_id);
+0089   reaction_indices_list(:,it) = label_names(reaction_ids , my_reaction_ids);
+0090 <span class="keyword">end</span>
+0091 
+0092 <span class="comment">% -----------------------------------------------------------------------------</span>
+0093 
+0094 <span class="keyword">switch</span> how, 
+0095   <span class="keyword">case</span> <span class="string">'union'</span>,
+0096   <span class="keyword">case</span> <span class="string">'intersection'</span>,
+0097     ind_ok = find(prod(metabolite_indices_list,2));
+0098     metabolite_ids = metabolite_ids(ind_ok);
+0099     metabolite_names = metabolite_names(ind_ok);
+0100     metabolite_indices_list = metabolite_indices_list(ind_ok,:);
+0101     ind_ok = find(prod(reaction_indices_list,2));
+0102     reaction_ids = reaction_ids(ind_ok);
+0103     reaction_names = reaction_names(ind_ok);
+0104     reaction_indices_list = reaction_indices_list(ind_ok,:);
+0105 <span class="keyword">end</span>
+0106 
+0107 
+0108 <span class="comment">% -----------------------------------------------------------------------------</span>
+0109 
+0110 r.metabolite_ids          = metabolite_ids          ;  
+0111 r.metabolite_names        = metabolite_names        ;
+0112 r.reaction_ids            = reaction_ids            ;
+0113 r.reaction_names          = reaction_names          ;
+0114 r.metabolite_indices_list = metabolite_indices_list ;
+0115 r.reaction_indices_list   = reaction_indices_list   ;</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 17:37:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

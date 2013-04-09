@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of influence_anova</title>
+  <meta name="keywords" content="influence_anova">
+  <meta name="description" content="function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">elasticity_sampling</a> &gt; <a href="index.html">es_utils</a> &gt; influence_anova.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for elasticity_sampling/es_utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>influence_anova
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function p = influence_anova(D, n_per, fdr, ind_intervention, verbose) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)
+
+ Anova of a variable characterising single reactions 
+   (e.g., all first-order control coefficients for a single objective)
+
+ Arguments:
+ D:               data tensor (size nr x n_sim x 2) where 
+                       nr: # reactions (corresponds to 'reaction' vector)
+                    n_sim: # number of MC samples
+                        2: two qualitative conditions to be compared (e.g. different fluxes)
+ n_per:            sample number in permutation tests
+ fdr:              false discovery rate
+ ind_intervention: reaction indices to be selected for the analysis (optional)
+
+ The results are returned in a structure 'p' with fields
+
+   p.mean_total               Mean value for all samples (total mean)
+   p.mean_a                   Mean value for 1st variant
+   p.mean_b                   Mean value for 2nd variant
+   p.mean_delta               Difference between values for both variants
+
+   p.p_value_mean_total       p value of [mean value for all samples ~= total mean]
+   p.p_value_mean_a           p value of [mean value for 1st variant ~= total mean]
+   p.p_value_mean_b           p value of [mean value for 2nd variant ~= total mean]
+   p.p_value_mean_delta       p value of [difference between values for both variants
+                                           ~= difference between values from shuffled variants]
+
+   p.mean_total_significant   Significant elements for mean value for all samples
+   p.mean_a_significant       Significant elements for mean value for 1st variant
+   p.mean_b_significant       Significant elements for mean value for 2nd variant
+   p.mean_delta_significant   Significant elements for difference between values for both variants
+    Entries: 1 (for significantly high),  -1 (for significantly low)
+   
+   p.n_mean_total_significant # significant elements for mean value for all samples
+   p.n_mean_a_significant     # significant elements for mean value for 1st variant
+   p.n_mean_b_significant     # significant elements for mean value for 2nd variant
+   p.n_mean_delta_significant # significant elements for difference between values for both variants</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>	significant = multiple_testing_fdr(all_p, false_discovery_rate)</li><li><a href="../../elasticity_sampling/utils/pvalue_from_countnumber.html" class="code" title="function p = pvalue_from_countnumber(value,value_list)">pvalue_from_countnumber</a>	formula stems from the mean of a beta distribution</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../elasticity_sampling/es_compare_ensembles.html" class="code" title="function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)">es_compare_ensembles</a>	ES_COMPARE_ENSEMBLES - Compare the output function for two model ensembles</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)</a>
+0002 
+0003 <span class="comment">% function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Anova of a variable characterising single reactions</span>
+0006 <span class="comment">%   (e.g., all first-order control coefficients for a single objective)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Arguments:</span>
+0009 <span class="comment">% D:               data tensor (size nr x n_sim x 2) where</span>
+0010 <span class="comment">%                       nr: # reactions (corresponds to 'reaction' vector)</span>
+0011 <span class="comment">%                    n_sim: # number of MC samples</span>
+0012 <span class="comment">%                        2: two qualitative conditions to be compared (e.g. different fluxes)</span>
+0013 <span class="comment">% n_per:            sample number in permutation tests</span>
+0014 <span class="comment">% fdr:              false discovery rate</span>
+0015 <span class="comment">% ind_intervention: reaction indices to be selected for the analysis (optional)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% The results are returned in a structure 'p' with fields</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   p.mean_total               Mean value for all samples (total mean)</span>
+0020 <span class="comment">%   p.mean_a                   Mean value for 1st variant</span>
+0021 <span class="comment">%   p.mean_b                   Mean value for 2nd variant</span>
+0022 <span class="comment">%   p.mean_delta               Difference between values for both variants</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%   p.p_value_mean_total       p value of [mean value for all samples ~= total mean]</span>
+0025 <span class="comment">%   p.p_value_mean_a           p value of [mean value for 1st variant ~= total mean]</span>
+0026 <span class="comment">%   p.p_value_mean_b           p value of [mean value for 2nd variant ~= total mean]</span>
+0027 <span class="comment">%   p.p_value_mean_delta       p value of [difference between values for both variants</span>
+0028 <span class="comment">%                                           ~= difference between values from shuffled variants]</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%   p.mean_total_significant   Significant elements for mean value for all samples</span>
+0031 <span class="comment">%   p.mean_a_significant       Significant elements for mean value for 1st variant</span>
+0032 <span class="comment">%   p.mean_b_significant       Significant elements for mean value for 2nd variant</span>
+0033 <span class="comment">%   p.mean_delta_significant   Significant elements for difference between values for both variants</span>
+0034 <span class="comment">%    Entries: 1 (for significantly high),  -1 (for significantly low)</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%   p.n_mean_total_significant # significant elements for mean value for all samples</span>
+0037 <span class="comment">%   p.n_mean_a_significant     # significant elements for mean value for 1st variant</span>
+0038 <span class="comment">%   p.n_mean_b_significant     # significant elements for mean value for 2nd variant</span>
+0039 <span class="comment">%   p.n_mean_delta_significant # significant elements for difference between values for both variants</span>
+0040 
+0041 eval(default(<span class="string">'fdr'</span>,<span class="string">'0.01'</span>,<span class="string">'ind_intervention'</span>,<span class="string">'[]'</span>,<span class="string">'verbose'</span>,<span class="string">'0'</span>));
+0042 
+0043 <span class="keyword">if</span> length(ind_intervention), D = squeeze(D(ind_intervention,:,:)); <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> verbose,
+0046   display(<span class="string">'Testing all single interventions'</span>);
+0047 <span class="keyword">end</span>
+0048 
+0049 nr    = size(D,1);
+0050 n_sim = size(D,2);
+0051 
+0052 Da = squeeze(D(:,:,1)); 
+0053 Db = squeeze(D(:,:,2)); 
+0054 
+0055 finite_indices   = find(isfinite(D)); 
+0056 finite_indices_a = find(isfinite(Da)); 
+0057 finite_indices_b = find(isfinite(Db)); 
+0058 n_finite         = length(finite_indices);
+0059 n_finite_a       = length(finite_indices_a);
+0060 n_finite_b       = length(finite_indices_b);
+0061 
+0062 p.mean_total         = nan * ones(nr,1);
+0063 p.mean_a             = nan * ones(nr,1);
+0064 p.mean_b             = nan * ones(nr,1);
+0065 p.mean_delta         = nan * ones(nr,1);
+0066 p.p_value_mean_total = nan * ones(nr,1);
+0067 p.p_value_mean_a     = nan * ones(nr,1);
+0068 p.p_value_mean_b     = nan * ones(nr,1);
+0069 p.p_value_mean_delta = nan * ones(nr,1);
+0070 
+0071 
+0072 <span class="keyword">for</span> r1 = 1:nr,
+0073     
+0074     <span class="keyword">if</span> verbose, display(sprintf(<span class="string">'Reaction %d'</span>,r1)); <span class="keyword">end</span>
+0075     data_table = [Da(r1,:); Db(r1,:)];
+0076     
+0077     <span class="comment">%% total mean value</span>
+0078     <span class="comment">%% p-value: background distribution sampled from condition A and B</span>
+0079     <span class="comment">%% this test should typically lead to INSIGNIFICANT results!</span>
+0080     
+0081     p.mean_total(r1) = mean(mean(data_table));
+0082     this_mean = [];
+0083     <span class="keyword">for</span> it_perm = 1:n_per, 
+0084       rand_indices = randperm(n_finite);
+0085       indices      = finite_indices(rand_indices(1:2*n_sim));
+0086       this_mean(it_perm) = mean(D(indices));
+0087     <span class="keyword">end</span>
+0088     p.p_value_mean_total(r1) = <a href="../../elasticity_sampling/utils/pvalue_from_countnumber.html" class="code" title="function p = pvalue_from_countnumber(value,value_list)">pvalue_from_countnumber</a>(p.mean_total(r1),this_mean);
+0089 
+0090     <span class="comment">%% mean value for condition A</span>
+0091     <span class="comment">%% p-value: background distribution sampled from condition A and B</span>
+0092 
+0093     p.mean_a(r1) = mean(data_table(1,:));    
+0094     this_mean_a = [];
+0095     <span class="keyword">for</span> it_perm = 1:n_per, 
+0096       rand_indices = randperm(n_finite_a);
+0097       indices = finite_indices(rand_indices(1:2*n_sim));
+0098       this_mean(it_perm) = mean(Da(indices));
+0099     <span class="keyword">end</span>
+0100     p.p_value_mean_a(r1) =  <a href="../../elasticity_sampling/utils/pvalue_from_countnumber.html" class="code" title="function p = pvalue_from_countnumber(value,value_list)">pvalue_from_countnumber</a>(p.mean_a(r1),this_mean);
+0101     
+0102     <span class="comment">%% mean value for condition B</span>
+0103     <span class="comment">%% p-value: background distribution sampled from condition A and B</span>
+0104     
+0105     p.mean_b(r1) = mean(data_table(2,:));    
+0106     this_mean_b = [];
+0107     <span class="keyword">for</span> it_perm = 1:n_per, 
+0108       rand_indices = randperm(n_finite_b);
+0109       indices = finite_indices(rand_indices(1:2*n_sim));
+0110       this_mean(it_perm) = mean(Db(indices));
+0111     <span class="keyword">end</span>
+0112     p.p_value_mean_b(r1) =  <a href="../../elasticity_sampling/utils/pvalue_from_countnumber.html" class="code" title="function p = pvalue_from_countnumber(value,value_list)">pvalue_from_countnumber</a>(p.mean_b(r1),this_mean);
+0113     
+0114     <span class="comment">%% difference between two conditions</span>
+0115     <span class="comment">%% p-value: background distribution sampled from condition A and B</span>
+0116     
+0117     p.mean_delta(r1) = [1, -1] * mean(data_table,2);    
+0118     this_mean_delta = [];
+0119     <span class="keyword">for</span> it_perm = 1:n_per, 
+0120       dummi = reshape(data_table(randperm(2*n_sim)),2,n_sim);
+0121       this_mean_delta(it_perm) = [1, -1] * mean(dummi,2);
+0122     <span class="keyword">end</span>
+0123     p.p_value_mean_delta(r1) = <a href="../../elasticity_sampling/utils/pvalue_from_countnumber.html" class="code" title="function p = pvalue_from_countnumber(value,value_list)">pvalue_from_countnumber</a>(p.mean_delta(r1),this_mean_delta);
+0124     
+0125   <span class="keyword">end</span>
+0126 
+0127   
+0128 <span class="comment">% ---------------------------------------------------------------</span>
+0129 <span class="comment">% determine significant elements</span>
+0130 
+0131 p.mean_total_significant = <a href="../../elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>(p.p_value_mean_total,fdr) <span class="keyword">...</span>
+0132     - <a href="../../elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>(1-p.p_value_mean_total  ,fdr);
+0133 
+0134 p.mean_a_significant = <a href="../../elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>(p.p_value_mean_a,fdr) <span class="keyword">...</span>
+0135     - <a href="../../elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>(1-p.p_value_mean_a,fdr);,
+0136 
+0137 p.mean_b_significant = <a href="../../elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>(p.p_value_mean_b,fdr) <span class="keyword">...</span>
+0138     - <a href="../../elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>(1-p.p_value_mean_b,fdr);
+0139 
+0140 p.mean_delta_significant = <a href="../../elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>(p.p_value_mean_delta,fdr) <span class="keyword">...</span>
+0141     - <a href="../../elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>(1-p.p_value_mean_delta,fdr);
+0142 
+0143 
+0144 <span class="comment">% ---------------------------------------------------------------</span>
+0145 <span class="comment">% count significant elements</span>
+0146 
+0147 p.n_mean_total_significant = sum(sum(abs(p.mean_total_significant)));
+0148 p.n_mean_a_significant     = sum(sum(abs(p.mean_a_significant)));
+0149 p.n_mean_b_significant     = sum(sum(abs(p.mean_b_significant)));
+0150 p.n_mean_delta_significant = sum(sum(abs(p.mean_delta_significant )));</pre></div>
+<hr><address>Generated on Tue 09-Apr-2013 09:29:24 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

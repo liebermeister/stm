@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_control_analysis</title>
+  <meta name="keywords" content="es_control_analysis">
+  <meta name="description" content="control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">es</a> &gt; es_control_analysis.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for es&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>es_control_analysis
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)
+
+ Given the parameter response matrices and tensors, compute 
+ the matrices and tensors for enzymes and external metabolites
+ separately and compute all scaled response coefficients
+ 
+ Distinguish between response coefficients 
+ for enzymes (u) and external metabolites (s)
+ while p denotes all parameters p = [u; c(ind_ext)]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>	result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)</a>
+0002 
+0003 <span class="comment">% control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Given the parameter response matrices and tensors, compute</span>
+0006 <span class="comment">% the matrices and tensors for enzymes and external metabolites</span>
+0007 <span class="comment">% separately and compute all scaled response coefficients</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Distinguish between response coefficients</span>
+0010 <span class="comment">% for enzymes (u) and external metabolites (s)</span>
+0011 <span class="comment">% while p denotes all parameters p = [u; c(ind_ext)]</span>
+0012 
+0013 nr           = size(RJp,1);
+0014 
+0015 <span class="comment">% ---------------------------------------------------</span>
+0016 <span class="comment">% set scaled response coefficients</span>
+0017 
+0018 control.RSp  = RSp  ;
+0019 control.RJp  = RJp  ;
+0020 control.RSpp = RSpp ;
+0021 control.RJpp = RJpp ;
+0022 
+0023 control.RSu  = RSp(:,1:nr);
+0024 control.RSs  = RSp(:,nr+1:end);
+0025 control.RSuu = RSpp(:,1:nr,1:nr);
+0026 control.RSus = RSpp(:,1:nr,nr+1:end);
+0027 control.RSss = RSpp(:,nr+1:<span class="keyword">end</span>,nr+1:end);
+0028 
+0029 control.RJu  = RJp(:,1:nr);
+0030 control.RJs  = RJp(:,nr+1:end);
+0031 control.RJuu = RJpp(:,1:nr,1:nr);
+0032 control.RJus = RJpp(:,1:nr,nr+1:end);
+0033 control.RJss = RJpp(:,nr+1:<span class="keyword">end</span>,nr+1:end);
+0034 
+0035 
+0036 <span class="comment">% ---------------------------------------------------</span>
+0037 <span class="comment">% compute scaled response coefficients</span>
+0038 
+0039 p = [u; c(ind_ext)];
+0040 
+0041 [RSp_sc, RJp_sc, RSpp_sc, RJpp_sc] = norm_response_coefficients(c, v, p, RSp, RJp, RSpp, RJpp);
+0042 
+0043 control.RSp_sc  = RSp_sc  ;
+0044 control.RJp_sc  = RJp_sc  ;
+0045 control.RSpp_sc = RSpp_sc ;
+0046 control.RJpp_sc = RJpp_sc ;
+0047 
+0048 control.RSu_sc  = RSp_sc(:,1:nr);
+0049 control.RSs_sc  = RSp_sc(:,nr+1:end);
+0050 control.RSuu_sc = RSpp_sc(:,1:nr,1:nr);
+0051 control.RSus_sc = RSpp_sc(:,1:nr,nr+1:end);
+0052 control.RSss_sc = RSpp_sc(:,nr+1:<span class="keyword">end</span>,nr+1:end);
+0053 
+0054 control.RJu_sc  = RJp_sc(:,1:nr);
+0055 control.RJs_sc  = RJp_sc(:,nr+1:end);
+0056 control.RJuu_sc = RJpp_sc(:,1:nr,1:nr);
+0057 control.RJus_sc = RJpp_sc(:,1:nr,nr+1:end);
+0058 control.RJss_sc = RJpp_sc(:,nr+1:<span class="keyword">end</span>,nr+1:end);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 17:37:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

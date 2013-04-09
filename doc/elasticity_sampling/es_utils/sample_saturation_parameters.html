@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sample_saturation_parameters</title>
+  <meta name="keywords" content="sample_saturation_parameters">
+  <meta name="description" content="[alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,options)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">elasticity_sampling</a> &gt; <a href="index.html">es_utils</a> &gt; sample_saturation_parameters.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for elasticity_sampling/es_utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>sample_saturation_parameters
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,options)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,options)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../elasticity_sampling/es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>	ES_SAMPLE_ELASTICITIES - Sample elasticities</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,options)</a>
+0002 
+0003 <span class="comment">% [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,options)</span>
+0004 
+0005 <span class="keyword">if</span> ~isfield(options,<span class="string">'seed'</span>), options.seed = nan;     <span class="keyword">end</span>
+0006 <span class="keyword">if</span> ~isnan(options.seed), rand(<span class="string">'state'</span>,options.seed); <span class="keyword">end</span>
+0007 
+0008 [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int, ind_M, ind_Wp, ind_Wm, ind_Mp, ind_Mm] = make_structure_matrices(N,W,ind_ext,options.h);
+0009 
+0010 <span class="keyword">if</span> ~isfield(options,<span class="string">'set_alpha_to_half'</span>), options.set_alpha_to_half = 0; <span class="keyword">end</span>
+0011 
+0012 empty = sparse(nr,nm); alpha_A = empty; alpha_I = empty; alpha_M = empty;
+0013 
+0014 <span class="keyword">if</span> options.set_alpha_to_half,
+0015   alpha_A(ind_Wp) = 0.5;
+0016   alpha_I(ind_Wm) = 0.5;
+0017   alpha_M(ind_Mp) = 0.5;
+0018   alpha_M(ind_Mm) = 0.5;  
+0019   display(<span class="string">' Setting all alpha values = 0.5'</span>);
+0020 <span class="keyword">else</span>,
+0021   alpha_A(ind_Wp)  = rand(size(ind_Wp));
+0022   alpha_I(ind_Wm)  = rand(size(ind_Wm));
+0023   alpha_M(ind_Mp)  = rand(size(ind_Mp));
+0024   alpha_M(ind_Mm)  = rand(size(ind_Mm));
+0025   display(<span class="string">' Drawing alpha values uniformly from [0,1]'</span>);
+0026 
+0027   <span class="keyword">if</span> options.set_alpha_nonuniform,
+0028     <span class="comment">%% THIS STILL HAS TO BE TESTED!!!!</span>
+0029     [Beta_A_alpha, Beta_A_beta] = Beta_mean_std_to_parameters(options.alpha_A_mean, options.alpha_A_std);
+0030     [Beta_I_alpha, Beta_I_beta] = Beta_mean_std_to_parameters(options.alpha_A_mean, options.alpha_A_std);
+0031     [Beta_M_alpha, Beta_M_beta] = Beta_mean_std_to_parameters(options.alpha_A_mean, options.alpha_A_std);
+0032     rnd_A = betarnd(Beta_A_alpha, Beta_A_beta);
+0033     rnd_I = betarnd(Beta_I_alpha, Beta_I_beta);
+0034     rnd_M = betarnd(Beta_M_alpha, Beta_M_beta);
+0035     alpha_A(isfinite(rnd_A(ind_Wp))) = rnd_A(find(isfinite(rnd_A(ind_Wp))));
+0036     alpha_I(isfinite(rnd_I(ind_Wm))) = rnd_I(find(isfinite(rnd_A(ind_Wm))));
+0037     alpha_M(isfinite(rnd_M(ind_Mp))) = rnd_M(find(isfinite(rnd_A(ind_Mp))));
+0038     alpha_M(isfinite(rnd_M(ind_Mm))) = rnd_M(find(isfinite(rnd_A(ind_Mm))));
+0039   <span class="keyword">end</span>
+0040 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 09-Apr-2013 09:29:24 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

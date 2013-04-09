@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of unscale_elasticities</title>
+  <meta name="keywords" content="unscale_elasticities">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">es</a> &gt; <a href="index.html">es_util</a> &gt; unscale_elasticities.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for es/es_util&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>unscale_elasticities
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function E = unscale_elasticities(E, vplus, vminus, u, c); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function E = unscale_elasticities(E, vplus, vminus, u, c);</a>
+0002 
+0003 nr = length(vplus);
+0004 
+0005 v  = vplus - vminus;
+0006 
+0007 
+0008 <span class="comment">% -----------------------------------------------------------------------------------</span>
+0009 <span class="comment">% first order: simple multiply with v/p</span>
+0010 
+0011 E.un_E_plus_u   = diag(vplus)  * E.sc_E_plus_u  * diag(1./u);
+0012 E.un_E_minus_u  = diag(vminus) * E.sc_E_minus_u * diag(1./u)  ;
+0013 E.un_E_plus_c   = diag(vplus)  * E.sc_E_plus_c  * diag(1./c)  ;
+0014 E.un_E_minus_c  = diag(vminus) * E.sc_E_minus_c * diag(1./c)  ;
+0015             
+0016 E.un_E_u        = E.un_E_plus_u - E.un_E_minus_u;
+0017 E.un_E_c        = E.un_E_plus_c - E.un_E_minus_c;
+0018 
+0019 E.sc_E_u        = diag(1./v) * E.un_E_u * diag(u);
+0020 E.sc_E_c        = diag(1./v) * E.un_E_c * diag(c);
+0021 
+0022 
+0023 <span class="comment">% -----------------------------------------------------------------------------------</span>
+0024 <span class="comment">% second order</span>
+0025 
+0026 E.un_E_plus_cc   = tensor_scale(E.sc_E_plus_cc,1,vplus);
+0027 E.un_E_plus_cc   = tensor_scale(E.un_E_plus_cc,2,1./c);
+0028 E.un_E_plus_cc   = tensor_scale(E.un_E_plus_cc,3,1./c);
+0029             
+0030 E.un_E_minus_cc  = tensor_scale(E.sc_E_minus_cc,1,vminus);
+0031 E.un_E_minus_cc  = tensor_scale(E.un_E_minus_cc,2,1./c);
+0032 E.un_E_minus_cc  = tensor_scale(E.un_E_minus_cc,3,1./c);
+0033             
+0034 E.un_E_cc        = E.un_E_plus_cc - E.un_E_minus_cc;
+0035 
+0036 E.sc_E_cc        = tensor_scale(E.un_E_cc,1,1./v);
+0037 E.sc_E_cc        = tensor_scale(E.sc_E_cc,2,c);
+0038 E.sc_E_cc        = tensor_scale(E.sc_E_cc,3,c);
+0039 
+0040 
+0041 <span class="comment">% enzyme elasiticities</span>
+0042 
+0043 E.un_E_plus_cu   = tensor_scale(E.sc_E_plus_cu,1,vplus);
+0044 E.un_E_plus_cu   = tensor_scale(E.un_E_plus_cu,2,1./c);
+0045 E.un_E_plus_cu   = tensor_scale(E.un_E_plus_cu,3,1./u);
+0046 
+0047 E.un_E_minus_cu  = tensor_scale(E.sc_E_minus_cu,1,vminus);
+0048 E.un_E_minus_cu  = tensor_scale(E.un_E_minus_cu,2,1./c);
+0049 E.un_E_minus_cu  = tensor_scale(E.un_E_minus_cu,3,1./u);
+0050 
+0051 E.un_E_cu        = E.un_E_plus_cu - E.un_E_minus_cu;
+0052 
+0053 E.sc_E_cu        = tensor_scale(E.un_E_cu,1,1./v);
+0054 E.sc_E_cu        = tensor_scale(E.sc_E_cu,2,c);
+0055 E.sc_E_cu        = tensor_scale(E.sc_E_cu,3,u);
+0056 
+0057 E.un_E_plus_uu   = zeros(nr,nr,nr);
+0058 E.un_E_minus_uu  = zeros(nr,nr,nr);
+0059 E.un_E_uu        = zeros(nr,nr,nr);
+0060 E.sc_E_plus_uu   = zeros(nr,nr,nr);
+0061 E.sc_E_minus_uu  = zeros(nr,nr,nr);
+0062 E.sc_E_uu        = zeros(nr,nr,nr);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:56:35 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

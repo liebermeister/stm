@@ -35,6 +35,7 @@
 
 
  Inputs (= Outputs of es_sample_steady_state; with nm: # metabolites; nr: # reactions)
+
    N         - Stoichiometric matrix (nm x nr)
    W         - Allosteric regulation matrix (nr x nm)
    ind_ext   - indices of external metabolites
@@ -49,13 +50,13 @@
    zeta      - zeta vector computed from reaction affinities
    A         - Vector of reaction affinities (thermodynamic driving forces)
 
- For the inputs es_constraints and es_options, see es_default_options
+ For the inputs 'es_constraints' and 'es_options', see 'es_default_options'
 
  Fields in 'es_constraints' and 'es_options' relevant to this function:
+
    es_constraints.beta_M_fix     - predefined beta values (only used if non-zero)
    es_constraints.beta_A_fix     - predefined beta values (only used if non-zero)
    es_constraints.beta_I_fix     - predefined beta values (only used if non-zero)
-  
    es_options.kinetic_law        - Rate law {'cs','ms', ...}
    es_options.h                  - vector of Hill exponents (one for each reaction)
    es_options.no_equilibrium     - For inactive reactions: assume no equilibrium (Boolean)
@@ -64,6 +65,31 @@
    es_options.flag_second_order  - Compute second-order elasticities? (Boolean)
    es_options.zv                 - Flux weights for 2nd order resp. coeff output function
    es_options.zc                 - Conc. weights for 2nd order resp. coeff output function
+
+ All output data are stored in a structure 'result' with fields:
+   result.c            - Metabolite levels      
+   result.c0           - Equilibrium metabolite levels      
+   result.u            - Enzyme levels
+   result.A            - Reaction affinities
+   result.zeta         - zeta vector (computed from reaction affinities)
+   result.mu           - Chemical potentials
+   result.J            - Fluxes
+   result.v            - Reaction rates (computed from rate laws, v=J)
+   result.v_plus       - Microscopic forward rates
+   result.v_minus      - Microscopic reverse rates
+   result.Keq          - Equilibrium constants
+   result.Kma          - Mass-action ratios
+   result.KA           - Activation constants
+   result.KI           - Inhibition constants
+   result.KM           - Reactant constants
+   result.KV           - Velocity constants (geometric mean of catalytic constants)
+   result.Kplus        - Forward catalytic constants
+   result.Kminus       - Reverse catalytic constants
+   result.saturation   - Saturation values
+   result.elasticities - Elasticities (scaled and unscaled)
+   result.control      - Control and response coefficients (scaled and unscaled)
+   result.K            - Kernel matrix 
+   result.kinetics     - kinetic rate laws (to be inserted into 'network')
 
  See also: <a href="es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a></pre></div>
 
@@ -90,285 +116,311 @@ This function is called by:
 0008 <span class="comment">%</span>
 0009 <span class="comment">%</span>
 0010 <span class="comment">% Inputs (= Outputs of es_sample_steady_state; with nm: # metabolites; nr: # reactions)</span>
-0011 <span class="comment">%   N         - Stoichiometric matrix (nm x nr)</span>
-0012 <span class="comment">%   W         - Allosteric regulation matrix (nr x nm)</span>
-0013 <span class="comment">%   ind_ext   - indices of external metabolites</span>
-0014 <span class="comment">%   c0        - Vector of chemical equilibrium concentrations (optional)</span>
-0015 <span class="comment">%   c         - Vector of concentrations</span>
-0016 <span class="comment">%   u         - Vector of enzyme levels</span>
-0017 <span class="comment">%   J         - Flux vector</span>
-0018 <span class="comment">%   Keq       - Vector of equilibrium constants</span>
-0019 <span class="comment">%   mu        - Vector of chemical potentials</span>
-0020 <span class="comment">%   K         - Kernel matrix</span>
-0021 <span class="comment">%   Kma       - Vector of mass-action ratios</span>
-0022 <span class="comment">%   zeta      - zeta vector computed from reaction affinities</span>
-0023 <span class="comment">%   A         - Vector of reaction affinities (thermodynamic driving forces)</span>
-0024 <span class="comment">%</span>
-0025 <span class="comment">% For the inputs es_constraints and es_options, see es_default_options</span>
-0026 <span class="comment">%</span>
-0027 <span class="comment">% Fields in 'es_constraints' and 'es_options' relevant to this function:</span>
-0028 <span class="comment">%   es_constraints.beta_M_fix     - predefined beta values (only used if non-zero)</span>
-0029 <span class="comment">%   es_constraints.beta_A_fix     - predefined beta values (only used if non-zero)</span>
-0030 <span class="comment">%   es_constraints.beta_I_fix     - predefined beta values (only used if non-zero)</span>
-0031 <span class="comment">%</span>
-0032 <span class="comment">%   es_options.kinetic_law        - Rate law {'cs','ms', ...}</span>
-0033 <span class="comment">%   es_options.h                  - vector of Hill exponents (one for each reaction)</span>
-0034 <span class="comment">%   es_options.no_equilibrium     - For inactive reactions: assume no equilibrium (Boolean)</span>
-0035 <span class="comment">%   es_options.KV_prior_mean      - .. and KV value to be used in this case</span>
-0036 <span class="comment">%   es_options.flag_test          - Run tests? (Boolean)</span>
-0037 <span class="comment">%   es_options.flag_second_order  - Compute second-order elasticities? (Boolean)</span>
-0038 <span class="comment">%   es_options.zv                 - Flux weights for 2nd order resp. coeff output function</span>
-0039 <span class="comment">%   es_options.zc                 - Conc. weights for 2nd order resp. coeff output function</span>
-0040 <span class="comment">%</span>
-0041 <span class="comment">% See also: es_sample_model</span>
-0042 
-0043 
-0044 <span class="comment">% ----------------------------------------------------------------</span>
-0045 <span class="comment">% sample alpha, values and compute beta and gamma values</span>
-0046 
-0047 [nm,nr] = size(N);
-0048 
-0049 [alpha_A, alpha_I, alpha_M] = <a href="../elasticity_sampling/es_utils/sample_saturation_parameters.html" class="code" title="function [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,options)">sample_saturation_parameters</a>(N,W,ind_ext,es_options);
-0050 
-0051 <span class="keyword">if</span> sum(sum(isfinite([es_constraints.beta_M_fix(:),<span class="keyword">...</span>
-0052                  es_constraints.beta_A_fix(:),<span class="keyword">...</span>
-0053                  es_constraints.beta_I_fix(:)]))),
-0054   display(<span class="string">'Inserting given alpha values'</span>);
-0055   alpha_M(isfinite(es_constraints.beta_M_fix)) = 1 - es_constraints.beta_M_fix(isfinite(es_constraints.beta_M_fix));
-0056   alpha_A(isfinite(es_constraints.beta_A_fix)) = 1 - es_constraints.beta_A_fix(isfinite(es_constraints.beta_A_fix));
-0057   alpha_I(isfinite(es_constraints.beta_I_fix)) = 1 - es_constraints.beta_I_fix(isfinite(es_constraints.beta_I_fix));
-0058 <span class="keyword">end</span>
-0059 
-0060 [beta_A,gamma_A] = alpha_to_betagamma(alpha_A);
-0061 [beta_I,gamma_I] = alpha_to_betagamma(alpha_I);
-0062 [beta_M,gamma_M] = alpha_to_betagamma(alpha_M);
-0063 KA               = alpha_to_k(alpha_A,c);
-0064 KI               = alpha_to_k(alpha_I,c);
-0065 KM               = alpha_to_k(alpha_M,c);
-0066 
-0067 
-0068 <span class="comment">% ----------------------------------------------------------------</span>
-0069 <span class="comment">% compute remaining model parameters (KV, Kplus, Kminus)</span>
-0070 
-0071 <span class="comment">% compute KV (given sampled u and comparison between J and preliminary v</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   N         - Stoichiometric matrix (nm x nr)</span>
+0013 <span class="comment">%   W         - Allosteric regulation matrix (nr x nm)</span>
+0014 <span class="comment">%   ind_ext   - indices of external metabolites</span>
+0015 <span class="comment">%   c0        - Vector of chemical equilibrium concentrations (optional)</span>
+0016 <span class="comment">%   c         - Vector of concentrations</span>
+0017 <span class="comment">%   u         - Vector of enzyme levels</span>
+0018 <span class="comment">%   J         - Flux vector</span>
+0019 <span class="comment">%   Keq       - Vector of equilibrium constants</span>
+0020 <span class="comment">%   mu        - Vector of chemical potentials</span>
+0021 <span class="comment">%   K         - Kernel matrix</span>
+0022 <span class="comment">%   Kma       - Vector of mass-action ratios</span>
+0023 <span class="comment">%   zeta      - zeta vector computed from reaction affinities</span>
+0024 <span class="comment">%   A         - Vector of reaction affinities (thermodynamic driving forces)</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% For the inputs 'es_constraints' and 'es_options', see 'es_default_options'</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Fields in 'es_constraints' and 'es_options' relevant to this function:</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%   es_constraints.beta_M_fix     - predefined beta values (only used if non-zero)</span>
+0031 <span class="comment">%   es_constraints.beta_A_fix     - predefined beta values (only used if non-zero)</span>
+0032 <span class="comment">%   es_constraints.beta_I_fix     - predefined beta values (only used if non-zero)</span>
+0033 <span class="comment">%   es_options.kinetic_law        - Rate law {'cs','ms', ...}</span>
+0034 <span class="comment">%   es_options.h                  - vector of Hill exponents (one for each reaction)</span>
+0035 <span class="comment">%   es_options.no_equilibrium     - For inactive reactions: assume no equilibrium (Boolean)</span>
+0036 <span class="comment">%   es_options.KV_prior_mean      - .. and KV value to be used in this case</span>
+0037 <span class="comment">%   es_options.flag_test          - Run tests? (Boolean)</span>
+0038 <span class="comment">%   es_options.flag_second_order  - Compute second-order elasticities? (Boolean)</span>
+0039 <span class="comment">%   es_options.zv                 - Flux weights for 2nd order resp. coeff output function</span>
+0040 <span class="comment">%   es_options.zc                 - Conc. weights for 2nd order resp. coeff output function</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% All output data are stored in a structure 'result' with fields:</span>
+0043 <span class="comment">%   result.c            - Metabolite levels</span>
+0044 <span class="comment">%   result.c0           - Equilibrium metabolite levels</span>
+0045 <span class="comment">%   result.u            - Enzyme levels</span>
+0046 <span class="comment">%   result.A            - Reaction affinities</span>
+0047 <span class="comment">%   result.zeta         - zeta vector (computed from reaction affinities)</span>
+0048 <span class="comment">%   result.mu           - Chemical potentials</span>
+0049 <span class="comment">%   result.J            - Fluxes</span>
+0050 <span class="comment">%   result.v            - Reaction rates (computed from rate laws, v=J)</span>
+0051 <span class="comment">%   result.v_plus       - Microscopic forward rates</span>
+0052 <span class="comment">%   result.v_minus      - Microscopic reverse rates</span>
+0053 <span class="comment">%   result.Keq          - Equilibrium constants</span>
+0054 <span class="comment">%   result.Kma          - Mass-action ratios</span>
+0055 <span class="comment">%   result.KA           - Activation constants</span>
+0056 <span class="comment">%   result.KI           - Inhibition constants</span>
+0057 <span class="comment">%   result.KM           - Reactant constants</span>
+0058 <span class="comment">%   result.KV           - Velocity constants (geometric mean of catalytic constants)</span>
+0059 <span class="comment">%   result.Kplus        - Forward catalytic constants</span>
+0060 <span class="comment">%   result.Kminus       - Reverse catalytic constants</span>
+0061 <span class="comment">%   result.saturation   - Saturation values</span>
+0062 <span class="comment">%   result.elasticities - Elasticities (scaled and unscaled)</span>
+0063 <span class="comment">%   result.control      - Control and response coefficients (scaled and unscaled)</span>
+0064 <span class="comment">%   result.K            - Kernel matrix</span>
+0065 <span class="comment">%   result.kinetics     - kinetic rate laws (to be inserted into 'network')</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% See also: es_sample_model</span>
+0068 
+0069 
+0070 <span class="comment">% ----------------------------------------------------------------</span>
+0071 <span class="comment">% sample alpha, values and compute beta and gamma values</span>
 0072 
-0073 KM_full     = full(KM); KM_full(KM_full==0) = 1;
-0074 this_KV     = ones(nr,1);
-0075 v_pre       = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,this_KV,Keq,es_options.h);
-0076 ind_off     = find([v_pre==0].*[A~=0]);
-0077 ind_off_A   = find([v_pre==0].*[A==0]);
-0078 
-0079 <span class="keyword">if</span> es_options.no_equilibrium,
-0080   <span class="keyword">if</span> length(ind_off),  display(<span class="string">'Vanishing rates: setting enzyme values = 0'</span>); <span class="keyword">end</span>
-0081   u(ind_off)     = 0;
-0082   v_pre(ind_off) = 1;
-0083   KV          = J./v_pre;
-0084   KV(ind_off) = es_options.KV_prior_mean;
-0085 <span class="keyword">else</span>,
-0086   <span class="keyword">if</span> length(ind_off),  display(<span class="string">'Vanishing rates: setting KV values = 0'</span>); <span class="keyword">end</span>
-0087   v_pre(ind_off) = 1;
-0088   KV          = J./v_pre;
-0089   KV(ind_off) = 0;
-0090 <span class="keyword">end</span>
-0091 
-0092 <span class="comment">% arbitrary choice (since nothing is known...)</span>
+0073 [nm,nr] = size(N);
+0074 
+0075 [alpha_A, alpha_I, alpha_M] = <a href="../elasticity_sampling/es_utils/sample_saturation_parameters.html" class="code" title="function [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,options)">sample_saturation_parameters</a>(N,W,ind_ext,es_options);
+0076 
+0077 <span class="keyword">if</span> sum(sum(isfinite([es_constraints.beta_M_fix(:),<span class="keyword">...</span>
+0078                  es_constraints.beta_A_fix(:),<span class="keyword">...</span>
+0079                  es_constraints.beta_I_fix(:)]))),
+0080   display(<span class="string">'Inserting given alpha values'</span>);
+0081   alpha_M(isfinite(es_constraints.beta_M_fix)) = 1 - es_constraints.beta_M_fix(isfinite(es_constraints.beta_M_fix));
+0082   alpha_A(isfinite(es_constraints.beta_A_fix)) = 1 - es_constraints.beta_A_fix(isfinite(es_constraints.beta_A_fix));
+0083   alpha_I(isfinite(es_constraints.beta_I_fix)) = 1 - es_constraints.beta_I_fix(isfinite(es_constraints.beta_I_fix));
+0084 <span class="keyword">end</span>
+0085 
+0086 [beta_A,gamma_A] = alpha_to_betagamma(alpha_A);
+0087 [beta_I,gamma_I] = alpha_to_betagamma(alpha_I);
+0088 [beta_M,gamma_M] = alpha_to_betagamma(alpha_M);
+0089 KA               = alpha_to_k(alpha_A,c);
+0090 KI               = alpha_to_k(alpha_I,c);
+0091 KM               = alpha_to_k(alpha_M,c);
+0092 
 0093 
-0094 u(ind_off_A)  = nanmedian(u);
-0095 KV(ind_off_A) = nanmedian(KV);
+0094 <span class="comment">% ----------------------------------------------------------------</span>
+0095 <span class="comment">% compute remaining model parameters (KV, Kplus, Kminus)</span>
 0096 
-0097 <span class="comment">% compute reaction velocities</span>
+0097 <span class="comment">% compute KV (given sampled u and comparison between J and preliminary v</span>
 0098 
-0099 [v, v_plus, v_minus] = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,es_options.h);
-0100 [Kplus,Kminus]       = ms_compute_Kcat(N,KM,KV,Keq);
-0101 
-0102 
-0103 <span class="comment">% ----------------------------------------------------------------</span>
-0104 <span class="comment">% Tests</span>
-0105 
-0106 <span class="keyword">if</span> es_options.flag_test,
-0107   [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int] = make_structure_matrices(N,W,ind_ext,es_options.h);
-0108   dc_td             = N_int * J 
-0109   <span class="keyword">if</span> length(c0),
-0110     def_keq_mismatch  = [log(Keq) - N' * log(c0)]
-0111     v_eq = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c0,KA,KI,KM,KV,Keq,es_options.h)
-0112     max(abs( def_keq_mismatch)) 
-0113   max(abs( v_eq  )) 
-0114   <span class="keyword">end</span>
-0115   sign_J_A_mismatch = [sign(J) - sign(A)];
-0116   max(abs( dc_td)) 
-0117   max(abs( sign_J_A_mismatch )) 
-0118 <span class="keyword">end</span>
+0099 KM_full     = full(KM); KM_full(KM_full==0) = 1;
+0100 this_KV     = ones(nr,1);
+0101 v_pre       = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,this_KV,Keq,es_options.h);
+0102 ind_off     = find([v_pre==0].*[A~=0]);
+0103 ind_off_A   = find([v_pre==0].*[A==0]);
+0104 
+0105 <span class="keyword">if</span> es_options.no_equilibrium,
+0106   <span class="keyword">if</span> length(ind_off),  display(<span class="string">'Vanishing rates: setting enzyme values = 0'</span>); <span class="keyword">end</span>
+0107   u(ind_off)     = 0;
+0108   v_pre(ind_off) = 1;
+0109   KV          = J./v_pre;
+0110   KV(ind_off) = es_options.KV_prior_mean;
+0111 <span class="keyword">else</span>,
+0112   <span class="keyword">if</span> length(ind_off),  display(<span class="string">'Vanishing rates: setting KV values = 0'</span>); <span class="keyword">end</span>
+0113   v_pre(ind_off) = 1;
+0114   KV          = J./v_pre;
+0115   KV(ind_off) = 0;
+0116 <span class="keyword">end</span>
+0117 
+0118 <span class="comment">% arbitrary choice (since nothing is known...)</span>
 0119 
-0120 
-0121 <span class="comment">% ----------------------------------------------------------------</span>
-0122 <span class="comment">% Compute elasticities:</span>
-0123 <span class="comment">%  o scaled elasticities (single reaction directions) only require alpha values</span>
-0124 <span class="comment">%  o unscaled and total elasticities also require velocities and concentrations</span>
-0125 
-0126 v_plus_fallback  = ones(size(v));
-0127 v_minus_fallback = ones(size(v));
+0120 u(ind_off_A)  = nanmedian(u);
+0121 KV(ind_off_A) = nanmedian(KV);
+0122 
+0123 <span class="comment">% compute reaction velocities</span>
+0124 
+0125 [v, v_plus, v_minus] = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,es_options.h);
+0126 [Kplus,Kminus]       = ms_compute_Kcat(N,KM,KV,Keq);
+0127 
 0128 
-0129 E = compute_modular_elasticities(es_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback, es_options.flag_second_order);
-0130 
+0129 <span class="comment">% ----------------------------------------------------------------</span>
+0130 <span class="comment">% Tests</span>
 0131 
-0132 <span class="comment">% -------------------------------------------------------------</span>
-0133 <span class="comment">% Compute unscaled and scaled response coefficients</span>
-0134 
-0135 Ec   = E.un_E_c;
-0136 Eu   = E.un_E_u;
-0137 Es   = E.un_E_c(:,ind_ext);
-0138 Ep   = [Eu Es];
-0139 
-0140 external  = zeros(nm,1); external(ind_ext) = 1;
-0141 
-0142 <span class="keyword">if</span> prod(size(N)) &gt; 10^4, <span class="comment">% compute approximation of NR_int and L_int</span>
-0143   epsilon_nullspace = 10^-20;
-0144   N_int = N(find(external==0),:);
-0145   <span class="comment">%%[U,S,V]  = svds(sparse(N_int),100);</span>
-0146   [U,S,V]  = svd(full(N_int));
-0147   ii =  find(abs(diag(S))&gt;epsilon_nullspace); 
-0148   L_int  = U(:,ii) * S(ii,ii);
-0149   NR_int = V(:,ii)';
-0150   [CJ, CS, L_int, NR_int, M] = control_coefficients(N, Ec, external, [], NR_int, L_int);
-0151 <span class="keyword">else</span>,
-0152   [CJ, CS, L_int, NR_int, M] = control_coefficients(N, Ec, external);
-0153 <span class="keyword">end</span>
+0132 <span class="keyword">if</span> es_options.flag_test,
+0133   [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int] = make_structure_matrices(N,W,ind_ext,es_options.h);
+0134   dc_td             = N_int * J 
+0135   <span class="keyword">if</span> length(c0),
+0136     def_keq_mismatch  = [log(Keq) - N' * log(c0)]
+0137     v_eq = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c0,KA,KI,KM,KV,Keq,es_options.h)
+0138     max(abs( def_keq_mismatch)) 
+0139   max(abs( v_eq  )) 
+0140   <span class="keyword">end</span>
+0141   sign_J_A_mismatch = [sign(J) - sign(A)];
+0142   max(abs( dc_td)) 
+0143   max(abs( sign_J_A_mismatch )) 
+0144 <span class="keyword">end</span>
+0145 
+0146 
+0147 <span class="comment">% ----------------------------------------------------------------</span>
+0148 <span class="comment">% Compute elasticities:</span>
+0149 <span class="comment">%  o scaled elasticities (single reaction directions) only require alpha values</span>
+0150 <span class="comment">%  o unscaled and total elasticities also require velocities and concentrations</span>
+0151 
+0152 v_plus_fallback  = ones(size(v));
+0153 v_minus_fallback = ones(size(v));
 0154 
-0155 
-0156 <span class="comment">% -------------------------------------------------------------</span>
-0157 <span class="comment">% second order</span>
-0158 
-0159 <span class="keyword">if</span> es_options.flag_second_order * [length(es_options.zc) + length(es_options.zv) == 0],
+0155 E = compute_modular_elasticities(es_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback, es_options.flag_second_order);
+0156 
+0157 
+0158 <span class="comment">% -------------------------------------------------------------</span>
+0159 <span class="comment">% Compute unscaled and scaled response coefficients</span>
 0160 
-0161    <span class="comment">%% compute full second-order response matrices</span>
-0162    
-0163    Ecc  = E.un_E_cc;
-0164    Ecu  = E.un_E_cu;
-0165    Euu  = E.un_E_uu;
-0166    Ecs  = E.un_E_cc(:,:,ind_ext);
-0167    Ess  = E.un_E_cc(:,ind_ext,ind_ext);
-0168    Esu  = E.un_E_cu(:,ind_ext,:);
-0169   
-0170    np  = size(Ep,2);
-0171    Ecp = sptensor([nr,nm,np]);
-0172    Epp = sptensor([nr,np,np]);
-0173    Ecp(1:nr,1:nm,1:nr)       = Ecu;
-0174    Ecp(1:nr,1:nm,nr+1:np)    = Ecs;
-0175    Epp(1:nr,1:nr,1:nr)       = Euu;
-0176    Epp(1:nr,1:nr,nr+1:np)    = permute(Esu,[1 3 2]);
-0177    Epp(1:nr,nr+1:np,1:nr)    = Esu;
-0178    Epp(1:nr,nr+1:np,nr+1:np) = Ess;
-0179    
-0180    [RSp,RJp,RSpp,RJpp] = response_coefficients_sparse(CS,Ec,Ep,Ecc,Ecp,Epp);
-0181    control             = <a href="../elasticity_sampling/es_utils/es_control_analysis.html" class="code" title="function control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)">es_control_analysis</a>(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext);
-0182    
-0183 <span class="keyword">else</span>
-0184   
-0185   [RSp_un,RJp_un]   = response_coefficients(CS,Ec,Ep);
+0161 Ec   = E.un_E_c;
+0162 Eu   = E.un_E_u;
+0163 Es   = E.un_E_c(:,ind_ext);
+0164 Ep   = [Eu Es];
+0165 
+0166 external  = zeros(nm,1); external(ind_ext) = 1;
+0167 
+0168 <span class="keyword">if</span> prod(size(N)) &gt; 10^4, <span class="comment">% compute approximation of NR_int and L_int</span>
+0169   epsilon_nullspace = 10^-20;
+0170   N_int = N(find(external==0),:);
+0171   <span class="comment">%%[U,S,V]  = svds(sparse(N_int),100);</span>
+0172   [U,S,V]  = svd(full(N_int));
+0173   ii =  find(abs(diag(S))&gt;epsilon_nullspace); 
+0174   L_int  = U(:,ii) * S(ii,ii);
+0175   NR_int = V(:,ii)';
+0176   [CJ, CS, L_int, NR_int, M] = control_coefficients(N, Ec, external, [], NR_int, L_int);
+0177 <span class="keyword">else</span>,
+0178   [CJ, CS, L_int, NR_int, M] = control_coefficients(N, Ec, external);
+0179 <span class="keyword">end</span>
+0180 
+0181 
+0182 <span class="comment">% -------------------------------------------------------------</span>
+0183 <span class="comment">% second order</span>
+0184 
+0185 <span class="keyword">if</span> es_options.flag_second_order * [length(es_options.zc) + length(es_options.zv) == 0],
 0186 
-0187   control.CS  = CS;
-0188   control.CJ  = CJ;
-0189   control.RSp = RSp_un;
-0190   control.RJp = RJp_un;
-0191   control.CS_sc  = diag(1./(c)) * control.CS  * diag(v);
-0192   control.CJ_sc  = diag(1./(v)) * control.CJ  * diag(v);
-0193   n_ext = length(ind_ext);
-0194   control.RSu_un = control.RSp(:,1:nr);
-0195   control.RJu_un = control.RJp(:,1:nr);
-0196   control.RSu_sc = diag(1./(c)) * control.RSp(:,1:nr) * diag(u);
-0197   control.RJu_sc = diag(1./(v)) * control.RJp(:,1:nr) * diag(u);
-0198   control.RSs_sc = diag(1./(c)) * control.RSp(:,end-n_ext+1:end) * diag(c(ind_ext));
-0199   control.RJs_sc = diag(1./(v)) * control.RJp(:,end-n_ext+1:end) * diag(c(ind_ext));
-0200   
-0201   <span class="keyword">if</span> [length(es_options.zc) + length(es_options.zv)],
-0202     
-0203     [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(<span class="keyword">...</span>
-0204             es_options.zc, es_options.zv, es_options.kinetic_law,N, W, <span class="keyword">...</span>
-0205             ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, <span class="keyword">...</span>
-0206             v_plus_fallback, v_minus_fallback,CS,CJ);
-0207   <span class="keyword">end</span>
-0208   
-0209 <span class="keyword">end</span>
+0187    <span class="comment">%% compute full second-order response matrices</span>
+0188    
+0189    Ecc  = E.un_E_cc;
+0190    Ecu  = E.un_E_cu;
+0191    Euu  = E.un_E_uu;
+0192    Ecs  = E.un_E_cc(:,:,ind_ext);
+0193    Ess  = E.un_E_cc(:,ind_ext,ind_ext);
+0194    Esu  = E.un_E_cu(:,ind_ext,:);
+0195   
+0196    np  = size(Ep,2);
+0197    Ecp = sptensor([nr,nm,np]);
+0198    Epp = sptensor([nr,np,np]);
+0199    Ecp(1:nr,1:nm,1:nr)       = Ecu;
+0200    Ecp(1:nr,1:nm,nr+1:np)    = Ecs;
+0201    Epp(1:nr,1:nr,1:nr)       = Euu;
+0202    Epp(1:nr,1:nr,nr+1:np)    = permute(Esu,[1 3 2]);
+0203    Epp(1:nr,nr+1:np,1:nr)    = Esu;
+0204    Epp(1:nr,nr+1:np,nr+1:np) = Ess;
+0205    
+0206    [RSp,RJp,RSpp,RJpp] = response_coefficients_sparse(CS,Ec,Ep,Ecc,Ecp,Epp);
+0207    control             = <a href="../elasticity_sampling/es_utils/es_control_analysis.html" class="code" title="function control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)">es_control_analysis</a>(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext);
+0208    
+0209 <span class="keyword">else</span>
 0210   
-0211   <span class="comment">%% fix response coefficient of external concentration w.r.t. itself</span>
-0212   <span class="keyword">for</span> ittt = 1:length(ind_ext),
-0213     control.RJs_sc(ind_ext(ittt),ittt) = 1; 
-0214   <span class="keyword">end</span>
-0215   
-0216   <span class="keyword">if</span> length(es_options.zc),
-0217     [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(es_options.zc,es_options.zv,es_options.kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback,CS,CJ);
-0218   <span class="keyword">end</span>
-0219 
-0220 control.M = M;
-0221 eigmax    = max(real(eig(M)));
-0222 
-0223 control.stable = [eigmax &lt; 0];
-0224 
-0225 
-0226 <span class="comment">% -------------------------------------------------------------</span>
-0227 <span class="comment">% write all results to data structure 'result'</span>
-0228 
-0229 result.c                  = c;
-0230 result.c0                 = c0;
-0231 result.u                  = u;
-0232 result.A                  = A;
-0233 result.zeta               = zeta;
-0234 result.mu                 = mu;
-0235 result.J                  = J; <span class="comment">% for double checking between J and v</span>
-0236 result.v                  = v;
-0237 result.v_plus             = v_plus;
-0238 result.v_minus            = v_minus;
-0239 result.Keq                = Keq;
-0240 result.Kma                = Kma;
-0241 result.KA                 = KA;
-0242 result.KI                 = KI;
-0243 result.KM                 = KM;
-0244 result.KV                 = KV;
-0245 result.Kplus              = Kplus;
-0246 result.Kminus             = Kminus;
-0247 result.saturation.alpha_A = alpha_A;
-0248 result.saturation.alpha_I = alpha_I;
-0249 result.saturation.alpha_M = alpha_M;
-0250 result.saturation.beta_A  = beta_A;
-0251 result.saturation.beta_I  = beta_I;
-0252 result.saturation.beta_M  = beta_M;
-0253 result.saturation.gamma_A = gamma_A;
-0254 result.saturation.gamma_I = gamma_I;
-0255 result.saturation.gamma_M = gamma_M;
-0256 result.elasticities       = E;
-0257 result.control            = control;
-0258 result.control.CS         = CS;
-0259 result.control.CJ         = CJ;
-0260 result.K                  = K;
-0261 
-0262 
-0263 <span class="comment">% -------------------------------------------------------------</span>
-0264 <span class="comment">% kinetic parameters ready to use</span>
-0265 
-0266 result.kinetics.type = es_options.kinetic_law;     
-0267 result.kinetics.u    = result.u;     
-0268 result.kinetics.c    = result.c;     
-0269 result.kinetics.KA   = result.KA;    
-0270 result.kinetics.KI   = result.KI;    
-0271 result.kinetics.KM   = result.KM;    
-0272 result.kinetics.KV   = result.KV;    
-0273 result.kinetics.Keq  = result.Keq;
-0274 result.kinetics.h    = es_options.h;
-0275 
-0276 
-0277 <span class="comment">% ----------------------------------------------------------------</span>
-0278 <span class="comment">% test: do the first elasticities coincide with numerically computed elasticities?</span>
-0279 
-0280 <span class="keyword">if</span> 0,
-0281   network          = network_construct(N,ones(size(v)),ind_ext);
-0282   network.kinetics = result.kinetics;
-0283   Ec               = elasticities(network,result.c);
-0284   
-0285   <span class="keyword">if</span> [norm(full(Ec)) - norm(full(E.un_E_c))] / norm(full(Ec)) &gt; 10^-3,
-0286     warning(<span class="string">'Error in elasticities'</span>);
-0287     [norm(full(Ec)) - norm(full(E.un_E_c))]
-0288   <span class="keyword">end</span>
-0289 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 09-Apr-2013 09:29:24 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0211   [RSp_un,RJp_un]   = response_coefficients(CS,Ec,Ep);
+0212 
+0213   control.CS  = CS;
+0214   control.CJ  = CJ;
+0215   control.RSp = RSp_un;
+0216   control.RJp = RJp_un;
+0217   control.CS_sc  = diag(1./(c)) * control.CS  * diag(v);
+0218   control.CJ_sc  = diag(1./(v)) * control.CJ  * diag(v);
+0219   n_ext = length(ind_ext);
+0220   control.RSu_un = control.RSp(:,1:nr);
+0221   control.RJu_un = control.RJp(:,1:nr);
+0222   control.RSu_sc = diag(1./(c)) * control.RSp(:,1:nr) * diag(u);
+0223   control.RJu_sc = diag(1./(v)) * control.RJp(:,1:nr) * diag(u);
+0224   control.RSs_sc = diag(1./(c)) * control.RSp(:,end-n_ext+1:end) * diag(c(ind_ext));
+0225   control.RJs_sc = diag(1./(v)) * control.RJp(:,end-n_ext+1:end) * diag(c(ind_ext));
+0226   
+0227   <span class="keyword">if</span> [length(es_options.zc) + length(es_options.zv)],
+0228     
+0229     [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(<span class="keyword">...</span>
+0230             es_options.zc, es_options.zv, es_options.kinetic_law,N, W, <span class="keyword">...</span>
+0231             ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, <span class="keyword">...</span>
+0232             v_plus_fallback, v_minus_fallback,CS,CJ);
+0233   <span class="keyword">end</span>
+0234   
+0235 <span class="keyword">end</span>
+0236   
+0237   <span class="comment">%% fix response coefficient of external concentration w.r.t. itself</span>
+0238   <span class="keyword">for</span> ittt = 1:length(ind_ext),
+0239     control.RJs_sc(ind_ext(ittt),ittt) = 1; 
+0240   <span class="keyword">end</span>
+0241   
+0242   <span class="keyword">if</span> length(es_options.zc),
+0243     [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(es_options.zc,es_options.zv,es_options.kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback,CS,CJ);
+0244   <span class="keyword">end</span>
+0245 
+0246 control.M = M;
+0247 eigmax    = max(real(eig(M)));
+0248 
+0249 control.stable = [eigmax &lt; 0];
+0250 
+0251 
+0252 <span class="comment">% -------------------------------------------------------------</span>
+0253 <span class="comment">% write all results to data structure 'result'</span>
+0254 
+0255 result.c                  = c;
+0256 result.c0                 = c0;
+0257 result.u                  = u;
+0258 result.A                  = A;
+0259 result.zeta               = zeta;
+0260 result.mu                 = mu;
+0261 result.J                  = J; <span class="comment">% for double checking between J and v</span>
+0262 result.v                  = v;
+0263 result.v_plus             = v_plus;
+0264 result.v_minus            = v_minus;
+0265 result.Keq                = Keq;
+0266 result.Kma                = Kma;
+0267 result.KA                 = KA;
+0268 result.KI                 = KI;
+0269 result.KM                 = KM;
+0270 result.KV                 = KV;
+0271 result.Kplus              = Kplus;
+0272 result.Kminus             = Kminus;
+0273 result.saturation.alpha_A = alpha_A;
+0274 result.saturation.alpha_I = alpha_I;
+0275 result.saturation.alpha_M = alpha_M;
+0276 result.saturation.beta_A  = beta_A;
+0277 result.saturation.beta_I  = beta_I;
+0278 result.saturation.beta_M  = beta_M;
+0279 result.saturation.gamma_A = gamma_A;
+0280 result.saturation.gamma_I = gamma_I;
+0281 result.saturation.gamma_M = gamma_M;
+0282 result.elasticities       = E;
+0283 result.control            = control;
+0284 result.control.CS         = CS;
+0285 result.control.CJ         = CJ;
+0286 result.K                  = K;
+0287 
+0288 
+0289 <span class="comment">% -------------------------------------------------------------</span>
+0290 <span class="comment">% kinetic parameters ready to use</span>
+0291 
+0292 result.kinetics.type = es_options.kinetic_law;     
+0293 result.kinetics.u    = result.u;     
+0294 result.kinetics.c    = result.c;     
+0295 result.kinetics.KA   = result.KA;    
+0296 result.kinetics.KI   = result.KI;    
+0297 result.kinetics.KM   = result.KM;    
+0298 result.kinetics.KV   = result.KV;    
+0299 result.kinetics.Keq  = result.Keq;
+0300 result.kinetics.h    = es_options.h;
+0301 
+0302 
+0303 <span class="comment">% ----------------------------------------------------------------</span>
+0304 <span class="comment">% test: do the first elasticities coincide with numerically computed elasticities?</span>
+0305 
+0306 <span class="keyword">if</span> 0,
+0307   network          = network_construct(N,ones(size(v)),ind_ext);
+0308   network.kinetics = result.kinetics;
+0309   Ec               = elasticities(network,result.c);
+0310   
+0311   <span class="keyword">if</span> [norm(full(Ec)) - norm(full(E.un_E_c))] / norm(full(Ec)) &gt; 10^-3,
+0312     warning(<span class="string">'Error in elasticities'</span>);
+0313     [norm(full(Ec)) - norm(full(E.un_E_c))]
+0314   <span class="keyword">end</span>
+0315 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:44:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

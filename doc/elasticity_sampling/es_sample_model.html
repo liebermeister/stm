@@ -31,21 +31,32 @@
 
  result = es_sample_model(N, W, ind_ext, es_constraints, es_options)
  
- Sample all numbers needed for a kinetic in steady state
+ This script reconstructs one model instance, including the sampled elasticities.
+ For samplig multiple model instances, see 'es_sample_multiple'.
 
- This script returns one model instance, including the sampled elasticities 
 
- Sampling happens in two stages: 
-  1. Steady state         (es_sample_steady_state_state.m)
-  2. Elasticities and MCA (es_sample_elasticities.m)
+ Inputs (with nm: # metabolites; nr: # reactions)
+   N         - Stoichiometric matrix (nm x nr)
+   W         - Allosteric regulation matrix (nr x nm)
+   ind_ext   - indices of external metabolites
 
- For the information contained in 'es_constraints' and 'es_options', see es_default_es_options.m</pre></div>
+   For the inputs 'es_constraints' and 'es_options', see 'es_default_options'
+
+
+ Outputs
+   All output data are stored in a data structure 'result' (see 'es_sample_elasticities')
+   es_options and es_constraints are returned with the (possible) changes made.
+
+
+ Sampling consists of two stages:
+   1. Steady state          (calling 'es_sample_steady_state')
+   2. Elasticities and MCA  (calling 'es_sample_elasticities')</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>	ES_SAMPLE_ELASTICITIES - Sample elasticities</li><li><a href="es_sample_steady_state.html" class="code" title="function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)">es_sample_steady_state</a>	ES_SAMPLE_STATIONARY_STATE - Sample feasible stationary state for a network</li></ul>
+<li><a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>	ES_SAMPLE_ELASTICITIES - Sample elasticities</li><li><a href="es_sample_steady_state.html" class="code" title="function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)">es_sample_steady_state</a>	ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 <li><a href="../demo/es_demo.html" class="code" title="">es_demo</a>	ES_DEMO Demo script for thermodynamically feasible elasticity sampling</li><li><a href="es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>	ES_SAMPLE_MULTIPLE - Create model ensemble and collect values for an output function</li></ul>
@@ -60,55 +71,66 @@ This function is called by:
 0004 <span class="comment">%</span>
 0005 <span class="comment">% result = es_sample_model(N, W, ind_ext, es_constraints, es_options)</span>
 0006 <span class="comment">%</span>
-0007 <span class="comment">% Sample all numbers needed for a kinetic in steady state</span>
-0008 <span class="comment">%</span>
-0009 <span class="comment">% This script returns one model instance, including the sampled elasticities</span>
+0007 <span class="comment">% This script reconstructs one model instance, including the sampled elasticities.</span>
+0008 <span class="comment">% For samplig multiple model instances, see 'es_sample_multiple'.</span>
+0009 <span class="comment">%</span>
 0010 <span class="comment">%</span>
-0011 <span class="comment">% Sampling happens in two stages:</span>
-0012 <span class="comment">%  1. Steady state         (es_sample_steady_state_state.m)</span>
-0013 <span class="comment">%  2. Elasticities and MCA (es_sample_elasticities.m)</span>
-0014 <span class="comment">%</span>
-0015 <span class="comment">% For the information contained in 'es_constraints' and 'es_options', see es_default_es_options.m</span>
-0016 
-0017 
-0018 <span class="comment">% ----------------------------------------------------------------</span>
-0019 <span class="comment">% Initialise</span>
-0020 
-0021 es_options.flag_test = 0;
-0022 
-0023 <span class="keyword">if</span> ~isnan(es_options.seed), randn(<span class="string">'state'</span>,es_options.seed); <span class="keyword">end</span>
-0024 
-0025 
-0026 <span class="comment">% ----------------------------------------------------------------</span>
-0027 <span class="comment">% Check reaction sum formulae for large stoichoimetric coefficients</span>
-0028 <span class="comment">% they are compensated by setting smaller cooperativities</span>
-0029 <span class="comment">% such that m+ and m- reach maximally the threshold value</span>
-0030 <span class="comment">% (in es_options.limit_cooperativity)</span>
-0031 <span class="comment">% Currently, the settings for reaction affinities are NOT changed</span>
-0032 
-0033 M_max = es_options.limit_cooperativity;
-0034 
-0035 <span class="keyword">if</span>  max(max(abs(N))) &gt; M_max,
-0036   display(<span class="string">' * Large stoichiometric coefficients encountered. Compensating them by small'</span>);
-0037   display(<span class="string">'   reaction cooperativities h; predefined reaction affinities and equilibrium'</span>); 
-0038   display(<span class="string">'   constants are adjusted'</span>);
-0039   ind = find(max(abs(N)) &gt; M_max);
-0040   es_options.h(ind) = M_max./max(abs(N(:,ind)));
-0041   <span class="comment">%es_constraints.dmu_fix(ind) = es_constraints.dmu_fix(ind) ./ es_options.h(ind);</span>
-0042   <span class="comment">%es_constraints.Keq_fix(ind) = es_constraints.Keq_fix(ind) .^ es_options.h(ind);</span>
-0043 <span class="keyword">end</span>
-0044 
+0011 <span class="comment">% Inputs (with nm: # metabolites; nr: # reactions)</span>
+0012 <span class="comment">%   N         - Stoichiometric matrix (nm x nr)</span>
+0013 <span class="comment">%   W         - Allosteric regulation matrix (nr x nm)</span>
+0014 <span class="comment">%   ind_ext   - indices of external metabolites</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   For the inputs 'es_constraints' and 'es_options', see 'es_default_options'</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Outputs</span>
+0020 <span class="comment">%   All output data are stored in a data structure 'result' (see 'es_sample_elasticities')</span>
+0021 <span class="comment">%   es_options and es_constraints are returned with the (possible) changes made.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Sampling consists of two stages:</span>
+0025 <span class="comment">%   1. Steady state          (calling 'es_sample_steady_state')</span>
+0026 <span class="comment">%   2. Elasticities and MCA  (calling 'es_sample_elasticities')</span>
+0027 
+0028 
+0029 <span class="comment">% ----------------------------------------------------------------</span>
+0030 <span class="comment">% Initialise</span>
+0031 
+0032 es_options.flag_test = 0;
+0033 
+0034 <span class="keyword">if</span> ~isnan(es_options.seed), randn(<span class="string">'state'</span>,es_options.seed); <span class="keyword">end</span>
+0035 
+0036 
+0037 <span class="comment">% ----------------------------------------------------------------</span>
+0038 <span class="comment">% Check reaction sum formulae for large stoichoimetric coefficients</span>
+0039 <span class="comment">% they are compensated by setting smaller cooperativities</span>
+0040 <span class="comment">% such that m+ and m- reach maximally the threshold value</span>
+0041 <span class="comment">% (in es_options.limit_cooperativity)</span>
+0042 <span class="comment">% Currently, the settings for reaction affinities are NOT changed</span>
+0043 
+0044 M_max = es_options.limit_cooperativity;
 0045 
-0046 <span class="comment">% ----------------------------------------------------------------</span>
-0047 <span class="comment">% Steady-state phase: sample feasible steady quantities</span>
-0048 
-0049 [c0, c, u, J, Keq, mu, K, Kma, zeta, A] = <a href="es_sample_steady_state.html" class="code" title="function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)">es_sample_steady_state</a>(N, W, ind_ext, es_constraints, es_options);
-0050 
-0051 
-0052 <span class="comment">% ----------------------------------------------------------------</span>
-0053 <span class="comment">% Kinetics phase: sample saturation values compute all the rest</span>
-0054 
-0055 result = <a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A);</pre></div>
-<hr><address>Generated on Tue 09-Apr-2013 09:29:24 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0046 <span class="keyword">if</span>  max(max(abs(N))) &gt; M_max,
+0047   display(<span class="string">' * Large stoichiometric coefficients encountered. Compensating them by small'</span>);
+0048   display(<span class="string">'   reaction cooperativities h; predefined reaction affinities and equilibrium'</span>); 
+0049   display(<span class="string">'   constants are adjusted'</span>);
+0050   ind = find(max(abs(N)) &gt; M_max);
+0051   es_options.h(ind) = M_max./max(abs(N(:,ind)));
+0052   <span class="comment">%es_constraints.dmu_fix(ind) = es_constraints.dmu_fix(ind) ./ es_options.h(ind);</span>
+0053   <span class="comment">%es_constraints.Keq_fix(ind) = es_constraints.Keq_fix(ind) .^ es_options.h(ind);</span>
+0054 <span class="keyword">end</span>
+0055 
+0056 
+0057 <span class="comment">% ----------------------------------------------------------------</span>
+0058 <span class="comment">% Steady-state phase: sample feasible steady quantities</span>
+0059 
+0060 [c0, c, u, J, Keq, mu, K, Kma, zeta, A] = <a href="es_sample_steady_state.html" class="code" title="function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)">es_sample_steady_state</a>(N, W, ind_ext, es_constraints, es_options);
+0061 
+0062 
+0063 <span class="comment">% ----------------------------------------------------------------</span>
+0064 <span class="comment">% Kinetics phase: sample saturation values compute all the rest</span>
+0065 
+0066 result = <a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A);</pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:44:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

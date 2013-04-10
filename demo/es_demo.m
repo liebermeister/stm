@@ -1,5 +1,7 @@
 % ES_DEMO Demo script for thermodynamically feasible elasticity sampling 
 
+es_dependencies;
+
 demo_dir = [fileparts(which(mfilename))];
 
 cd(demo_dir);
@@ -92,8 +94,19 @@ clc
  
 result.kinetics
  
-% With these rate laws, the network has become a kinetic model.
+% With these rate laws, the network becomes a kinetic model.
+ 
+network.kinetics = result.kinetics;
+ 
 % It can be simulated with functions from the Metabolic Network Toolbox
+ 
+% Press any key to continue
+pause
+clc
+% --------------------------------------------------------------------
+% We can also export the model, including the rate laws, to SBML format
+ 
+SBMLmodel = network_sbml_export(network,1);
  
 % Press key to continue
 pause

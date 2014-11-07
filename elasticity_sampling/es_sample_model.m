@@ -59,7 +59,6 @@ end
 
 [c0, c, u, J, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state(N, W, ind_ext, es_constraints, es_options);
 
-
 % ----------------------------------------------------------------
 % Kinetics phase: sample saturation values compute all the rest
 

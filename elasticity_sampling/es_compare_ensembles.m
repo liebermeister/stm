@@ -1,6 +1,6 @@
 function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)
 
-% ES_COMPARE_ENSEMBLES - Compare the output function for two model ensembles
+% ES_COMPARE_ENSEMBLES - Compare an output function between two model ensembles
 %
 % res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)
 % 

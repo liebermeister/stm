@@ -76,10 +76,22 @@ end
 
 all_c_given   = sum(isnan(es_constraints.log_c_fix)) == 0;
 all_v_given   = sum(isnan(es_constraints.v_fix))     == 0;
-all_dmu_given = sum(isnan(es_constraints.dmu_fix))   == 0;
-all_mu_given  = sum(isnan(es_constraints.mu_fix))    == 0;
+all_mu0_given = sum(isnan(es_constraints.mu0_fix))   == 0;
+
+% if all_mu0_given,
+%   es_constraints.Keq_fix = exp(-1/RT * N' * es_constraints.mu0_fix);
+% end
 all_keq_given = sum(isnan(es_constraints.Keq_fix))   == 0;
 
+% if all_c_given * all_mu0_given,
+%   es_constraints.mu_fix = es_constraints.mu0_fix + RT * es_constraints.log_c_fix;
+% end
+all_mu_given  = sum(isnan(es_constraints.mu_fix)) == 0;
+
+%if all_mu_given,
+%  es_constraints.dmu_fix = N' * es_constraints.mu_fix;
+%end
+all_dmu_given = sum(isnan(es_constraints.dmu_fix)) == 0;
 
 % ---------------------------------------------------------------------------------
 % determine fluxes
@@ -146,6 +158,8 @@ c        = exp(es_constraints.log_c_mean + es_constraints.log_c_std .* randn(nm,
 ind_c    = find(isfinite(es_constraints.log_c_fix));
 c(ind_c) = exp(es_constraints.log_c_fix(ind_c));
 Kma      = exp(N' * log(c));
+% safety fix
+Kma(Kma<10^-10) = 10^-10;
 
 if all_mu_given,
   display(' Using given chemical potentials');
@@ -159,7 +173,17 @@ elseif all_dmu_given,
   A    = - es_constraints.dmu_fix;
   zeta = exp(es_options.h .* A/RT);
   Keq  = exp(A/RT) .* Kma;
-  mu   = -pinv(full(N'))*A;
+  %% safety fix
+  Keq(Keq>10^50) = 10^50;
+  %% JUST FOR SAFETY ..REMOVE THIS LATER:
+  if ~isfield(es_constraints,'mu_eqconstraint'),
+    es_constraints.mu_eqconstraint = [];
+  end
+  if isempty(es_constraints.mu_eqconstraint),
+    mu   = -pinv(full(N'))*A;
+  else,
+    mu = pinv([-full(N'); es_constraints.mu_eqconstraint.matrix'])*[-A; es_constraints.mu_eqconstraint.vector];
+  end
   display(' * Computing mu from A by pseudoinverse (in es_sample_steady_state)');
 
 elseif all_keq_given,
@@ -187,82 +211,23 @@ end
 if find([v~=0].*[abs(A) < es_constraints.dmu_limit_min]), error('Overly small reaction affinity encountered'); end
 if find([v~=0].*[abs(A) > [1+10^-5]*es_constraints.dmu_limit]),     error('Overly large reaction affinity encountered'); end
 
+
 % ----------------------------------------------------------------------
 % output quantities
 
-u    = exp(es_constraints.log_u_mean + es_constraints.log_u_std .* randn(nr,1));
+u = exp(es_constraints.log_u_mean + es_constraints.log_u_std .* randn(nr,1));
+
+
+% ----------------------------------------------------------------------
+% safety checks
 
 if sum(v .* A<0), 
   [v,A, sign(v)~=sign(A)]
-  error('Signs of reaction rates and affinities disagree!!!'); end 
+  error('Signs of reaction rates and affinities disagree!!!'); 
+end 
 
+if sum(log(Keq./Kma) .* A<0), error('Problem with equilibrium constants'); end 
 
-% switch es_options.sampling_method,
-%   
-%   case 'c0 and c';
-%       
-%       ok       = 0;
-%       it       = 0;    
-%       n_trials = 100000;
-%       K        = sparse(null(N_int,'r'));
-%         
-%       while (ok == 0) &  (it < n_trials),
-%         
-%         it = it+1;
-%         
-%         %% sample c0 and c
-%         log_c0   = es_constraints.log_c0_mean + es_constraints.log_c0_std .* randn(nm,1);
-%         log_c    = es_constraints.log_c_mean  + es_constraints.log_c_std  .* randn(nm,1);
-%         
-%         %% compute Keq, mu, A
-%         log_Keq  = N'*log_c0;
-%         mu       = RT * ( log_c - log_c0 );
-%         A        = - N' * mu;
-%           
-%         %% sample fluxes v given the directions set by A     
-%         ind_prescribed_signs = find(isfinite(es_constraints.vsigns));
-%         n_prescribed_signs   = length(ind_prescribed_signs);
-%         dummy                = diag(es_constraints.vsigns);
-%         ind_ext_signs = find(isfinite(es_constraints.ext_signs));
-%         
-%         M = [diag(sign(A)); ...
-%              eye(nr); ...
-%              - eye(nr); ...
-%              dummy(ind_prescribed_signs,:); ... 
-%              diag(es_constraints.ext_signs(ind_ext_signs)) * N(ind_ext_signs,:) ] * K;
-%         
-%         b = [zeros(nr,1); ...
-%              es_constraints.vmin; ...
-%              -es_constraints.vmax; ...
-%              zeros(n_prescribed_signs,1);...
-%              zeros(length(ind_ext_signs),1) ];
-%         
-%         if isfield(es_constraints,'v'),   v_red = pinv(full(K)) * es_constraints.v;
-%         else,                          v_red = randn(size(K,2),1);
-%         end
-%         
-%         if sum(M*v_red < b) == 0,  ok = 1; end
-%         
-%       end
-%       
-%       v = K * v_red;
-%       
-%       if ok == 0, 
-%         display('Warning, no feasible combination found');
-%         log_c0  = nan * log_c0;
-%         log_c   = nan * log_c;
-%         log_Keq = nan * log_Keq;
-%         v       = nan * v; 
-%       end
-%       
-%       c0   = exp(log_c0 );
-%       c    = exp(log_c  );
-%       Keq  = exp(log_Keq);
-%       
-%   end
-%   
-%   Kma  = exp(N' * log(c));
-%   zeta = [Keq./Kma].^es_options.h;
-%   A    = RT * log(Keq./Kma);
-%   
-% end
+if sum(Keq==0),     error('Vanishing equilibrium constant'); end
+if sum(isinf(Keq)), error('Infinite equilibrium constant'); end
+if sum(isnan(Keq)), error('Unknown equilibrium constant'); end

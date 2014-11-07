@@ -1,6 +1,6 @@
 function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)
 
-% ES_SAMPLE_ELASTICITIES - Sample elasticities
+% ES_SAMPLE_ELASTICITIES - Elasticity phase
 %
 % result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)
 %
@@ -72,16 +72,7 @@ function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_optio
 
 [nm,nr] = size(N);
 
-[alpha_A, alpha_I, alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options);
-
-if sum(sum(isfinite([es_constraints.beta_M_fix(:),...
-                 es_constraints.beta_A_fix(:),...
-                 es_constraints.beta_I_fix(:)]))),
-  display('Inserting given alpha values');
-  alpha_M(isfinite(es_constraints.beta_M_fix)) = 1 - es_constraints.beta_M_fix(isfinite(es_constraints.beta_M_fix));
-  alpha_A(isfinite(es_constraints.beta_A_fix)) = 1 - es_constraints.beta_A_fix(isfinite(es_constraints.beta_A_fix));
-  alpha_I(isfinite(es_constraints.beta_I_fix)) = 1 - es_constraints.beta_I_fix(isfinite(es_constraints.beta_I_fix));
-end
+[alpha_A, alpha_I, alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options,es_constraints);
 
 [beta_A,gamma_A] = alpha_to_betagamma(alpha_A);
 [beta_I,gamma_I] = alpha_to_betagamma(alpha_I);
@@ -102,6 +93,12 @@ v_pre       = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM
 ind_off     = find([v_pre==0].*[A~=0]);
 ind_off_A   = find([v_pre==0].*[A==0]);
 
+%-----------------------------
+% FIX, TO BE REMOVED LATER:
+es_options = join_struct(struct('no_equilibrium',1),es_options);
+%-----------------------------
+
+
 if es_options.no_equilibrium,
   if length(ind_off),  display('Vanishing rates: setting enzyme values = 0'); end
   u(ind_off)     = 0;
@@ -119,12 +116,13 @@ end
 
 u(ind_off_A)  = nanmedian(u);
 KV(ind_off_A) = nanmedian(KV);
+KV(isnan(KV)) = nanmedian(KV);
+
+if sum(KV<0), error('Problem with flux directions'); end
 
 % compute reaction velocities
-
 [v, v_plus, v_minus] = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,es_options.h);
 [Kplus,Kminus]       = ms_compute_Kcat(N,KM,KV,Keq);
-
 
 % ----------------------------------------------------------------
 % Tests
@@ -154,7 +152,6 @@ v_minus_fallback = ones(size(v));
 
 E = compute_modular_elasticities(es_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback, es_options.flag_second_order);
 
-
 % -------------------------------------------------------------
 % Compute unscaled and scaled response coefficients 
 
@@ -173,9 +170,9 @@ if prod(size(N)) > 10^4, % compute approximation of NR_int and L_int
   ii =  find(abs(diag(S))>epsilon_nullspace); 
   L_int  = U(:,ii) * S(ii,ii);
   NR_int = V(:,ii)';
-  [CJ, CS, L_int, NR_int, M] = control_coefficients(N, Ec, external, [], NR_int, L_int);
+  [CJ, CS, L_int, NR_int, M, M_adj] = control_coefficients(N, Ec, external, [], NR_int, L_int);
 else,
-  [CJ, CS, L_int, NR_int, M] = control_coefficients(N, Ec, external);
+  [CJ, CS, L_int, NR_int, M, M_adj] = control_coefficients(N, Ec, external);
 end
 
 
@@ -204,11 +201,16 @@ if es_options.flag_second_order * [length(es_options.zc) + length(es_options.zv)
    Epp(1:nr,nr+1:np,nr+1:np) = Ess;
    
    [RSp,RJp,RSpp,RJpp] = response_coefficients_sparse(CS,Ec,Ep,Ecc,Ecp,Epp);
-   control             = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext);
-   
+
+   %% "response" effect of external metabolite to itself
+   RSp(ind_ext,nr+1:np) = eye(length(ind_ext));
+   control              = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext);
 else
   
-  [RSp_un,RJp_un]   = response_coefficients(CS,Ec,Ep);
+  [RSp_un,RJp_un] = response_coefficients(CS,Ec,Ep);
+  %% "response" effect of external metabolite to itself
+  np  = size(Ep,2);
+  RSp_un(ind_ext,nr+1:np) = eye(length(ind_ext));
 
   control.CS  = CS;
   control.CJ  = CJ;
@@ -223,31 +225,40 @@ else
   control.RJu_sc = diag(1./(v)) * control.RJp(:,1:nr) * diag(u);
   control.RSs_sc = diag(1./(c)) * control.RSp(:,end-n_ext+1:end) * diag(c(ind_ext));
   control.RJs_sc = diag(1./(v)) * control.RJp(:,end-n_ext+1:end) * diag(c(ind_ext));
-  
-  if [length(es_options.zc) + length(es_options.zv)],
-    
+  control.RSs_un = control.RSp(:,end-n_ext+1:end);
+  control.RJs_un = control.RJp(:,end-n_ext+1:end);
+
+  %% Second order effects on specified target reaction 
+  if [length(es_options.zc) + length(es_options.zv)],    
     [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(...
-            es_options.zc, es_options.zv, es_options.kinetic_law,N, W, ...
-            ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, ...
-            v_plus_fallback, v_minus_fallback,CS,CJ);
+        es_options.zc, es_options.zv, es_options.kinetic_law,N, W, ...
+        ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, ...
+        v_plus_fallback, v_minus_fallback,CS,CJ);
   end
   
 end
   
-  %% fix response coefficient of external concentration w.r.t. itself
-  for ittt = 1:length(ind_ext),
-    control.RJs_sc(ind_ext(ittt),ittt) = 1; 
-  end
-  
-  if length(es_options.zc),
-    [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(es_options.zc,es_options.zv,es_options.kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback,CS,CJ);
-  end
+%% fix response coefficient of external concentration w.r.t. itself
+for ittt = 1:length(ind_ext),
+  control.RSs_sc(ind_ext(ittt),ittt) = 1; 
+end
 
-control.M = M;
-eigmax    = max(real(eig(M)));
+if length(es_options.zc),
+  [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(es_options.zc,es_options.zv,es_options.kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback,CS,CJ);
+end
 
-control.stable = [eigmax < 0];
+control.M     = M;
+control.M_adj = M_adj;
 
+eigmax = max(real(eig(M)));
+
+control.stable = [eigmax <= 0];
+
+if control.stable,
+  display('The metabolic state is stable.');
+else
+  display('WARNING: The metabolic state is unstable.');
+end
 
 % -------------------------------------------------------------
 % write all results to data structure 'result'

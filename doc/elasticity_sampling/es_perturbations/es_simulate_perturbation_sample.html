@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_simulate_perturbation_sample</title>
+  <meta name="keywords" content="es_simulate_perturbation_sample">
+  <meta name="description" content="[res,es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_perturbations</a> &gt; es_simulate_perturbation_sample.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_perturbations&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_simulate_perturbation_sample
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[res,es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [res, es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [res,es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)
+
+ Compute the predicted effects of a given differential profile 
+ for enzyme concentrations and external concentrations
+ on concentrations and fluxes: do this for a number of model variants
+ with sampled elasticities and present a statistics of the results
+
+ N, W, ind_ext: structural information about the network
+ x_ratio:       expression ratio column vector (or matrix, for several samples)
+ nrun:          number of samples
+ constraints, options: options for elasticity sampling
+ s_ratio:       external concentration ratio vector
+ u_ratio:       expression ratio vector
+ expansion:     {'logarithmic','non-logarithmic'}
+                -&gt; depending on the expansion type, the output refers to logarithmic 
+                   or non-logarithmic values; 
+
+ Outputs:
+ res:            contains statistics over predicted effects
+ es_result_list: contains the results of all sampling runs</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="es_simulate_perturbation.html" class="code" title="function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)">es_simulate_perturbation</a>	r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)</li><li><a href="../.././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>	ES_SAMPLE_MODEL - Sample all model parameters for a network</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [res, es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)</a>
+0002 
+0003 <span class="comment">% [res,es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Compute the predicted effects of a given differential profile</span>
+0006 <span class="comment">% for enzyme concentrations and external concentrations</span>
+0007 <span class="comment">% on concentrations and fluxes: do this for a number of model variants</span>
+0008 <span class="comment">% with sampled elasticities and present a statistics of the results</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% N, W, ind_ext: structural information about the network</span>
+0011 <span class="comment">% x_ratio:       expression ratio column vector (or matrix, for several samples)</span>
+0012 <span class="comment">% nrun:          number of samples</span>
+0013 <span class="comment">% constraints, options: options for elasticity sampling</span>
+0014 <span class="comment">% s_ratio:       external concentration ratio vector</span>
+0015 <span class="comment">% u_ratio:       expression ratio vector</span>
+0016 <span class="comment">% expansion:     {'logarithmic','non-logarithmic'}</span>
+0017 <span class="comment">%                -&gt; depending on the expansion type, the output refers to logarithmic</span>
+0018 <span class="comment">%                   or non-logarithmic values;</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Outputs:</span>
+0021 <span class="comment">% res:            contains statistics over predicted effects</span>
+0022 <span class="comment">% es_result_list: contains the results of all sampling runs</span>
+0023 
+0024 eval(default(<span class="string">'expansion'</span>,<span class="string">'''non-logarithmic'''</span>,<span class="string">'expansion_order'</span>,<span class="string">'2'</span>,<span class="string">'nrun'</span>,<span class="string">'1'</span>));
+0025 
+0026 
+0027 <span class="comment">% -------------------------------------------------</span>
+0028 <span class="comment">% iterate:</span>
+0029 <span class="comment">%   - sample elasticities</span>
+0030 <span class="comment">%   - compute the metabolite and flux changes due to perturbation</span>
+0031 
+0032 <span class="keyword">for</span> it = 1:nrun,
+0033   display(sprintf(<span class="string">'Monte Carlo run %d/%d'</span>,it,nrun));
+0034   options.seed        = it;
+0035   es_result_list{it}  = <a href="../.././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>(N,W,ind_ext,constraints,options);
+0036   r                   = <a href="es_simulate_perturbation.html" class="code" title="function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)">es_simulate_perturbation</a>(N,W,ind_ext,u_ratio,s_ratio,es_result_list{it},expansion,expansion_order);
+0037   res.c(:,it)         = es_result_list{it}.c;
+0038   res.v(:,it)         = es_result_list{it}.v;
+0039   res.delta_c(:,:,it) = r.delta_c;
+0040   res.delta_v(:,:,it) = r.delta_v;
+0041   res.c_ratio(:,:,it) = r.c_ratio;
+0042   res.v_ratio(:,:,it) = r.v_ratio;
+0043 <span class="keyword">end</span>
+0044 
+0045 
+0046 <span class="comment">% -------------------------------------------------</span>
+0047 <span class="comment">% statistics over the sampling results</span>
+0048 
+0049 flag_multiple_samples = double(size(u_ratio,2)&gt;1);
+0050 
+0051 res.c_mean = mean(res.c,2+flag_multiple_samples);
+0052 res.v_mean = mean(res.v,2+flag_multiple_samples);
+0053 
+0054 <span class="keyword">if</span> nrun &gt; 1,
+0055   res.c_std  = std(res.c,0,2+flag_multiple_samples);
+0056   res.v_std  = std(res.v,0,2+flag_multiple_samples);
+0057 <span class="keyword">else</span> 
+0058   res.c_std  = nan * res.c_mean;
+0059   res.v_std  = nan * res.v_mean;
+0060 <span class="keyword">end</span>
+0061 
+0062 res.delta_c_mean = squeeze(mean(res.delta_c,  3+flag_multiple_samples));
+0063 res.delta_c_std  = squeeze( std(res.delta_c,0,3+flag_multiple_samples));
+0064 res.delta_v_mean = squeeze(mean(res.delta_v,  3+flag_multiple_samples));
+0065 res.delta_v_std  = squeeze( std(res.delta_v,0,3+flag_multiple_samples));
+0066 res.c_ratio_mean = squeeze(mean(res.c_ratio,  3+flag_multiple_samples));
+0067 res.c_ratio_std  = squeeze( std(res.c_ratio,0,3+flag_multiple_samples));
+0068 res.v_ratio_mean = squeeze(mean(res.v_ratio,  3+flag_multiple_samples));
+0069 res.v_ratio_std  = squeeze( std(res.v_ratio,0,3+flag_multiple_samples));
+0070</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

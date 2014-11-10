@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of interaction_statistics</title>
+  <meta name="keywords" content="interaction_statistics">
+  <meta name="description" content="res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_synergies</a> &gt; interaction_statistics.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_synergies&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>interaction_statistics
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)
+
+ Run elasticity sampling repeatedly and compute statistics 
+ over the resulting influence values (1st order control coefficients) 
+ and interaction values (i.e. 2nd order control coefficients) 
+ 
+ Output:
+ res.p_influence       p-values for influences
+ res.p_interaction     p-values for interactions
+ res.influence_sig     
+ res.influence_a_sig   
+ res.influence_b_sig   
+ res.interaction_sig   
+ res.interaction_a_sig 
+ res.interaction_b_sig</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../.././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>	ES_SAMPLE_MODEL - Sample all model parameters for a network</li><li><a href="influence_anova.html" class="code" title="function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)">influence_anova</a>	function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)</li><li><a href="interaction_anova.html" class="code" title="function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)">interaction_anova</a>	function p = influence_anova(D, n_per, fdr, ind_intervention)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)</a>
+0002 
+0003 <span class="comment">% res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Run elasticity sampling repeatedly and compute statistics</span>
+0006 <span class="comment">% over the resulting influence values (1st order control coefficients)</span>
+0007 <span class="comment">% and interaction values (i.e. 2nd order control coefficients)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Output:</span>
+0010 <span class="comment">% res.p_influence       p-values for influences</span>
+0011 <span class="comment">% res.p_interaction     p-values for interactions</span>
+0012 <span class="comment">% res.influence_sig</span>
+0013 <span class="comment">% res.influence_a_sig</span>
+0014 <span class="comment">% res.influence_b_sig</span>
+0015 <span class="comment">% res.interaction_sig</span>
+0016 <span class="comment">% res.interaction_a_sig</span>
+0017 <span class="comment">% res.interaction_b_sig</span>
+0018 
+0019 
+0020 <span class="comment">% ---------------------------------------------</span>
+0021 <span class="comment">% result files contain data structures 'es_options', 'es_constraints', 'result'</span>
+0022 <span class="comment">% predefined flux distribution is contained in 'es_constraints.vfix'</span>
+0023 
+0024 load(es_filenames.network_file);
+0025 
+0026 N          = network.N;
+0027 W          = network.regulation_matrix;
+0028 ind_ext    = find(network.external);
+0029 [nm,nr]    = size(N);
+0030 ind_target = find(strcmp(target_reaction, network.actions));
+0031 
+0032 
+0033 <span class="comment">% ---------------------------------------------</span>
+0034 
+0035 cd(es_filenames.es_dir); load(input_file1);
+0036 es_options.set_alpha_to_half  = 0;
+0037 es_options.seed               = 0;
+0038 es_options.epsilon_stationary = 0.001;
+0039 
+0040 <span class="keyword">if</span> fluxes_fixed,
+0041   es_options.method_flux_sampling = <span class="string">'accept_flux'</span>;
+0042   es_constraints.v_fix = result.v;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% ---------------------------------------------</span>
+0046 
+0047 <span class="keyword">for</span> it = 1:n_mc,
+0048   fprintf(<span class="string">'MC sample %d/%d:'</span>,it,n_mc);
+0049   result         = <a href="../.././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>(N,W,ind_ext,es_constraints,es_options);
+0050   R_target_u_sc  = result.control.RJu_sc(ind_target,:);
+0051   R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
+0052   influence_list(:,it,1)     = R_target_u_sc;
+0053   interaction_list(:,:,it,1) = R_target_uu_sc - diag(diag(R_target_uu_sc));
+0054 <span class="keyword">end</span>
+0055 
+0056 cd(es_filenames.es_dir); 
+0057 load(input_file2); <span class="comment">% es_options, result; from script 'ycm_elasticity_sampling'</span>
+0058 es_options.set_alpha_to_half  = 0;
+0059 es_options.seed               = 0;
+0060 es_options.epsilon_stationary = 0.001;
+0061 
+0062 <span class="keyword">if</span> fluxes_fixed,
+0063   es_options.method_flux_sampling = <span class="string">'accept_flux'</span>;
+0064   es_constraints.v_fix = result.v;
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="keyword">for</span> it = 1:n_mc,
+0068   fprintf(<span class="string">'MC sample %d/%d:'</span>,it,n_mc);
+0069   result         = <a href="../.././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>(N,W,ind_ext,es_constraints,es_options);
+0070   R_target_u_sc  = result.control.RJu_sc(ind_target,:);
+0071   R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
+0072   influence_list(:,it,2)     = R_target_u_sc;
+0073   interaction_list(:,:,it,2) = R_target_uu_sc - diag(diag(R_target_uu_sc));
+0074 <span class="keyword">end</span>
+0075 
+0076 
+0077 <span class="comment">% --------------------------------------------------------------</span>
+0078 <span class="comment">% Detect significant values and differences in the interaction matrices</span>
+0079 <span class="comment">% by a permutation test</span>
+0080 
+0081 ind_intervention = 1:nr;
+0082 
+0083 p_influence   = <a href="influence_anova.html" class="code" title="function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)">influence_anova</a>(    influence_list, n_per, fdr, ind_intervention);
+0084 p_interaction = <a href="interaction_anova.html" class="code" title="function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)">interaction_anova</a>(interaction_list, n_per, fdr, ind_intervention);
+0085 
+0086 
+0087 <span class="comment">% --------------------------------------------------------------</span>
+0088 <span class="comment">% use significance for thresholding</span>
+0089 
+0090 influence_sig = nan*ones(nr,1);
+0091 influence_sig(ind_intervention) = abs(p_influence.mean_total_significant).*p_influence.mean_total;
+0092 interaction_sig = nan*ones(nr);
+0093 dummi = abs(p_interaction.mean_total_significant).*p_interaction.mean_total; dummi(isnan(dummi)) = 0; dummi = dummi + dummi';
+0094 interaction_sig(ind_intervention,ind_intervention) = dummi;
+0095 
+0096 influence_a_sig = nan*ones(nr,1);
+0097 influence_a_sig(ind_intervention) =abs(p_influence.mean_a_significant).*p_influence.mean_a;
+0098 interaction_a_sig = nan*ones(nr);
+0099 dummi = abs(p_interaction.mean_a_significant).*p_interaction.mean_a; dummi(isnan(dummi)) = 0; dummi = dummi + dummi';
+0100 interaction_a_sig(ind_intervention,ind_intervention) = dummi;
+0101 
+0102 influence_b_sig = nan*ones(nr,1);
+0103 influence_b_sig(ind_intervention) =abs(p_influence.mean_b_significant).*p_influence.mean_b;
+0104 interaction_b_sig = nan*ones(nr);
+0105 dummi = abs(p_interaction.mean_b_significant).*p_interaction.mean_b; dummi(isnan(dummi)) = 0; dummi = dummi + dummi';
+0106 interaction_b_sig(ind_intervention,ind_intervention) = dummi;
+0107 
+0108 res.p_influence       = p_influence;
+0109 res.p_interaction     = p_interaction;
+0110 res.influence_sig     = influence_sig;
+0111 res.influence_a_sig   = influence_a_sig;
+0112 res.influence_b_sig   = influence_b_sig;
+0113 res.interaction_sig   = interaction_sig;
+0114 res.interaction_a_sig = interaction_a_sig;
+0115 res.interaction_b_sig = interaction_b_sig;
+0116 
+0117 res.ind_intervention = ind_intervention;</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of make_ext_sign_vector</title>
+  <meta name="keywords" content="make_ext_sign_vector">
+  <meta name="description" content="[ext_sign_vector,v_sign_vector] = make_ext_sign_vector_vector(ext_sign,metabolites,ext_ind,v_signs,actions)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_functions</a> &gt; make_ext_sign_vector.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_functions&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>make_ext_sign_vector
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[ext_sign_vector,v_sign_vector] = make_ext_sign_vector_vector(ext_sign,metabolites,ext_ind,v_signs,actions)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [ext_sign_vector,v_sign_vector] = make_ext_sign_vector_vector(ext_sign,metabolites,ext_ind,v_signs,actions) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [ext_sign_vector,v_sign_vector] = make_ext_sign_vector_vector(ext_sign,metabolites,ext_ind,v_signs,actions)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ext_sign_vector,v_sign_vector] = make_ext_sign_vector_vector(ext_sign,metabolites,ext_ind,v_signs,actions)</a>
+0002 
+0003 <span class="comment">% [ext_sign_vector,v_sign_vector] = make_ext_sign_vector_vector(ext_sign,metabolites,ext_ind,v_signs,actions)</span>
+0004 
+0005 nm              = length(metabolites);
+0006 ext_sign_vector = nan*ones(nm,1);
+0007 
+0008 <span class="keyword">for</span> it=1:length(ext_sign),
+0009   this_ind = find(strcmp(metabolites,ext_sign{it}{1}));
+0010   <span class="keyword">if</span> find(this_ind==ext_ind),
+0011     ext_sign_vector(this_ind) = ext_sign{it}{2};
+0012   <span class="keyword">end</span>
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="keyword">if</span> nargout &gt;1,
+0016 
+0017   nr            = length(actions);
+0018   v_sign_vector = nan*ones(nr,1);
+0019 
+0020   <span class="keyword">for</span> it=1:length(v_signs),
+0021     this_ind = find(strcmp(actions,v_signs{it}{1}));
+0022     v_sign_vector(this_ind) = v_signs{it}{2};
+0023   <span class="keyword">end</span>
+0024   
+0025 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

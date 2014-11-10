@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_demo_ecoli_glycolysis</title>
+  <meta name="keywords" content="es_demo_ecoli_glycolysis">
+  <meta name="description" content="ES_DEMO Demo script for thermodynamically feasible elasticity sampling">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">demo</a> &gt; es_demo_ecoli_glycolysis.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./demo&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>es_demo_ecoli_glycolysis
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>ES_DEMO Demo script for thermodynamically feasible elasticity sampling</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ES_DEMO Demo script for thermodynamically feasible elasticity sampling</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href=".././elasticity_sampling/es_compare_ensembles.html" class="code" title="function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)">es_compare_ensembles</a>	ES_COMPARE_ENSEMBLES - Compare an output function between two model ensembles</li><li><a href=".././elasticity_sampling/es_default_options.html" class="code" title="function [es_options,es_constraints] = es_default_options(N)">es_default_options</a>	ES_DEFAULT_OPTIONS - Set default values in 'es_options' and 'es_constraints'</li><li><a href=".././elasticity_sampling/es_functions/es_dependencies.html" class="code" title="function es_dependencies()">es_dependencies</a>	</li><li><a href=".././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>	ES_SAMPLE_MODEL - Sample all model parameters for a network</li><li><a href=".././elasticity_sampling/es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>	ES_SAMPLE_MULTIPLE - Create model ensemble and collect values for an output function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% ES_DEMO Demo script for thermodynamically feasible elasticity sampling</span>
+0002 
+0003 <a href=".././elasticity_sampling/es_functions/es_dependencies.html" class="code" title="function es_dependencies()">es_dependencies</a>;
+0004 
+0005 demo_dir = [fileparts(which(mfilename))];
+0006 
+0007 cd(demo_dir);
+0008 
+0009 echo on;
+0010 clc
+0011 <span class="comment">%---------------------------------------------------------</span>
+0012 <span class="comment">% Elasticity sampling demo</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% This script shows how to load a metabolic network model,</span>
+0015 <span class="comment">% to run elasticity sampling for two types of rate laws,</span>
+0016 <span class="comment">% to compare the results of the two model ensembles</span>
+0017 <span class="comment">%---------------------------------------------------------</span>
+0018  
+0019 <span class="comment">% Press key to continue</span>
+0020  
+0021 pause
+0022 clc
+0023 <span class="comment">%-------------------------------------------------------------------------------</span>
+0024 <span class="comment">% Load network model from SBML file</span>
+0025 
+0026 network = network_sbml_import(<span class="string">'data/ecoli_glycolysis_network.xml'</span>)
+0027  
+0028 <span class="comment">% Network structures can also be defined within matlab using 'network_construct'</span>
+0029  
+0030 <span class="comment">% Press key to continue</span>
+0031  
+0032 pause
+0033 clc
+0034 <span class="comment">%-------------------------------------------------------------------------------</span>
+0035 <span class="comment">% Read graphics information for the network model from file</span>
+0036 <span class="comment">%</span>
+0037 network = netgraph_read_positions(network,<span class="string">'data/ecoli_glycolysis_Positions.tsv'</span>);
+0038  
+0039 <span class="comment">% Press key to continue</span>
+0040  
+0041 pause
+0042 clc
+0043 <span class="comment">%-------------------------------------------------------------------------------</span>
+0044 <span class="comment">% The matlab command for elasticity sampling requires the stoichiometric matrix N</span>
+0045 <span class="comment">% and the allosteric regulation matrix W.</span>
+0046 
+0047 <span class="comment">% Now we extract these matrices from the network structure.</span>
+0048  
+0049 N       = network.N;                  <span class="comment">% stoichiometric matrix</span>
+0050  
+0051 W       = network.regulation_matrix;  <span class="comment">% allosteric regulation matrix</span>
+0052  
+0053 ind_ext = find(network.external);     <span class="comment">% external metabolites (indices)</span>
+0054  
+0055 <span class="comment">% Then, we compute a right-kernel matrix K and, just for this example,</span>
+0056 <span class="comment">% choose its first column as our flux mode v</span>
+0057  
+0058 K = full(network_analyse(network));   <span class="comment">% stationary fluxes</span>
+0059  
+0060 v = K(:,1) * sign(K(1));              
+0061  
+0062 <span class="comment">% Press key to continue</span>
+0063 pause
+0064 clc
+0065 <span class="comment">%-------------------------------------------------------------------------------</span>
+0066 <span class="comment">% User options for elasticity sampling are stored in two matlab structs,</span>
+0067 <span class="comment">% 'es_options' and 'es_constraints'.</span>
+0068  
+0069 <span class="comment">% 'es_options' contains general settings, 'es_constraints' contains numerical details.</span>
+0070  
+0071 <span class="comment">% Default settings can be obtained as follows:</span>
+0072  
+0073 [es_options,es_constraints] = <a href=".././elasticity_sampling/es_default_options.html" class="code" title="function [es_options,es_constraints] = es_default_options(N)">es_default_options</a>(N);
+0074  
+0075 <span class="comment">% To learn more about these structs, try 'help es_default_options'</span>
+0076  
+0077 <span class="comment">% Now press key to continue</span>
+0078 pause
+0079 clc
+0080 <span class="comment">%-------------------------------------------------------------------------------</span>
+0081 <span class="comment">% After inserting the flux mode into 'es_constraints', we run elasticity sampling</span>
+0082 <span class="comment">% All output will be stored in a data structure 'result'</span>
+0083  
+0084 es_constraints.v_fix = v;
+0085  
+0086 result = <a href=".././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>(N, W, ind_ext, es_constraints, es_options);
+0087  
+0088 <span class="comment">% Press key to continue</span>
+0089 pause
+0090 clc
+0091 <span class="comment">%-------------------------------------------------------------------------------</span>
+0092 <span class="comment">% The matlab struct 'result' contains, among other types of information,  a field</span>
+0093 <span class="comment">% 'kinetics'. containing the kinetic rate laws obtained from elasticity sampling</span>
+0094  
+0095 result.kinetics
+0096  
+0097 <span class="comment">% With these rate laws, the network becomes a kinetic model.</span>
+0098  
+0099 network.kinetics = result.kinetics;
+0100  
+0101 <span class="comment">% It can be simulated with functions from the Metabolic Network Toolbox</span>
+0102  
+0103 <span class="comment">% Press any key to continue</span>
+0104 pause
+0105 clc
+0106 <span class="comment">% --------------------------------------------------------------------</span>
+0107 <span class="comment">% We can also export the model, including the rate laws, to SBML format</span>
+0108 
+0109 SBMLmodel = network_sbml_export(network,1);
+0110  
+0111 <span class="comment">% Press key to continue</span>
+0112 pause
+0113 clc
+0114 <span class="comment">%-------------------------------------------------------------------------------</span>
+0115 <span class="comment">% Now we try multiple elasticity sampling runs. We first modify the directives</span>
+0116  
+0117 es_options.n_samples         = 10;
+0118  
+0119 es_options.set_alpha_to_half = 0;
+0120  
+0121 <span class="comment">% We will sample the enzyme interactions for a specific output function.</span>
+0122 <span class="comment">% Here we choose the sum of squares of all flux control coefficients.</span>
+0123  
+0124 output_function  = inline(<span class="string">'sum(result.control.CJ .^2)'</span>,<span class="string">'result'</span>,<span class="string">'other'</span>);
+0125  
+0126 <span class="comment">% Now we will create two ensembles, one with cs kinetics and one with ms kinetics</span>
+0127  
+0128 <span class="comment">% Press key to continue</span>
+0129 pause
+0130 clc
+0131 <span class="comment">%-------------------------------------------------------------------------------</span>
+0132 <span class="comment">% First ensemble: common saturable modular rate law ('cs')</span>
+0133  
+0134 es_options.kinetic_law = <span class="string">'cs'</span>;
+0135  
+0136 output1 = <a href=".././elasticity_sampling/es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>(N, W, ind_ext, es_constraints, es_options, output_function);
+0137  
+0138 <span class="comment">% This was the first ensemble</span>
+0139  
+0140 <span class="comment">% Press key to continue</span>
+0141 pause
+0142 clc
+0143 <span class="comment">%-------------------------------------------------------------------------------</span>
+0144 <span class="comment">% Second ensemble:  simultaneous binding modular rate law ('ms')</span>
+0145  
+0146 es_options.kinetic_law = <span class="string">'ms'</span>;
+0147  
+0148 output2 = <a href=".././elasticity_sampling/es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>(N, W, ind_ext, es_constraints, es_options, output_function);
+0149 
+0150 <span class="comment">% This was the second ensemble</span>
+0151  
+0152 <span class="comment">% Press key to continue</span>
+0153 pause
+0154 clc
+0155 <span class="comment">%-------------------------------------------------------------------------------</span>
+0156 <span class="comment">% Now we try to determine significant differences between both ensembles</span>
+0157 <span class="comment">% We choose a false discovery rate of 5 percent.</span>
+0158  
+0159 false_discovery_rate = 0.05;
+0160  
+0161 <span class="comment">% All results of the comparison are stored in a data structure res</span>
+0162  
+0163 res = <a href=".././elasticity_sampling/es_compare_ensembles.html" class="code" title="function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)">es_compare_ensembles</a>(output1, output2, false_discovery_rate);
+0164  
+0165 <span class="comment">% All variables are still in your workspace</span>
+0166  
+0167 <span class="comment">% Enjoy working with elasticity sampling!</span>
+0168  
+0169 <span class="comment">% Press key to finish</span>
+0170 pause
+0171 <span class="keyword">return</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

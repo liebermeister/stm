@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_sample_model_write_flux_task</title>
+  <meta name="keywords" content="es_sample_model_write_flux_task">
+  <meta name="description" content="result = es_sample_model_naama_write(N, W, ind_ext, es_constraints, es_options)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_functions</a> &gt; es_sample_model_write_flux_task.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_functions&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_sample_model_write_flux_task
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>result = es_sample_model_naama_write(N, W, ind_ext, es_constraints, es_options)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function r = es_sample_model_naama_write(network,es_constraints,es_options,filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> result = es_sample_model_naama_write(N, W, ind_ext, es_constraints, es_options)
+
+ analogous to es_sample_model; write task file for naama to compute feasible flux distribution</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function r = es_sample_model_naama_write(network,es_constraints,es_options,filename)</a>
+0002 
+0003 <span class="comment">% result = es_sample_model_naama_write(N, W, ind_ext, es_constraints, es_options)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% analogous to es_sample_model; write task file for naama to compute feasible flux distribution</span>
+0006 
+0007 <span class="keyword">if</span> 0,
+0008   addpath ~/projekte/elasticity_sampling/matlab_elasticity_sampling/models/ 
+0009   model_name = <span class="string">'eccm'</span>; condition_name = <span class="string">'ishii_growth_07'</span>;  
+0010   filenames       = elasticity_sampling_filenames(model_name,condition_name); 
+0011   cd([filenames.es_dir]); load(filenames.model_data_file);   
+0012   filename = <span class="string">'~/projekte/elasticity_sampling/matlab_elasticity_sampling/models_for_naama/eccm_for_naama'</span>;
+0013   r = es_sample_model_naama_write(network,es_constraints,es_options);
+0014 <span class="keyword">end</span>
+0015 
+0016 eval(default(<span class="string">'filename'</span>,<span class="string">'[]'</span>));
+0017 nx = sum(network.external);
+0018 nn = network_add_transport(network, network.metabolites(find(network.external)),1);  
+0019 [nm,nr] = size(nn.N);
+0020 external_prod_sign = sign(network.N(find(network.external),:)*es_constraints.v_mean);
+0021 
+0022 r.rxns                             = nn.actions;
+0023 r.mets                             = nn.metabolites;
+0024 r.S                                = sparse(nn.N);
+0025 r.lb                               = nan * ones(nr,1); 
+0026 r.ub                               = nan * ones(nr,1);
+0027 r.lb(1:end-nx)                     = es_constraints.v_min;
+0028 r.ub(1:end-nx)                     = es_constraints.v_max;
+0029 r.lb(end-nx+find(external_prod_sign ==-1)) = -inf;
+0030 r.ub(end-nx+find(external_prod_sign ==-1)) = inf;
+0031 r.lb(end-nx+find(external_prod_sign ~=-1)) = -inf;
+0032 r.ub(end-nx+find(external_prod_sign ~=-1)) = 0;
+0033 r.lb(es_constraints.v_sign&gt;0)         = 0;
+0034 r.ub(es_constraints.v_sign&lt;0)         = 0;
+0035 r.lb(isfinite(es_constraints.v_fix))  = es_constraints.v_fix(isfinite(es_constraints.v_fix)); 
+0036 r.ub(isfinite(es_constraints.v_fix))  = es_constraints.v_fix(isfinite(es_constraints.v_fix)); 
+0037 r.c_lb                             = exp(es_constraints.log_c_min);
+0038 r.c_ub                             = exp(es_constraints.log_c_max);
+0039 <span class="comment">%r.gfe_formation                    = es_constraints.mu0_fix;</span>
+0040 r.gfe_formation_lb                 = es_constraints.mu0_min;
+0041 r.gfe_formation_ub                 = es_constraints.mu0_max;
+0042 r.gfe_reaction_lb                  = es_constraints.dmu_min;
+0043 r.gfe_reaction_ub                  = es_constraints.dmu_max;
+0044 r.flux_data_mean                   = nan * ones(nr,1); 
+0045 r.flux_data_std                    = nan * ones(nr,1); 
+0046 r.flux_data_mean(1:end-nx)         = es_constraints.v_mean;
+0047 r.flux_data_std(1:end-nx)          = es_constraints.v_std;
+0048 
+0049 r.gibbs_threshold                  = 0.1; <span class="comment">% kJ/mol, necessary for driving a reaction</span>
+0050 
+0051 <span class="keyword">if</span> length(filename),
+0052   save(filename, <span class="string">'r'</span>);
+0053 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

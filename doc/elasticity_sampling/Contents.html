@@ -6,16 +6,16 @@
   <meta name="keywords" content="Contents">
   <meta name="description" content="ELASTICITY_SAMPLING - Matlab toolbox for thermodynamically feasible elasticity sampling">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../index.html">Home</a> &gt;  <a href="index.html">elasticity_sampling</a> &gt; Contents.m</div>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; Contents.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for elasticity_sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./elasticity_sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
 
 <h1>Contents
 </h1>
@@ -33,7 +33,8 @@
 
  Main functions
    es_default_options         - Set default values in 'es_options' and 'es_constraints'
-   es_sample_model            - Sample all model parameters for a network
+   es_sample_model            - Sample all model parameters for a network; 
+                                    calls 'es_sample_steady_state' and 'es_sample_elasticities'
    es_sample_multiple         - Create model ensemble and collect values for an output function
    es_compare_ensembles - Compare the output function for two model ensembles
 
@@ -44,10 +45,12 @@
  Demos
    See directory 'demo'
 
- Other MATLAB Toolboxes required:
-   Metabolic Network Toolbox 
-   Tensor Toolbox, Sandia National Labs
-     see http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html
+ MATLAB toolboxes required
+   Metabolic Network Toolbox              (https://github.com/wolframliebermeister/mnt)
+   SBMLtoolbox    - SBML import / export  (http://sbml.org/Software/SBMLToolbox)
+   SBtab toolbox  - SBtab format          (https://github.com/wolframliebermeister/sbtab-matlab)
+   Tensor toolbox -                       (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
+   efmtool        - Elementary flux modes (http://www.csb.ethz.ch/tools/efmtool)
 
  Copyright (C) 2011-2013
  Wolfram Liebermeister  &lt;wolfram.liebermeister@gmail.com&gt;</pre></div>
@@ -64,7 +67,6 @@ This function is called by:
 
 
 
-
-<hr><address>Generated on Wed 10-Apr-2013 10:44:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

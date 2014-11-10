@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Beta_mean_std_to_parameters</title>
+  <meta name="keywords" content="Beta_mean_std_to_parameters">
+  <meta name="description" content="[Beta_A_alpha, Beta_A_beta] = Beta_mean_std_to_parameters(x_mean,x_std)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">utils</a> &gt; Beta_mean_std_to_parameters.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>Beta_mean_std_to_parameters
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[Beta_A_alpha, Beta_A_beta] = Beta_mean_std_to_parameters(x_mean,x_std)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [Beta_A_alpha, Beta_A_beta] = Beta_mean_std_to_parameters(x_mean,x_std) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[Beta_A_alpha, Beta_A_beta] = Beta_mean_std_to_parameters(x_mean,x_std)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../.././elasticity_sampling/es_functions/sample_saturation_parameters.html" class="code" title="function [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options,es_constraints)">sample_saturation_parameters</a>	[alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options)</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Beta_A_alpha, Beta_A_beta] = Beta_mean_std_to_parameters(x_mean,x_std)</a>
+0002 
+0003 <span class="comment">%[Beta_A_alpha, Beta_A_beta] = Beta_mean_std_to_parameters(x_mean,x_std)</span>
+0004 
+0005 <span class="comment">% based on formulae for computing distributions parameters from mean (x_mean) and std_dev (x_std)</span>
+0006 <span class="comment">% &quot;method of moments&quot;; works for matrices</span>
+0007 
+0008 dum          = [ x_mean .* [1- x_mean] ] ./ [x_std.^2] -1;
+0009 Beta_A_alpha = x_mean .* dum;
+0010 Beta_A_beta  = [1-x_mean] .* dum;</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

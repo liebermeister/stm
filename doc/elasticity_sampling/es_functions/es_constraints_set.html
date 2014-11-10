@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_constraints_set</title>
+  <meta name="keywords" content="es_constraints_set">
+  <meta name="description" content="c = es_constraints_set(es_constraints,network,varargin)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_functions</a> &gt; es_constraints_set.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_functions&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_constraints_set
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>c = es_constraints_set(es_constraints,network,varargin)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function c = es_constraints_set(es_constraints,network,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> c = es_constraints_set(es_constraints,network,varargin)
+
+ convenience function to define es_constraints</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c = es_constraints_set(es_constraints,network,varargin)</a>
+0002 
+0003 <span class="comment">% c = es_constraints_set(es_constraints,network,varargin)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% convenience function to define es_constraints</span>
+0006 
+0007 c = es_constraints;
+0008 
+0009 <span class="keyword">for</span> it = 1:floor(length(varargin)/3),
+0010   type   = varargin{it*3-2};
+0011   names  = varargin{it*3-1};
+0012   values = varargin{it*3};
+0013   
+0014   <span class="keyword">for</span> it2 = 1:length(names),
+0015     <span class="keyword">switch</span> type,
+0016       <span class="keyword">case</span> {<span class="string">'v_min'</span>,<span class="string">'v_max'</span>,<span class="string">'v_sign'</span>,<span class="string">'v_fix'</span>}, ind = label_names(names(it2),network.actions);
+0017       <span class="keyword">case</span> <span class="string">'ext_sign'</span>,                         ind = label_names(names(it2),network.metabolites);
+0018     <span class="keyword">end</span>
+0019     <span class="keyword">switch</span> type,
+0020       <span class="keyword">case</span> <span class="string">'v_min'</span>,       c.v_min(ind) = values(it2);
+0021       <span class="keyword">case</span> <span class="string">'v_max'</span>,       c.v_max(ind) = values(it2);
+0022       <span class="keyword">case</span> <span class="string">'v_sign'</span>,     c.v_sign(ind) = values(it2);
+0023       <span class="keyword">case</span> <span class="string">'v_fix'</span>,        c.vfix(ind) = values(it2);
+0024       <span class="keyword">case</span> <span class="string">'ext_sign'</span>, c.ext_sign(ind) = values(it2);
+0025     <span class="keyword">end</span>
+0026   <span class="keyword">end</span>
+0027   
+0028 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

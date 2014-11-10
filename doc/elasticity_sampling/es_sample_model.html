@@ -6,16 +6,16 @@
   <meta name="keywords" content="es_sample_model">
   <meta name="description" content="ES_SAMPLE_MODEL - Sample all model parameters for a network">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../index.html">Home</a> &gt;  <a href="index.html">elasticity_sampling</a> &gt; es_sample_model.m</div>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; es_sample_model.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for elasticity_sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./elasticity_sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
 
 <h1>es_sample_model
 </h1>
@@ -56,12 +56,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>	ES_SAMPLE_ELASTICITIES - Sample elasticities</li><li><a href="es_sample_steady_state.html" class="code" title="function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)">es_sample_steady_state</a>	ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network</li></ul>
+<li><a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>	ES_SAMPLE_ELASTICITIES - Elasticity phase</li><li><a href="es_sample_steady_state.html" class="code" title="function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)">es_sample_steady_state</a>	ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../demo/es_demo.html" class="code" title="">es_demo</a>	ES_DEMO Demo script for thermodynamically feasible elasticity sampling</li><li><a href="es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>	ES_SAMPLE_MULTIPLE - Create model ensemble and collect values for an output function</li></ul>
+<li><a href=".././demo/es_demo_ecoli_glycolysis.html" class="code" title="">es_demo_ecoli_glycolysis</a>	ES_DEMO Demo script for thermodynamically feasible elasticity sampling</li><li><a href=".././elasticity_sampling/es_mcmc/es_mcmc_utils/elasticity_sampling_sample_prior.html" class="code" title="function result = elasticity_sampling_sample_prior(p)">elasticity_sampling_sample_prior</a>	result = elasticity_sampling_sample_prior(p)</li><li><a href=".././elasticity_sampling/es_perturbations/es_discover_perturbation_sample.html" class="code" title="function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation_sample</a>	function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...</li><li><a href=".././elasticity_sampling/es_perturbations/es_simulate_perturbation_sample.html" class="code" title="function [res, es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)">es_simulate_perturbation_sample</a>	[res,es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)</li><li><a href="es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>	ES_SAMPLE_MULTIPLE - Create model ensemble and collect values for an output function</li><li><a href=".././elasticity_sampling/es_synergies/interaction_statistics.html" class="code" title="function res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)">interaction_statistics</a>	res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -126,11 +125,10 @@ This function is called by:
 0059 
 0060 [c0, c, u, J, Keq, mu, K, Kma, zeta, A] = <a href="es_sample_steady_state.html" class="code" title="function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)">es_sample_steady_state</a>(N, W, ind_ext, es_constraints, es_options);
 0061 
-0062 
-0063 <span class="comment">% ----------------------------------------------------------------</span>
-0064 <span class="comment">% Kinetics phase: sample saturation values compute all the rest</span>
-0065 
-0066 result = <a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A);</pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:44:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0062 <span class="comment">% ----------------------------------------------------------------</span>
+0063 <span class="comment">% Kinetics phase: sample saturation values compute all the rest</span>
+0064 
+0065 result = <a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A);</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

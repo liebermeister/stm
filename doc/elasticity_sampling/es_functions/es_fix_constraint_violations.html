@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_fix_constraint_violations</title>
+  <meta name="keywords" content="es_fix_constraint_violations">
+  <meta name="description" content="[c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_functions</a> &gt; es_fix_constraint_violations.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_functions&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_fix_constraint_violations
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)
+
+ 1. Threshold small and large concentrations
+ 2. Recalculate reaction affinities accordingly
+ 3. Threshold the resulting reaction affinities, giving up their proper 
+    relationship to concentrations</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)</a>
+0002 
+0003 <span class="comment">% [c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% 1. Threshold small and large concentrations</span>
+0006 <span class="comment">% 2. Recalculate reaction affinities accordingly</span>
+0007 <span class="comment">% 3. Threshold the resulting reaction affinities, giving up their proper</span>
+0008 <span class="comment">%    relationship to concentrations</span>
+0009 
+0010 eval(default(<span class="string">'constraints'</span>,<span class="string">'[]'</span>));
+0011 
+0012 <span class="keyword">if</span> isempty(constraints), constraints = struct; <span class="keyword">end</span> 
+0013 
+0014 constraints_default.A_limit_min  = 2;
+0015 constraints_default.A_limit_max  = 200;
+0016 constraints_default.c_limit_min  = 10^-6;
+0017 constraints_default.c_limit_max  = 100;
+0018 
+0019 constraints = join_struct(constraints_default,constraints);
+0020 
+0021 <span class="comment">% fix very small concentrations</span>
+0022 c_new            = c;
+0023 ind_small        = find([c&lt;constraints.c_limit_min]);
+0024 c_new(ind_small) = constraints.c_limit_min;
+0025 
+0026 <span class="comment">% fix very large concentrations</span>
+0027 ind_large        = find([c&gt;constraints.c_limit_max]);
+0028 c_new(ind_large) = constraints.c_limit_max;
+0029 
+0030 dmu = dmu + RT * N' * [log(c_new) - log(c)]; 
+0031 
+0032 ind_violated = find( [[v~=0] .* [sign(v.*dmu)~=-1]]  + isnan(dmu));
+0033 
+0034 <span class="keyword">if</span> length(ind_violated),
+0035   warning(sprintf(<span class="string">'%d sign constraints violated; changing some of the reaction affinities'</span>,length(ind_violated)));
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">% Fix wrong reaction affinities</span>
+0039 dmu_geometric_median = exp(nanmean(log(abs(dmu(find(dmu))))));
+0040 dmu(ind_violated) = -sign(v(ind_violated)) .* dmu_geometric_median;
+0041 plot(v,dmu,<span class="string">'.'</span>);
+0042 
+0043 display(<span class="string">'Adjusting small and large reaction affinities'</span>);
+0044 
+0045 <span class="comment">% Fix very small or large reaction affinities</span>
+0046 
+0047 ind_small      = find(abs(dmu)&lt;constraints.A_limit_min);
+0048 dmu(ind_small) = sign(dmu(ind_small)) * constraints.A_limit_min;
+0049 ind_large      = find(abs(dmu)&gt;constraints.A_limit_max);
+0050 dmu(ind_large) = sign(dmu(ind_large)) * constraints.A_limit_max;
+0051 
+0052 c = c_new;</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

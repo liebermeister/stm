@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_mcmc_prior_likelihood_sampling</title>
+  <meta name="keywords" content="es_mcmc_prior_likelihood_sampling">
+  <meta name="description" content="[sample, likeli, acceptance_rate] =  mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_mcmc</a> &gt; es_mcmc_prior_likelihood_sampling.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_mcmc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_mcmc_prior_likelihood_sampling
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[sample, likeli, acceptance_rate] =  mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [sample, likeli, acceptance_rate] =  es_mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [sample, likeli, acceptance_rate] =  mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)
+
+ mcmc posterior sampling using sampling from the prior 
+ and acceptance/rejection according to the likelihood
+
+ prior_function:      m-file that samples (once) from the prior
+ prior_par            parameters for the prior sampling
+ likelihood_function: m-file that computed the likelihood
+ prior_par            parameters for the likelihood calculation
+ n_samples:           # of samples
+ n_relax:             # of samples before the actual sampling starts</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [sample, likeli, acceptance_rate] =  es_mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)</a>
+0002 
+0003 <span class="comment">% [sample, likeli, acceptance_rate] =  mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% mcmc posterior sampling using sampling from the prior</span>
+0006 <span class="comment">% and acceptance/rejection according to the likelihood</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% prior_function:      m-file that samples (once) from the prior</span>
+0009 <span class="comment">% prior_par            parameters for the prior sampling</span>
+0010 <span class="comment">% likelihood_function: m-file that computed the likelihood</span>
+0011 <span class="comment">% prior_par            parameters for the likelihood calculation</span>
+0012 <span class="comment">% n_samples:           # of samples</span>
+0013 <span class="comment">% n_relax:             # of samples before the actual sampling starts</span>
+0014 
+0015 sample = repmat({struct},n_relax+n_samples,1);
+0016 
+0017 display(sprintf(<span class="string">'\nInitial sample'</span>));
+0018 old_sample = feval(prior_function, prior_par);
+0019 old_likeli = feval(likelihood_function, old_sample, likelihood_par);
+0020 
+0021 accept_list = [];
+0022 
+0023 <span class="keyword">for</span> it = 1:n_relax+n_samples,
+0024   display(sprintf(<span class="string">'\nSample %d/%d'</span>,it-n_relax,n_samples));
+0025   new_sample = feval(prior_function, prior_par);
+0026   new_likeli = feval(likelihood_function, old_sample, likelihood_par);
+0027   accept = 0;
+0028   <span class="keyword">if</span> new_likeli &gt; old_likeli, 
+0029     accept = 1;
+0030   <span class="keyword">elseif</span> rand &lt; (new_likeli / old_likeli),
+0031     accept = 1;
+0032   <span class="keyword">end</span>
+0033 
+0034   <span class="keyword">if</span> accept, 
+0035     old_sample = new_sample; 
+0036     old_likeli = new_likeli; 
+0037   <span class="keyword">end</span>  
+0038 
+0039   accept_list(it) = accept;
+0040 
+0041   <span class="keyword">for</span> it2 = 1:length(keep_fields),
+0042     sample{it} = setfield(sample{it},keep_fields{it2},getfield(old_sample,keep_fields{it2}));
+0043   <span class="keyword">end</span>
+0044   
+0045   likeli(it) = old_likeli;
+0046 
+0047 <span class="keyword">end</span>
+0048 
+0049 accept_list = accept_list(n_relax+1:end); 
+0050 sample = sample(n_relax+1:end);
+0051 likeli = likeli(n_relax+1:end);
+0052 acceptance_rate = sum(accept_list)/length(accept_list);</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

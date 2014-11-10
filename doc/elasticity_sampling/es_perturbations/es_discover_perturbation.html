@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_discover_perturbation</title>
+  <meta name="keywords" content="es_discover_perturbation">
+  <meta name="description" content="[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_perturbations</a> &gt; es_discover_perturbation.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_perturbations&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_discover_perturbation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)
+
+ Compute the most likely perturbation of enzyme expression (u) and external metabolites (s)
+ that would give rise to a given differential profile of balanced concentrations c and fluxes j
+ 
+ This is, more or less, an inversion of 'es_simulate_perturbation'
+
+ N, W, ind_ext: structural information about the network
+ c_ratio,v_ratio vectors containing perturbations (no matrices for several samples allowed!)
+ es_result:     output from a previous elasticity sampling (function 'sample_model')
+ expansion:     {'logarithmic','non-logarithmic'}
+                -&gt; depending on the expansion type, the output refers to logarithmic 
+                   or non-logarithmic values; 
+ expansion_order:       1 or 2 for first- or second-expansion_order expansion
+
+ output:
+
+ s_ratio:       external concentration ratio vector
+ u_ratio:       expression ratio vector</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>	[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</li><li><a href="../.././elasticity_sampling/es_perturbations/es_perturbations_utils/solve_quadratic2.html" class="code" title="function x = solve_quadratic2(A,c,B,D,seed)">solve_quadratic2</a>	x = solve_quadratic2(A,c,B,D,seed)</li><li><a href="es_simulate_perturbation.html" class="code" title="function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)">es_simulate_perturbation</a>	r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>	[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</li><li><a href="es_discover_perturbation_sample.html" class="code" title="function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation_sample</a>	function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</a>
+0002 
+0003 <span class="comment">% [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Compute the most likely perturbation of enzyme expression (u) and external metabolites (s)</span>
+0006 <span class="comment">% that would give rise to a given differential profile of balanced concentrations c and fluxes j</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% This is, more or less, an inversion of 'es_simulate_perturbation'</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% N, W, ind_ext: structural information about the network</span>
+0011 <span class="comment">% c_ratio,v_ratio vectors containing perturbations (no matrices for several samples allowed!)</span>
+0012 <span class="comment">% es_result:     output from a previous elasticity sampling (function 'sample_model')</span>
+0013 <span class="comment">% expansion:     {'logarithmic','non-logarithmic'}</span>
+0014 <span class="comment">%                -&gt; depending on the expansion type, the output refers to logarithmic</span>
+0015 <span class="comment">%                   or non-logarithmic values;</span>
+0016 <span class="comment">% expansion_order:       1 or 2 for first- or second-expansion_order expansion</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% output:</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% s_ratio:       external concentration ratio vector</span>
+0021 <span class="comment">% u_ratio:       expression ratio vector</span>
+0022 
+0023 sigma_decrease_factor = 0.8;
+0024 
+0025 [nm,nr] = size(N);
+0026 nsample = size(c_ratio,2);
+0027 c       = es_result.c;
+0028 v       = es_result.v;
+0029 np      = nr+length(ind_ext);
+0030 
+0031 <span class="keyword">if</span> exist(<span class="string">'u_sigma_prior'</span>,<span class="string">'var'</span>),
+0032   dum = isfinite(c_ratio);
+0033   dum = dum(ind_ext);
+0034   s_sigma_prior = s_known_sigma_prior * dum + s_unknown_sigma_prior * (1-dum);
+0035   C_prior_inv = diag( 1./[u_sigma_prior.^2 * ones(nr,1); s_sigma_prior.^2]);
+0036 <span class="keyword">else</span>
+0037   C_prior_inv = eye(np);
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">switch</span> expansion 
+0041   
+0042   <span class="keyword">case</span> <span class="string">'logarithmic'</span>,
+0043 
+0044     <span class="comment">% fits better the multiplicative nature of kinetic models</span>
+0045     <span class="comment">% but doesn't preserve stationarity condition of fluxes</span>
+0046     
+0047     RSpsc   = es_result.control.RSp_sc;
+0048     RJpsc   = es_result.control.RJp_sc;
+0049 
+0050     <span class="comment">% merge the known fold changes to a vector y and compute the response coeffs</span>
+0051     
+0052     d_log_y = [log(c_ratio); log(v_ratio)];
+0053     RYpsc   = [RSpsc; RJpsc]; 
+0054     ind_known = find(isfinite(d_log_y));
+0055     d_log_y = d_log_y(ind_known);
+0056     
+0057     <span class="keyword">switch</span> expansion_order,
+0058       
+0059       <span class="keyword">case</span> 1,
+0060         d_log_p = inv(RYpsc' * RYpsc + C_prior_inv) * RYpsc' * d_log_y;
+0061         
+0062       <span class="keyword">case</span> 2,
+0063         RSppsc  = es_result.control.RSpp_sc;
+0064         RJppsc  = es_result.control.RJpp_sc;
+0065         RYppsc(1:nm,:,:)      = RSppsc;
+0066         RYppsc(nm+(1:nr),:,:) = RJppsc;
+0067         RYpsc   = RYpsc(ind_known,:);
+0068         RYppsc  = RYppsc(ind_known,:,:);        
+0069         d_log_p = <a href="../.././elasticity_sampling/es_perturbations/es_perturbations_utils/solve_quadratic2.html" class="code" title="function x = solve_quadratic2(A,c,B,D,seed)">solve_quadratic2</a>(C_prior_inv,d_log_y,RYpsc,RYppsc);
+0070     
+0071     <span class="keyword">end</span>
+0072     
+0073     p_ratio = exp(d_log_p);
+0074     
+0075   <span class="keyword">case</span> <span class="string">'non-logarithmic'</span>,
+0076     
+0077     <span class="comment">% preserves stationarity condition of fluxes</span>
+0078     <span class="comment">% but doen't fit the multiplicative nature of kinetic models</span>
+0079 
+0080     delta_c = (c_ratio - 1) .* c;
+0081     delta_v = (v_ratio - 1) .* v;
+0082     u = es_result.u;
+0083     s = es_result.c(ind_ext);
+0084     p = [u; s];
+0085     
+0086     RSp   = es_result.control.RSp;
+0087     RJp   = es_result.control.RJp;
+0088 
+0089     <span class="comment">% merge the known differences to a vector y and compute the response coeffs</span>
+0090     
+0091     delta_y   = [delta_c; delta_v];
+0092     RYp       = [RSp; RJp]; 
+0093     ind_known = find(isfinite(delta_y));
+0094     delta_y   = delta_y(ind_known);
+0095     RYp       = RYp(ind_known,:);
+0096         
+0097     <span class="keyword">switch</span> expansion_order,
+0098       <span class="keyword">case</span> 1
+0099 
+0100         delta_p = inv( RYp' * RYp + C_prior_inv ) * RYp' * delta_y;
+0101 
+0102       <span class="keyword">case</span> 2
+0103         RSpp  = es_result.control.RSpp;
+0104         RJpp  = es_result.control.RJpp;
+0105         RYpp(1:nm,:,:)      = RSpp;
+0106         RYpp(nm+(1:nr),:,:) = RJpp;
+0107         RYpp    = RYpp(ind_known,:,:);
+0108         delta_p = <a href="../.././elasticity_sampling/es_perturbations/es_perturbations_utils/solve_quadratic2.html" class="code" title="function x = solve_quadratic2(A,c,B,D,seed)">solve_quadratic2</a>(C_prior_inv, delta_y, RYp, RYpp);
+0109     
+0110     <span class="keyword">end</span>
+0111 
+0112     p_ratio = 1 + delta_p ./ p;
+0113 
+0114 <span class="keyword">end</span>
+0115 
+0116 u_ratio_pred = p_ratio(1:nr);
+0117 s_ratio_pred = p_ratio(nr+1:end);
+0118 
+0119 <span class="keyword">if</span> sum(p_ratio&lt;0), 
+0120   display(sprintf(<span class="string">' Expansion leads to negative values. Decreasing the prior sigmas by a factor %f'</span>,sigma_decrease_factor)); 
+0121   [u_ratio_pred, s_ratio_pred] = <a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>(<span class="keyword">...</span>
+0122       N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,<span class="keyword">...</span>
+0123       expansion_order,sigma_decrease_factor*u_sigma_prior,sigma_decrease_factor*s_known_sigma_prior,sigma_decrease_factor*s_unknown_sigma_prior);
+0124 <span class="keyword">end</span>
+0125 
+0126 
+0127 <span class="keyword">if</span> nargout &gt;2,
+0128   
+0129   pred_effect = <a href="es_simulate_perturbation.html" class="code" title="function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)">es_simulate_perturbation</a>(<span class="keyword">...</span>
+0130       N,W,ind_ext,u_ratio_pred,s_ratio_pred,es_result,expansion,expansion_order);
+0131   
+0132 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

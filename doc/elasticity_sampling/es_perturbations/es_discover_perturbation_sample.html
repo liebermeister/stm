@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_discover_perturbation_sample</title>
+  <meta name="keywords" content="es_discover_perturbation_sample">
+  <meta name="description" content="function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_perturbations</a> &gt; es_discover_perturbation_sample.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_perturbations&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_discover_perturbation_sample
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...
+  options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_sigma_prior)
+
+ Compute the most likely perturbation of enzyme expression (u) and external metabolites (s)
+ that would give rise to a given differential profile of balanced concentrations c and fluxes j
+ do this for a number of model variants
+ with sampled elasticities and present a statistics of the results
+
+ N, W, ext_ind: structural information about the network
+ x_ratio:       expression ratio column vector (or matrix, for several samples)
+ nrun:          number of samples
+ constraints, options: options for elasticity sampling
+ expansion:     {'logarithmic','non-logarithmic'}
+                -&gt; depending on the expansion type, the output refers to logarithmic 
+                   or non-logarithmic values; 
+ expansion_order:       1 or 2 for first- or second-expansion_order expansion
+
+ Outputs:
+ ris:            contains statistics over predicted effects
+ es_result_list: contains the results of all sampling runs</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>	[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</li><li><a href="../.././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>	ES_SAMPLE_MODEL - Sample all model parameters for a network</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</a>
+0002 
+0003 <span class="comment">% function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...</span>
+0004 <span class="comment">%  options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_sigma_prior)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Compute the most likely perturbation of enzyme expression (u) and external metabolites (s)</span>
+0007 <span class="comment">% that would give rise to a given differential profile of balanced concentrations c and fluxes j</span>
+0008 <span class="comment">% do this for a number of model variants</span>
+0009 <span class="comment">% with sampled elasticities and present a statistics of the results</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% N, W, ext_ind: structural information about the network</span>
+0012 <span class="comment">% x_ratio:       expression ratio column vector (or matrix, for several samples)</span>
+0013 <span class="comment">% nrun:          number of samples</span>
+0014 <span class="comment">% constraints, options: options for elasticity sampling</span>
+0015 <span class="comment">% expansion:     {'logarithmic','non-logarithmic'}</span>
+0016 <span class="comment">%                -&gt; depending on the expansion type, the output refers to logarithmic</span>
+0017 <span class="comment">%                   or non-logarithmic values;</span>
+0018 <span class="comment">% expansion_order:       1 or 2 for first- or second-expansion_order expansion</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Outputs:</span>
+0021 <span class="comment">% ris:            contains statistics over predicted effects</span>
+0022 <span class="comment">% es_result_list: contains the results of all sampling runs</span>
+0023 
+0024 eval(default(<span class="string">'expansion'</span>,<span class="string">'''non-logarithmic'''</span>,<span class="string">'expansion_order'</span>,<span class="string">'2'</span>,<span class="string">'nrun'</span>,<span class="string">'1'</span>));
+0025 
+0026 [nm,nr] = size(N);
+0027 
+0028 options.set_alpha_to_half = 0;
+0029 
+0030 <span class="comment">% -------------------------------------------------</span>
+0031 <span class="comment">% iterate:</span>
+0032 <span class="comment">%   - sample elasticities</span>
+0033 <span class="comment">%   - compute the metabolite and flux changes due to perturbation</span>
+0034 
+0035 ris.u_ratio = [];
+0036 ris.s_ratio = [];
+0037 ris.c_ratio = [];
+0038 ris.v_ratio = [];
+0039 
+0040 <span class="keyword">for</span> it = 1:nrun,
+0041   
+0042   display(sprintf(<span class="string">'Monte Carlo run %d'</span>,it));
+0043 
+0044   this_es_result      = <a href="../.././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>(N,W,ext_ind,constraints,options);
+0045 
+0046   [u_ratio, s_ratio, pred_effect] = <a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>(<span class="keyword">...</span>
+0047       N,W,ext_ind,c_ratio,v_ratio,this_es_result,expansion,expansion_order,<span class="keyword">...</span>
+0048       u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior);
+0049 
+0050   ris.u_ratio(:,it)   = u_ratio;
+0051   ris.s_ratio(:,it)   = s_ratio;
+0052   ris.c_ratio(:,it)   = pred_effect.c_ratio;
+0053   ris.v_ratio(:,it)   = pred_effect.v_ratio;
+0054   <span class="keyword">if</span> nargout&gt;1,   es_result_list{it} = this_es_result; <span class="keyword">end</span>
+0055 
+0056 <span class="keyword">end</span>
+0057 
+0058 
+0059 <span class="comment">% -------------------------------------------------</span>
+0060 <span class="comment">% statistics over the sampling results</span>
+0061 
+0062 ris.u_ratio_mean = mean(ris.u_ratio,2);
+0063 ris.s_ratio_mean = mean(ris.s_ratio,2);
+0064 ris.c_ratio_mean = mean(ris.c_ratio,2);
+0065 ris.v_ratio_mean = mean(ris.v_ratio,2);
+0066 
+0067 <span class="keyword">if</span> nrun &gt; 1,
+0068   ris.u_ratio_std  = std(ris.u_ratio,0,2);
+0069   ris.s_ratio_std  = std(ris.s_ratio,0,2);
+0070   ris.c_ratio_std  = std(ris.c_ratio,0,2);
+0071   ris.v_ratio_std  = std(ris.v_ratio,0,2);
+0072 <span class="keyword">else</span> 
+0073   ris.u_ratio_std  = nan*ris.u_ratio_mean;
+0074   ris.s_ratio_std  = nan*ris.s_ratio_mean;
+0075   ris.c_ratio_std  = nan*ris.c_ratio_mean;
+0076   ris.v_ratio_std  = nan*ris.v_ratio_mean;
+0077 <span class="keyword">end</span>
+0078 
+0079 
+0080 <span class="comment">% -------------------------------------------------</span>
+0081 <span class="comment">% probabilities for being the most strongly downregulated enzyme</span>
+0082 
+0083 [dum,ranks] = sort(ris.u_ratio,1);
+0084 
+0085 <span class="keyword">if</span> nrun&gt;0,
+0086 <span class="keyword">for</span> it = 1:nr, ris.prob_to_be_best(it) = sum(ranks(1,:)==it)/nrun; <span class="keyword">end</span>
+0087 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

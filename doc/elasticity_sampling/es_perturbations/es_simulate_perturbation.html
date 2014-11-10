@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_simulate_perturbation</title>
+  <meta name="keywords" content="es_simulate_perturbation">
+  <meta name="description" content="r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_perturbations</a> &gt; es_simulate_perturbation.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_perturbations&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_simulate_perturbation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)
+
+ Compute the predicted effects of a given differential profile 
+ of enzyme expression (u) and external metabolites (s)
+ on balanced concentrations c and fluxes j
+ based on an expansion using the response coefficients in &quot;es_result&quot;
+ 
+ N, W, ind_ext: structural information about the network
+ s_ratio:       external concentration ratio vector
+ u_ratio:       expression ratio vector
+ es_result:     output from a previous elasticity sampling (function 'sample_model')
+ expansion:     {'logarithmic','non-logarithmic'}
+                -&gt; depending on the expansion type, the output refers to logarithmic 
+                   or non-logarithmic values; 
+ expansion_order          1 or 2 expansion_order of the expansion
+
+ output r contains the ratios etc.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>	[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</li><li><a href="es_simulate_perturbation_sample.html" class="code" title="function [res, es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)">es_simulate_perturbation_sample</a>	[res,es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)</a>
+0002 
+0003 <span class="comment">% r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Compute the predicted effects of a given differential profile</span>
+0006 <span class="comment">% of enzyme expression (u) and external metabolites (s)</span>
+0007 <span class="comment">% on balanced concentrations c and fluxes j</span>
+0008 <span class="comment">% based on an expansion using the response coefficients in &quot;es_result&quot;</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% N, W, ind_ext: structural information about the network</span>
+0011 <span class="comment">% s_ratio:       external concentration ratio vector</span>
+0012 <span class="comment">% u_ratio:       expression ratio vector</span>
+0013 <span class="comment">% es_result:     output from a previous elasticity sampling (function 'sample_model')</span>
+0014 <span class="comment">% expansion:     {'logarithmic','non-logarithmic'}</span>
+0015 <span class="comment">%                -&gt; depending on the expansion type, the output refers to logarithmic</span>
+0016 <span class="comment">%                   or non-logarithmic values;</span>
+0017 <span class="comment">% expansion_order          1 or 2 expansion_order of the expansion</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% output r contains the ratios etc.</span>
+0020 
+0021 p_ratio = [u_ratio; s_ratio];
+0022 
+0023 [nm,nr] = size(N);
+0024 nsample = size(u_ratio,2);
+0025 c       = es_result.c;
+0026 v       = es_result.v;
+0027 
+0028 <span class="keyword">switch</span> expansion,
+0029   
+0030   <span class="keyword">case</span> <span class="string">'logarithmic'</span>,
+0031 
+0032 <span class="comment">% fits better the multiplicative nature of kinetic models</span>
+0033 <span class="comment">% but doesn't preserve stationarity condition of fluxes</span>
+0034     
+0035     RSpsc   = es_result.control.RSp_sc;
+0036     RJpsc   = es_result.control.RJp_sc;
+0037     
+0038     <span class="keyword">switch</span> expansion_order,
+0039       
+0040       <span class="keyword">case</span> 1
+0041         
+0042         d_c = squeeze(RSpsc(:,:)) * log(p_ratio);
+0043         d_v = squeeze(RJpsc(:,:)) * log(p_ratio);
+0044         
+0045       <span class="keyword">case</span> 2
+0046         
+0047         RSppsc  = es_result.control.RSpp_sc;
+0048         RJppsc  = es_result.control.RJpp_sc;
+0049         
+0050         <span class="keyword">for</span> i2 = 1:nsample          
+0051           dlogS2(:,i2) =  tensor_product(tensor_product(<span class="keyword">...</span>
+0052               squeeze(RSppsc(:,:,:)),<span class="keyword">...</span>
+0053               log(p_ratio(:,i2)),2,1),log(p_ratio(:,i2)),2,1);
+0054           dlogJ2(:,i2) =  tensor_product(tensor_product(<span class="keyword">...</span><span class="comment">          </span>
+0055               squeeze(RJppsc(:,:,:)),<span class="keyword">...</span>
+0056               log(p_ratio(:,i2)),2,1),log(p_ratio(:,i2)),2,1);
+0057         <span class="keyword">end</span>
+0058         
+0059         d_c = squeeze(RSpsc(:,:)) * log(p_ratio) + 0.5 * dlogS2;
+0060         d_v = squeeze(RJpsc(:,:)) * log(p_ratio) + 0.5 * dlogJ2;
+0061     <span class="keyword">end</span>
+0062 
+0063     d_c(ind_ext) = log(s_ratio);
+0064     
+0065   <span class="keyword">case</span> <span class="string">'non-logarithmic'</span>,
+0066     
+0067 <span class="comment">% preserves stationarity condition of fluxes</span>
+0068 <span class="comment">% but doen't fit the multiplicative nature of kinetic models</span>
+0069     
+0070     u = es_result.u;
+0071     s = es_result.c(ind_ext);
+0072     p = [u; s];
+0073     delta_p = p_ratio .* p - p;
+0074     
+0075     RSp   = es_result.control.RSp;
+0076     RJp   = es_result.control.RJp;
+0077     
+0078     <span class="keyword">switch</span> expansion_order
+0079       
+0080       <span class="keyword">case</span> 1
+0081         
+0082         d_c = squeeze(RSp(:,:)) * log(p_ratio);
+0083         d_v = squeeze(RJp(:,:)) * log(p_ratio);
+0084         
+0085       <span class="keyword">case</span> 2
+0086         
+0087         RSpp  = es_result.control.RSpp;
+0088         RJpp  = es_result.control.RJpp;
+0089         
+0090         <span class="keyword">for</span> i2 = 1:nsample
+0091           delta_S2(:,i2) =  tensor_product(tensor_product(<span class="keyword">...</span>
+0092               squeeze(RSpp(:,:,:)),<span class="keyword">...</span>
+0093               delta_p(:,i2),2,1),delta_p(:,i2),2,1);
+0094           delta_J2(:,i2) =  tensor_product(tensor_product(<span class="keyword">...</span>
+0095               squeeze(RJpp(:,:,:)),<span class="keyword">...</span>
+0096               delta_p(:,i2),2,1),delta_p(:,i2),2,1);
+0097         <span class="keyword">end</span>
+0098         
+0099         d_c = squeeze(RSp(:,:)) * log(p_ratio) + 0.5 * delta_S2;
+0100         d_v = squeeze(RJp(:,:)) * log(p_ratio) + 0.5 * delta_J2;
+0101         
+0102     <span class="keyword">end</span>
+0103     
+0104     d_c(ind_ext) = s_ratio .* s - s;
+0105     
+0106 <span class="keyword">end</span>
+0107 
+0108 
+0109 <span class="comment">% ----------------------------------------------------</span>
+0110 <span class="comment">% collect the results in the output data structure r</span>
+0111 
+0112 r.c_init = es_result.c;
+0113 r.v_init = es_result.v;
+0114 
+0115 <span class="keyword">switch</span> expansion, 
+0116   
+0117   <span class="keyword">case</span> (<span class="string">'non-logarithmic'</span>), 
+0118 
+0119     <span class="comment">% exclude negative concentrations</span>
+0120     d_c(r.c_init + d_c&lt;0) = -r.c_init(r.c_init + d_c&lt;0);
+0121     r.c_ratio  = 1 + d_c./r.c_init;
+0122     r.c_new    = r.c_init + d_c;
+0123     r.v_ratio  = 1 + d_v./r.v_init;
+0124     r.v_new    = r.v_init + d_v;
+0125   
+0126   <span class="keyword">case</span> (<span class="string">'logarithmic'</span>),
+0127 
+0128     r.c_ratio  = exp(d_c);
+0129     r.c_new    = r.c_ratio .* r.c_init;
+0130     <span class="comment">% ensure stationarity:</span>
+0131     K = null(N(find(ind_ext==0),:)); <span class="comment">% kernel matrix</span>
+0132     dum = exp(d_v); dum(isnan(dum))=0; 
+0133     d_v_nonlog = K * pinv(K) * [r.v_init .* dum];
+0134     r.v_ratio  = 1 + d_v_nonlog./r.v_init;
+0135     r.v_new    = r.v_init + d_v_nonlog;
+0136 
+0137 <span class="keyword">end</span>
+0138 
+0139 r.delta_c  = r.c_new - r.c_init;
+0140 r.delta_v  = r.v_new - r.v_init;</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

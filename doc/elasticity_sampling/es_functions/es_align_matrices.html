@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_align_matrices</title>
+  <meta name="keywords" content="es_align_matrices">
+  <meta name="description" content="aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_functions</a> &gt; es_align_matrices.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_functions&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>es_align_matrices
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)
+ 
+ align matrices corresponding to different metabolic models</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)</a>
+0002 
+0003 <span class="comment">% aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% align matrices corresponding to different metabolic models</span>
+0006 
+0007 <span class="comment">% fields of 'r': [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list]</span>
+0008 <span class="comment">% can be prepared by es_align_models</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% type_rows, type_columns: either 'metabolite' or 'reaction'</span>
+0011 
+0012 <span class="keyword">if</span> 0,
+0013   <span class="comment">%% example: align the stoichiometric matrices of three models</span>
+0014   compare_eccm_bscm_ycm
+0015 <span class="keyword">end</span>
+0016 
+0017 nm = length(r.metabolite_ids);
+0018 nr = length(r.reaction_ids);
+0019 
+0020 <span class="keyword">switch</span> type_rows,
+0021   <span class="keyword">case</span> <span class="string">'metabolite'</span>, n_rows = nm; ind_rows = r.metabolite_indices_list;
+0022   <span class="keyword">case</span> <span class="string">'reaction'</span>,   n_rows = nr; ind_rows = r.reaction_indices_list;
+0023   <span class="keyword">case</span> <span class="string">'none'</span>,       n_rows = 1;  ind_rows = ones(1,length(matrix_list));
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="keyword">switch</span> type_columns,
+0027   <span class="keyword">case</span> <span class="string">'metabolite'</span>, n_columns = nm; ind_columns = r.metabolite_indices_list; 
+0028   <span class="keyword">case</span> <span class="string">'reaction'</span>,   n_columns = nr; ind_columns = r.reaction_indices_list; 
+0029   <span class="keyword">case</span> <span class="string">'none'</span>,       n_columns = 1;  ind_columns = ones(1,length(matrix_list));
+0030 <span class="keyword">end</span>
+0031 
+0032 
+0033 <span class="keyword">for</span> it = 1:length(matrix_list),
+0034   aligned_matrices{it} = nan * zeros(n_rows, n_columns);
+0035   my_ind_rows    = ind_rows(:,it);
+0036   my_ind_columns = ind_columns(:,it);
+0037   matrix_list{it}(my_ind_rows(find(my_ind_rows)),my_ind_columns(find(my_ind_columns)));
+0038   aligned_matrices{it}(find(my_ind_rows),find(my_ind_columns)) = matrix_list{it}(my_ind_rows(find(my_ind_rows)),my_ind_columns(find(my_ind_columns)));
+0039 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

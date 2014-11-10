@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of solve_quadratic2</title>
+  <meta name="keywords" content="solve_quadratic2">
+  <meta name="description" content="x = solve_quadratic2(A,c,B,D,seed)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_perturbations</a> &gt; <a href="#">es_perturbations_utils</a> &gt; solve_quadratic2.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_perturbations/es_perturbations_utils&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>solve_quadratic2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>x = solve_quadratic2(A,c,B,D,seed)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function x = solve_quadratic2(A,c,B,D,seed) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> x = solve_quadratic2(A,c,B,D,seed)
+ solve min = 1/2 x'*A*x with constraint (1)
+ where B*x + 1/2 D (x o x ) = c     (2)
+ with symmetric matrix A and symmetric tensor D
+
+ with a langrangian multiplier vector l 
+ we get 
+
+ min = 1/2 x' A x + l' ( B x + 1/2 D (x o x) )
+ 0   = x' A   + l' B + 1/2 l' (x' D )
+ 0   = ( A + 1/2 l' D ) x + B' l
+ x = - inv( A + 1/2 l o D) B' l 
+
+ inserting it into (2) yields
+ 0 = - B ( inv( A + 1/2 l o D) B' l) + 1/2 D * (( inv( A + 1/2 l o D) B' l) o ( inv( A + 1/2 l o D) B' l)) - c
+ which has to be solved for l
+
+ for the starting guess (omit quadratic term with D):
+
+ min = 1/2 x' A x + l' B x
+ =&gt; x = - inv(A) B' l
+ insert in (2) in the form &quot;B*x = c&quot;
+ yields - B inv(A) B' l  = c    so guess  l = -inv(B inv(A) B') c</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="solve_quadratic2.html" class="code" title="function x = solve_quadratic2(A,c,B,D,seed)">solve_quadratic2</a>	x = solve_quadratic2(A,c,B,D,seed)</li><li><a href="solve_quadratic2_fct.html" class="code" title="function f = solve_quadratic2_fct(l,A,B,c,D)">solve_quadratic2_fct</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././elasticity_sampling/es_perturbations/es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>	[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</li><li><a href="solve_quadratic2.html" class="code" title="function x = solve_quadratic2(A,c,B,D,seed)">solve_quadratic2</a>	x = solve_quadratic2(A,c,B,D,seed)</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function x = solve_quadratic2(A,c,B,D,seed)</a>
+0002 
+0003 <span class="comment">% x = solve_quadratic2(A,c,B,D,seed)</span>
+0004 <span class="comment">% solve min = 1/2 x'*A*x with constraint (1)</span>
+0005 <span class="comment">% where B*x + 1/2 D (x o x ) = c     (2)</span>
+0006 <span class="comment">% with symmetric matrix A and symmetric tensor D</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% with a langrangian multiplier vector l</span>
+0009 <span class="comment">% we get</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% min = 1/2 x' A x + l' ( B x + 1/2 D (x o x) )</span>
+0012 <span class="comment">% 0   = x' A   + l' B + 1/2 l' (x' D )</span>
+0013 <span class="comment">% 0   = ( A + 1/2 l' D ) x + B' l</span>
+0014 <span class="comment">% x = - inv( A + 1/2 l o D) B' l</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% inserting it into (2) yields</span>
+0017 <span class="comment">% 0 = - B ( inv( A + 1/2 l o D) B' l) + 1/2 D * (( inv( A + 1/2 l o D) B' l) o ( inv( A + 1/2 l o D) B' l)) - c</span>
+0018 <span class="comment">% which has to be solved for l</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% for the starting guess (omit quadratic term with D):</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% min = 1/2 x' A x + l' B x</span>
+0023 <span class="comment">% =&gt; x = - inv(A) B' l</span>
+0024 <span class="comment">% insert in (2) in the form &quot;B*x = c&quot;</span>
+0025 <span class="comment">% yields - B inv(A) B' l  = c    so guess  l = -inv(B inv(A) B') c</span>
+0026 
+0027 eval(default(<span class="string">'seed'</span>,<span class="string">'0'</span>));
+0028 randn(<span class="string">'state'</span>,seed);
+0029 
+0030 l_guess = - pinv(B*pinv(A)*B')*c;
+0031 l_guess = l_guess + randn(size(l_guess));
+0032 
+0033 l       =   fsolve(@<a href="solve_quadratic2_fct.html" class="code" title="function f = solve_quadratic2_fct(l,A,B,c,D)">solve_quadratic2_fct</a>,l_guess,[],A,B,c,D);
+0034 x       = - inv( A + 1/2 * squeeze(tensor_product(l',D,2,1)) ) * B' * l;
+0035 
+0036 cpred   = B * x + 1/2 * tensor_product(tensor_product(D,x,2,1),x,2,1);
+0037 
+0038 mismatch = abs( (cpred - c) ./ (cpred + c) );
+0039 
+0040 <span class="keyword">if</span> max(mismatch)&gt;10^-10,
+0041   max_mismatch = max(mismatch)
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">% Test</span>
+0045 
+0046 <span class="keyword">return</span>
+0047 
+0048 A = eye(3);
+0049 B = [1 1 1; 0 0 1];
+0050 c = [1 2]';
+0051 D(1,:,:) = eye(3);
+0052 D(2,:,:) = eye(3);
+0053 
+0054 x = <a href="solve_quadratic2.html" class="code" title="function x = solve_quadratic2(A,c,B,D,seed)">solve_quadratic2</a>(A,c,B,D)</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

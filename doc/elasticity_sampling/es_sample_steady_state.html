@@ -6,16 +6,16 @@
   <meta name="keywords" content="es_sample_steady_state">
   <meta name="description" content="ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../index.html">Home</a> &gt;  <a href="index.html">elasticity_sampling</a> &gt; es_sample_steady_state.m</div>
+<div><a href="../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; es_sample_steady_state.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for elasticity_sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./elasticity_sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
 
 <h1>es_sample_steady_state
 </h1>
@@ -102,7 +102,6 @@ This function is called by:
 <!-- crossreference -->
 
 
-
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)</a>
 0002 
@@ -182,196 +181,161 @@ This function is called by:
 0076 
 0077 all_c_given   = sum(isnan(es_constraints.log_c_fix)) == 0;
 0078 all_v_given   = sum(isnan(es_constraints.v_fix))     == 0;
-0079 all_dmu_given = sum(isnan(es_constraints.dmu_fix))   == 0;
-0080 all_mu_given  = sum(isnan(es_constraints.mu_fix))    == 0;
-0081 all_keq_given = sum(isnan(es_constraints.Keq_fix))   == 0;
-0082 
-0083 
-0084 <span class="comment">% ---------------------------------------------------------------------------------</span>
-0085 <span class="comment">% determine fluxes</span>
-0086 
-0087 <span class="keyword">if</span> all_v_given,
-0088   
-0089   display(<span class="string">' Using given flux distribution'</span>);
+0079 all_mu0_given = sum(isnan(es_constraints.mu0_fix))   == 0;
+0080 
+0081 <span class="comment">% if all_mu0_given,</span>
+0082 <span class="comment">%   es_constraints.Keq_fix = exp(-1/RT * N' * es_constraints.mu0_fix);</span>
+0083 <span class="comment">% end</span>
+0084 all_keq_given = sum(isnan(es_constraints.Keq_fix))   == 0;
+0085 
+0086 <span class="comment">% if all_c_given * all_mu0_given,</span>
+0087 <span class="comment">%   es_constraints.mu_fix = es_constraints.mu0_fix + RT * es_constraints.log_c_fix;</span>
+0088 <span class="comment">% end</span>
+0089 all_mu_given  = sum(isnan(es_constraints.mu_fix)) == 0;
 0090 
-0091   v = es_constraints.v_fix; 
-0092 
-0093 <span class="keyword">else</span>
-0094 
-0095   v = [];
-0096   es_constraints.v_min(es_constraints.v_sign ==  1) = 0;
-0097   es_constraints.v_max(es_constraints.v_sign == -1) = 0;
+0091 <span class="comment">%if all_mu_given,</span>
+0092 <span class="comment">%  es_constraints.dmu_fix = N' * es_constraints.mu_fix;</span>
+0093 <span class="comment">%end</span>
+0094 all_dmu_given = sum(isnan(es_constraints.dmu_fix)) == 0;
+0095 
+0096 <span class="comment">% ---------------------------------------------------------------------------------</span>
+0097 <span class="comment">% determine fluxes</span>
 0098 
-0099   <span class="keyword">switch</span> es_options.sampling_method,
-0100     
-0101     <span class="keyword">case</span> <span class="string">'accept_flux'</span>,
-0102       v = es_constraints.v_mean;      
-0103     
-0104     <span class="keyword">case</span> <span class="string">'sample_and_discard'</span>,
-0105       es_options.sampling_cycle_correction = 1;    
-0106       [sample_v, best_v] = sample_fluxes_given_data(N, ind_ext, es_constraints.v_mean, es_constraints.v_std, 1, 1, 1, es_options.ind_ignore, es_constraints.v_sign);
-0107       v = best_v.v;
-0108     
-0109     <span class="keyword">case</span> <span class="string">'convex_optimisation'</span>,
-0110       es_options.sampling_cycle_correction = 1;
-0111       [sample_v, best_v, res] = sample_fluxes_by_convex_fba(N,ind_ext,es_constraints.v_mean,es_constraints.v_std,struct,-es_constraints.dmu_fix);
-0112       v                   = best_v.v;
-0113       es_constraints.dmu_fix = -res.A;    <span class="comment">%</span>
-0114     
-0115     <span class="keyword">case</span> <span class="string">'v and mu'</span>,
-0116       v = sample_feasible_v(N,ind_ext,es_constraints,es_options);  
-0117     
-0118     <span class="keyword">case</span> <span class="string">'v from data'</span>,
-0119       sample_v = sample_fluxes_given_data(N, ind_ext, es_constraints.v_mean, es_constraints.v_std, 1, 1, 1, es_options.ind_ignore, es_constraints.v_sign);
-0120       v        = sample_v.v{1};
-0121       
-0122     <span class="keyword">otherwise</span>,
-0123     error(sprintf(<span class="string">'unknown method %s'</span>,  es_options.sampling_method));
-0124   <span class="keyword">end</span>  
-0125 
-0126   <span class="keyword">if</span> length(v),
-0127     <span class="keyword">if</span> es_options.sampling_cycle_correction,
-0128       <span class="comment">%% correct        = es_check_flux_es_constraints(es_constraints.v_mean,N,ind_ext,es_constraints,1,epsilon_stationary,cycles);</span>
-0129       <span class="comment">%% correct mean fluxes by Nathan's method (requires variable 'ind_ignore')</span>
-0130       [v_feas, C] = eba_make_feasible(v, N, <span class="string">'loose'</span>, nan, es_options.ind_ignore, <span class="string">'efmtool'</span>);
-0131       v = v_feas;  <span class="comment">% if not given -&gt; fluxes are sampled again</span>
-0132     <span class="keyword">end</span>
-0133   <span class="keyword">end</span>
-0134 
-0135 <span class="keyword">end</span>
-0136 
-0137 <span class="comment">% ---------------------------------------------------------------------------------</span>
-0138 <span class="comment">% now do the rest</span>
-0139 
-0140 <span class="comment">%% sample c freely, determine Keq, A, zeta, depending on given information</span>
-0141 
-0142 c0       = [];
-0143 mu       = [];
-0144 K        = [];
-0145 c        = exp(es_constraints.log_c_mean + es_constraints.log_c_std .* randn(nm,1));
-0146 ind_c    = find(isfinite(es_constraints.log_c_fix));
-0147 c(ind_c) = exp(es_constraints.log_c_fix(ind_c));
-0148 Kma      = exp(N' * log(c));
-0149 
-0150 <span class="keyword">if</span> all_mu_given,
-0151   display(<span class="string">' Using given chemical potentials'</span>);
-0152   mu   = es_constraints.mu_fix;
-0153   A    = - N' * mu;
-0154   zeta = exp(es_options.h .* A/RT);
-0155   Keq  = exp(A/RT) .* Kma;
-0156 
-0157 <span class="keyword">elseif</span> all_dmu_given,
-0158   display(<span class="string">' Using given chemical potential differences'</span>);
-0159   A    = - es_constraints.dmu_fix;
-0160   zeta = exp(es_options.h .* A/RT);
-0161   Keq  = exp(A/RT) .* Kma;
-0162   mu   = -pinv(full(N'))*A;
-0163   display(<span class="string">' * Computing mu from A by pseudoinverse (in es_sample_steady_state)'</span>);
-0164 
-0165 <span class="keyword">elseif</span> all_keq_given,
-0166   display(<span class="string">' Using given equilibrium constants'</span>);
-0167   Keq  = es_constraints.Keq_fix;
-0168   A    = RT * log(Keq ./ Kma);
-0169   zeta = exp(es_options.h .* A/RT);
+0099 <span class="keyword">if</span> all_v_given,
+0100   
+0101   display(<span class="string">' Using given flux distribution'</span>);
+0102 
+0103   v = es_constraints.v_fix; 
+0104 
+0105 <span class="keyword">else</span>
+0106 
+0107   v = [];
+0108   es_constraints.v_min(es_constraints.v_sign ==  1) = 0;
+0109   es_constraints.v_max(es_constraints.v_sign == -1) = 0;
+0110 
+0111   <span class="keyword">switch</span> es_options.sampling_method,
+0112     
+0113     <span class="keyword">case</span> <span class="string">'accept_flux'</span>,
+0114       v = es_constraints.v_mean;      
+0115     
+0116     <span class="keyword">case</span> <span class="string">'sample_and_discard'</span>,
+0117       es_options.sampling_cycle_correction = 1;    
+0118       [sample_v, best_v] = sample_fluxes_given_data(N, ind_ext, es_constraints.v_mean, es_constraints.v_std, 1, 1, 1, es_options.ind_ignore, es_constraints.v_sign);
+0119       v = best_v.v;
+0120     
+0121     <span class="keyword">case</span> <span class="string">'convex_optimisation'</span>,
+0122       es_options.sampling_cycle_correction = 1;
+0123       [sample_v, best_v, res] = sample_fluxes_by_convex_fba(N,ind_ext,es_constraints.v_mean,es_constraints.v_std,struct,-es_constraints.dmu_fix);
+0124       v                   = best_v.v;
+0125       es_constraints.dmu_fix = -res.A;    <span class="comment">%</span>
+0126     
+0127     <span class="keyword">case</span> <span class="string">'v and mu'</span>,
+0128       v = sample_feasible_v(N,ind_ext,es_constraints,es_options);  
+0129     
+0130     <span class="keyword">case</span> <span class="string">'v from data'</span>,
+0131       sample_v = sample_fluxes_given_data(N, ind_ext, es_constraints.v_mean, es_constraints.v_std, 1, 1, 1, es_options.ind_ignore, es_constraints.v_sign);
+0132       v        = sample_v.v{1};
+0133       
+0134     <span class="keyword">otherwise</span>,
+0135     error(sprintf(<span class="string">'unknown method %s'</span>,  es_options.sampling_method));
+0136   <span class="keyword">end</span>  
+0137 
+0138   <span class="keyword">if</span> length(v),
+0139     <span class="keyword">if</span> es_options.sampling_cycle_correction,
+0140       <span class="comment">%% correct        = es_check_flux_es_constraints(es_constraints.v_mean,N,ind_ext,es_constraints,1,epsilon_stationary,cycles);</span>
+0141       <span class="comment">%% correct mean fluxes by Nathan's method (requires variable 'ind_ignore')</span>
+0142       [v_feas, C] = eba_make_feasible(v, N, <span class="string">'loose'</span>, nan, es_options.ind_ignore, <span class="string">'efmtool'</span>);
+0143       v = v_feas;  <span class="comment">% if not given -&gt; fluxes are sampled again</span>
+0144     <span class="keyword">end</span>
+0145   <span class="keyword">end</span>
+0146 
+0147 <span class="keyword">end</span>
+0148 
+0149 <span class="comment">% ---------------------------------------------------------------------------------</span>
+0150 <span class="comment">% now do the rest</span>
+0151 
+0152 <span class="comment">%% sample c freely, determine Keq, A, zeta, depending on given information</span>
+0153 
+0154 c0       = [];
+0155 mu       = [];
+0156 K        = [];
+0157 c        = exp(es_constraints.log_c_mean + es_constraints.log_c_std .* randn(nm,1));
+0158 ind_c    = find(isfinite(es_constraints.log_c_fix));
+0159 c(ind_c) = exp(es_constraints.log_c_fix(ind_c));
+0160 Kma      = exp(N' * log(c));
+0161 <span class="comment">% safety fix</span>
+0162 Kma(Kma&lt;10^-10) = 10^-10;
+0163 
+0164 <span class="keyword">if</span> all_mu_given,
+0165   display(<span class="string">' Using given chemical potentials'</span>);
+0166   mu   = es_constraints.mu_fix;
+0167   A    = - N' * mu;
+0168   zeta = exp(es_options.h .* A/RT);
+0169   Keq  = exp(A/RT) .* Kma;
 0170 
-0171 <span class="keyword">else</span>,
-0172   <span class="comment">%% sample mu</span>
-0173   <span class="keyword">if</span> es_options.verbose, display(<span class="string">' Computing extreme feasible mu vectors ..'</span>); <span class="keyword">end</span>
-0174   [mu_list, feasible] = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options);
-0175   <span class="keyword">if</span> es_options.verbose, display(<span class="string">' .. done'</span>); <span class="keyword">end</span>
-0176   <span class="keyword">if</span> ~feasible, error(<span class="string">'Unfeasible flux distribution'</span>); <span class="keyword">end</span>
-0177   display(<span class="string">'  Choosing chemical potentials mu randomly from extreme points of the allowed region'</span>);
-0178   mu     = mu_list(:,ceil(rand*size(mu_list,2)));
-0179   log_c  = log(c);
-0180   log_c0 = log_c - mu/RT;
-0181   Keq    = exp(N'*log_c0);
-0182   Kma    = exp(N' * log(c));
-0183   zeta   = [Keq./Kma].^es_options.h;
-0184   A      = RT * log(Keq./Kma);
-0185 <span class="keyword">end</span>
-0186 
-0187 <span class="keyword">if</span> find([v~=0].*[abs(A) &lt; es_constraints.dmu_limit_min]), error(<span class="string">'Overly small reaction affinity encountered'</span>); <span class="keyword">end</span>
-0188 <span class="keyword">if</span> find([v~=0].*[abs(A) &gt; [1+10^-5]*es_constraints.dmu_limit]),     error(<span class="string">'Overly large reaction affinity encountered'</span>); <span class="keyword">end</span>
-0189 
-0190 <span class="comment">% ----------------------------------------------------------------------</span>
-0191 <span class="comment">% output quantities</span>
-0192 
-0193 u    = exp(es_constraints.log_u_mean + es_constraints.log_u_std .* randn(nr,1));
+0171 <span class="keyword">elseif</span> all_dmu_given,
+0172   display(<span class="string">' Using given chemical potential differences'</span>);
+0173   A    = - es_constraints.dmu_fix;
+0174   zeta = exp(es_options.h .* A/RT);
+0175   Keq  = exp(A/RT) .* Kma;
+0176   <span class="comment">%% safety fix</span>
+0177   Keq(Keq&gt;10^50) = 10^50;
+0178   <span class="comment">%% JUST FOR SAFETY ..REMOVE THIS LATER:</span>
+0179   <span class="keyword">if</span> ~isfield(es_constraints,<span class="string">'mu_eqconstraint'</span>),
+0180     es_constraints.mu_eqconstraint = [];
+0181   <span class="keyword">end</span>
+0182   <span class="keyword">if</span> isempty(es_constraints.mu_eqconstraint),
+0183     mu   = -pinv(full(N'))*A;
+0184   <span class="keyword">else</span>,
+0185     mu = pinv([-full(N'); es_constraints.mu_eqconstraint.matrix'])*[-A; es_constraints.mu_eqconstraint.vector];
+0186   <span class="keyword">end</span>
+0187   display(<span class="string">' * Computing mu from A by pseudoinverse (in es_sample_steady_state)'</span>);
+0188 
+0189 <span class="keyword">elseif</span> all_keq_given,
+0190   display(<span class="string">' Using given equilibrium constants'</span>);
+0191   Keq  = es_constraints.Keq_fix;
+0192   A    = RT * log(Keq ./ Kma);
+0193   zeta = exp(es_options.h .* A/RT);
 0194 
-0195 <span class="keyword">if</span> sum(v .* A&lt;0), 
-0196   [v,A, sign(v)~=sign(A)]
-0197   error(<span class="string">'Signs of reaction rates and affinities disagree!!!'</span>); <span class="keyword">end</span> 
-0198 
-0199 
-0200 <span class="comment">% switch es_options.sampling_method,</span>
-0201 <span class="comment">%</span>
-0202 <span class="comment">%   case 'c0 and c';</span>
-0203 <span class="comment">%</span>
-0204 <span class="comment">%       ok       = 0;</span>
-0205 <span class="comment">%       it       = 0;</span>
-0206 <span class="comment">%       n_trials = 100000;</span>
-0207 <span class="comment">%       K        = sparse(null(N_int,'r'));</span>
-0208 <span class="comment">%</span>
-0209 <span class="comment">%       while (ok == 0) &amp;  (it &lt; n_trials),</span>
-0210 <span class="comment">%</span>
-0211 <span class="comment">%         it = it+1;</span>
-0212 <span class="comment">%</span>
-0213 <span class="comment">%         %% sample c0 and c</span>
-0214 <span class="comment">%         log_c0   = es_constraints.log_c0_mean + es_constraints.log_c0_std .* randn(nm,1);</span>
-0215 <span class="comment">%         log_c    = es_constraints.log_c_mean  + es_constraints.log_c_std  .* randn(nm,1);</span>
-0216 <span class="comment">%</span>
-0217 <span class="comment">%         %% compute Keq, mu, A</span>
-0218 <span class="comment">%         log_Keq  = N'*log_c0;</span>
-0219 <span class="comment">%         mu       = RT * ( log_c - log_c0 );</span>
-0220 <span class="comment">%         A        = - N' * mu;</span>
-0221 <span class="comment">%</span>
-0222 <span class="comment">%         %% sample fluxes v given the directions set by A</span>
-0223 <span class="comment">%         ind_prescribed_signs = find(isfinite(es_constraints.vsigns));</span>
-0224 <span class="comment">%         n_prescribed_signs   = length(ind_prescribed_signs);</span>
-0225 <span class="comment">%         dummy                = diag(es_constraints.vsigns);</span>
-0226 <span class="comment">%         ind_ext_signs = find(isfinite(es_constraints.ext_signs));</span>
-0227 <span class="comment">%</span>
-0228 <span class="comment">%         M = [diag(sign(A)); ...</span>
-0229 <span class="comment">%              eye(nr); ...</span>
-0230 <span class="comment">%              - eye(nr); ...</span>
-0231 <span class="comment">%              dummy(ind_prescribed_signs,:); ...</span>
-0232 <span class="comment">%              diag(es_constraints.ext_signs(ind_ext_signs)) * N(ind_ext_signs,:) ] * K;</span>
-0233 <span class="comment">%</span>
-0234 <span class="comment">%         b = [zeros(nr,1); ...</span>
-0235 <span class="comment">%              es_constraints.vmin; ...</span>
-0236 <span class="comment">%              -es_constraints.vmax; ...</span>
-0237 <span class="comment">%              zeros(n_prescribed_signs,1);...</span>
-0238 <span class="comment">%              zeros(length(ind_ext_signs),1) ];</span>
-0239 <span class="comment">%</span>
-0240 <span class="comment">%         if isfield(es_constraints,'v'),   v_red = pinv(full(K)) * es_constraints.v;</span>
-0241 <span class="comment">%         else,                          v_red = randn(size(K,2),1);</span>
-0242 <span class="comment">%         end</span>
-0243 <span class="comment">%</span>
-0244 <span class="comment">%         if sum(M*v_red &lt; b) == 0,  ok = 1; end</span>
-0245 <span class="comment">%</span>
-0246 <span class="comment">%       end</span>
-0247 <span class="comment">%</span>
-0248 <span class="comment">%       v = K * v_red;</span>
-0249 <span class="comment">%</span>
-0250 <span class="comment">%       if ok == 0,</span>
-0251 <span class="comment">%         display('Warning, no feasible combination found');</span>
-0252 <span class="comment">%         log_c0  = nan * log_c0;</span>
-0253 <span class="comment">%         log_c   = nan * log_c;</span>
-0254 <span class="comment">%         log_Keq = nan * log_Keq;</span>
-0255 <span class="comment">%         v       = nan * v;</span>
-0256 <span class="comment">%       end</span>
-0257 <span class="comment">%</span>
-0258 <span class="comment">%       c0   = exp(log_c0 );</span>
-0259 <span class="comment">%       c    = exp(log_c  );</span>
-0260 <span class="comment">%       Keq  = exp(log_Keq);</span>
-0261 <span class="comment">%</span>
-0262 <span class="comment">%   end</span>
-0263 <span class="comment">%</span>
-0264 <span class="comment">%   Kma  = exp(N' * log(c));</span>
-0265 <span class="comment">%   zeta = [Keq./Kma].^es_options.h;</span>
-0266 <span class="comment">%   A    = RT * log(Keq./Kma);</span>
-0267 <span class="comment">%</span>
-0268 <span class="comment">% end</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:44:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0195 <span class="keyword">else</span>,
+0196   <span class="comment">%% sample mu</span>
+0197   <span class="keyword">if</span> es_options.verbose, display(<span class="string">' Computing extreme feasible mu vectors ..'</span>); <span class="keyword">end</span>
+0198   [mu_list, feasible] = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options);
+0199   <span class="keyword">if</span> es_options.verbose, display(<span class="string">' .. done'</span>); <span class="keyword">end</span>
+0200   <span class="keyword">if</span> ~feasible, error(<span class="string">'Unfeasible flux distribution'</span>); <span class="keyword">end</span>
+0201   display(<span class="string">'  Choosing chemical potentials mu randomly from extreme points of the allowed region'</span>);
+0202   mu     = mu_list(:,ceil(rand*size(mu_list,2)));
+0203   log_c  = log(c);
+0204   log_c0 = log_c - mu/RT;
+0205   Keq    = exp(N'*log_c0);
+0206   Kma    = exp(N' * log(c));
+0207   zeta   = [Keq./Kma].^es_options.h;
+0208   A      = RT * log(Keq./Kma);
+0209 <span class="keyword">end</span>
+0210 
+0211 <span class="keyword">if</span> find([v~=0].*[abs(A) &lt; es_constraints.dmu_limit_min]), error(<span class="string">'Overly small reaction affinity encountered'</span>); <span class="keyword">end</span>
+0212 <span class="keyword">if</span> find([v~=0].*[abs(A) &gt; [1+10^-5]*es_constraints.dmu_limit]),     error(<span class="string">'Overly large reaction affinity encountered'</span>); <span class="keyword">end</span>
+0213 
+0214 
+0215 <span class="comment">% ----------------------------------------------------------------------</span>
+0216 <span class="comment">% output quantities</span>
+0217 
+0218 u = exp(es_constraints.log_u_mean + es_constraints.log_u_std .* randn(nr,1));
+0219 
+0220 
+0221 <span class="comment">% ----------------------------------------------------------------------</span>
+0222 <span class="comment">% safety checks</span>
+0223 
+0224 <span class="keyword">if</span> sum(v .* A&lt;0), 
+0225   [v,A, sign(v)~=sign(A)]
+0226   error(<span class="string">'Signs of reaction rates and affinities disagree!!!'</span>); 
+0227 <span class="keyword">end</span> 
+0228 
+0229 <span class="keyword">if</span> sum(log(Keq./Kma) .* A&lt;0), error(<span class="string">'Problem with equilibrium constants'</span>); <span class="keyword">end</span> 
+0230 
+0231 <span class="keyword">if</span> sum(Keq==0),     error(<span class="string">'Vanishing equilibrium constant'</span>); <span class="keyword">end</span>
+0232 <span class="keyword">if</span> sum(isinf(Keq)), error(<span class="string">'Infinite equilibrium constant'</span>); <span class="keyword">end</span>
+0233 <span class="keyword">if</span> sum(isnan(Keq)), error(<span class="string">'Unknown equilibrium constant'</span>); <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

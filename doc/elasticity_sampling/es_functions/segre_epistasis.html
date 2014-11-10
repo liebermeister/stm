@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of segre_epistasis</title>
+  <meta name="keywords" content="segre_epistasis">
+  <meta name="description" content="Segre's epistasis measure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">es_functions</a> &gt; segre_epistasis.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/es_functions&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>segre_epistasis
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Segre's epistasis measure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function epistasis = es_segre_epistasis(f_ref,f_single,f_double) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Segre's epistasis measure
+
+ Input 
+ f_ref    wildtype fitness (number)
+ f_single single perturbation fitnesses (vector)
+ f_double double perturbation fitnesses (matrix)
+
+ Output
+ epistasis (matrix)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function epistasis = es_segre_epistasis(f_ref,f_single,f_double)</a>
+0002 
+0003 <span class="comment">% Segre's epistasis measure</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Input</span>
+0006 <span class="comment">% f_ref    wildtype fitness (number)</span>
+0007 <span class="comment">% f_single single perturbation fitnesses (vector)</span>
+0008 <span class="comment">% f_double double perturbation fitnesses (matrix)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Output</span>
+0011 <span class="comment">% epistasis (matrix)</span>
+0012 
+0013 epsilon = 10^-8;
+0014 
+0015 w_single = f_single/f_ref;
+0016 w_double = f_double/f_ref;
+0017 w_single(abs(w_single)&lt;10^-8)= 0;
+0018 w_double(abs(w_double)&lt;10^-8)= 0;
+0019 is_aggravating = w_double &lt;  w_single * w_single' - epsilon;
+0020 is_buffering   = w_double &gt;  w_single * w_single' + epsilon;
+0021 is_neutral     = 1 - [is_aggravating + is_buffering];
+0022 
+0023 w_ratio = w_double ./ [w_single * w_single'];
+0024 w_ratio(find(is_neutral)) = 1;
+0025 w_milder = max( repmat(w_single,1,length(w_single)), repmat(w_single,1,length(w_single))');
+0026 
+0027 epistasis = is_aggravating .* (w_ratio - 1) + is_buffering .* ( [w_ratio - 1] ./ [1./w_milder - 1]);
+0028 
+0029 epistasis = epistasis - diag(diag(epistasis));</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

@@ -11,9 +11,9 @@ clc
 %---------------------------------------------------------
 % Elasticity sampling demo
 %
-% This script shows how to load a metabolic network model, 
-% to run elasticity sampling for two types of rate laws, 
-% to compare the results of the two model ensembles 
+% In this script, we load a metabolic network model, 
+% run elasticity sampling with two types of rate laws, 
+% and compare the results of the two model ensembles 
 %---------------------------------------------------------
  
 % Press key to continue
@@ -25,7 +25,8 @@ clc
 
 network = network_sbml_import('data/ecoli_glycolysis_network.xml')
  
-% Network structures can also be defined within matlab using 'network_construct'
+% Network structures can also be defined within matlab 
+% by using the function 'network_construct'
  
 % Press key to continue
  
@@ -34,7 +35,7 @@ clc
 %-------------------------------------------------------------------------------
 % Read graphics information for the network model from file
 %
-network = netgraph_read_positions(network,'data/ecoli_glycolysis_Positions.tsv');
+network = netgraph_read_positions(network,'data/ecoli_glycolysis_Positions.csv');
  
 % Press key to continue
  
@@ -44,16 +45,16 @@ clc
 % The matlab command for elasticity sampling requires the stoichiometric matrix N 
 % and the allosteric regulation matrix W.
 
-% Now we extract these matrices from the network structure.
+% We extract these matrices from the network structure.
  
 N       = network.N;                  % stoichiometric matrix
  
 W       = network.regulation_matrix;  % allosteric regulation matrix
  
-ind_ext = find(network.external);     % external metabolites (indices)
+ind_ext = find(network.external);     % indices of external metabolites
  
-% Then, we compute a right-kernel matrix K and, just for this example, 
-% choose its first column as our flux mode v
+% Then, we compute a right-kernel matrix K and, for this example, choose its
+% first column as our flux mode v (the first flux is supposed to be positive)
  
 K = full(network_analyse(network));   % stationary fluxes
  
@@ -66,11 +67,12 @@ clc
 % User options for elasticity sampling are stored in two matlab structs,
 % 'es_options' and 'es_constraints'. 
  
-% 'es_options' contains general settings, 'es_constraints' contains numerical details.
+% 'es_options' contains general settings for the calculation workflow, 
+% 'es_constraints' contains numerical details about the model.
  
 % Default settings can be obtained as follows:
  
-[es_options,es_constraints] = es_default_options(N);
+[es_options, es_constraints] = es_default_options(N);
  
 % To learn more about these structs, try 'help es_default_options'
  
@@ -112,14 +114,14 @@ SBMLmodel = network_sbml_export(network,1);
 pause
 clc
 %-------------------------------------------------------------------------------
-% Now we try multiple elasticity sampling runs. We first modify the directives
+% Now we try multiple elasticity sampling runs. We first modify the settings
  
 es_options.n_samples         = 10;
  
 es_options.set_alpha_to_half = 0;
  
-% We will sample the enzyme interactions for a specific output function.
-% Here we choose the sum of squares of all flux control coefficients.
+% We will sample the interactive effects of enzyme pairs on a specific output function.
+% As an output function, we choose the sum of squares of all flux control coefficients.
  
 output_function  = inline('sum(result.control.CJ .^2)','result','other');
  
@@ -158,7 +160,7 @@ clc
  
 false_discovery_rate = 0.05;
  
-% All results of the comparison are stored in a data structure res
+% The result of the comparison are stored in a data structure res
  
 res = es_compare_ensembles(output1, output2, false_discovery_rate);
  

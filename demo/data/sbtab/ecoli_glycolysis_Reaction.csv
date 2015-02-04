@@ -1,5 +1,5 @@
-!!SBtab TableType="Reaction" Version="0.1" Level="1.0"			
-!Reaction	!Enzyme	!Gene	!MiriamID::urn:miriam:kegg.reaction	!SumFormula
+!!SBtab TableType='Reaction' Version='0.1' Level='1.0'			
+!Reaction	!Enzyme	!Gene	!Identifiers:kegg.reaction	!SumFormula
 PTS	PTS system		R00299	Phosphoenolpyruvate + D_Glucose <=> Pyruvate + D_Glucose_6_phosphate
 PGI	Phosphoglucose isomerase	pgi	R00771	D_Glucose_6_phosphate <=> D_Fructose_6_phosphate
 PFK	Phosphofructokinase	pfkA	R00756	ATP + D_Fructose_6_phosphate <=> ADP + D_Fructose_1_6_bisphosphate

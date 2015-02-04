@@ -1,5 +1,5 @@
-!!SBtab TableType="QuantityData" Version="0.1" Level="1.0"
-!QuantityType	!SBMLReactionID	!SBMLSpeciesID	!Mean	!Std	!Unit	!Reaction MiriamID::urn:miriam:kegg.reaction	!Compound MiriamID::urn:miriam:kegg.compound
+!!SBtab TableType='QuantityData' Version='0.1' Level='1.0'
+!QuantityType	!Reaction:sbml:reaction:id	!Compound:sbml:species:id	!Mean	!Std	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound
 standard chemical potential		2_Phospho_D_glycerate	-1341.7		kJ/mol		C00631
 standard chemical potential		3_Phospho_D_glycerate	-1347.4		kJ/mol		C00197
 standard chemical potential		3_Phospho_D_glyceroyl_phosphate	-2206.2		kJ/mol		C00236

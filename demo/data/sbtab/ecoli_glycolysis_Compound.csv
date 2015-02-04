@@ -1,5 +1,5 @@
-!!SBtab TableType="Compound"
-!Compound	!MiriamID::urn:miriam:kegg.compound	!External
+!!SBtab TableType='Compound'
+!Compound	!Identifiers:kegg.compound	!External
 2_Phospho_D_glycerate	C00631	0
 3_Phospho_D_glycerate	C00197	0
 3_Phospho_D_glyceroyl_phosphate	C00236	0

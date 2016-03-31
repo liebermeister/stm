@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of energetics_control_and_noise</title>
+  <meta name="keywords" content="energetics_control_and_noise">
+  <meta name="description" content="[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, v, mu, omega_list, tau_list, psfile_dir, basename, es_options, es_constraints, volume)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">elasticity_sampling</a> &gt; <a href="#">es_metabolite_fluctuations</a> &gt; energetics_control_and_noise.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/elasticity_sampling/es_metabolite_fluctuations&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>energetics_control_and_noise
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, v, mu, omega_list, tau_list, psfile_dir, basename, es_options, es_constraints, volume)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, c, v, mu, omega_list, tau_list, omega_fast, omega_slow, psfile_dir, basename, es_options, es_constraints, volume) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, v, mu, omega_list, tau_list, psfile_dir, basename, es_options, es_constraints, volume)
+
+ Analyse control coefficients and noise levels (assuming uniform white noise in each reaction!)
+
+ Recommended units: 
+  Enzyme levels in  mol
+  Volume            m^3
+  Metabolite levels mM
+  Fluxes            mol/s
+  Accordingly, the spectral densities will be in mM^2 and (mol/s)^2
+ 
+ Spectral densities are computed under the assumption that white noise 
+ has a spectral density of 1. If white noise is defined as having a covariance 
+ given by the Dirac delta function (with prefactor 1), as assumed in the 
+ chemical Langevin equation, this corresponds to a Fourier transformation 
+ with prefactor 1 for the transformation omega -&gt; t and prefactor 1/2pi for the 
+ transformation t -&gt; omega</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././elasticity_sampling/es_default_options.html" class="code" title="function [es_options,es_constraints] = es_default_options(N)">es_default_options</a>	ES_DEFAULT_OPTIONS - Set default values in 'es_options' and 'es_constraints'</li><li><a href="../../.././elasticity_sampling/es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>	ES_SAMPLE_MODEL - Sample all model parameters for a network</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././elasticity_sampling/demo/article_figures/es_figure_7_energetics_control_and_noise.html" class="code" title="">es_figure_7_energetics_control_and_noise</a>	---------------------------------------------------------------</li></ul>
+<!-- crossreference -->
+
+
+
+<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

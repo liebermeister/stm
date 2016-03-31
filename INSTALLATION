@@ -14,12 +14,13 @@ INSTALLATION
       o SBML Toolbox    (http://sbml.org/Software/SBMLToolbox)
       o SBtab           (https://github.com/liebermeister/sbtab-matlab)
       o Tensor Toolbox  (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
+      o efmtool         (http://www.csb.ethz.ch/tools/efmtool)
   4. For a little demo, run 'es_demo'
 
 
 REQUIREMENTS
 
-  The functions were developed and tested with matlab6 
+  The functions have been developed and tested with matlab6 
     
   They require 
     Metabolic Network Toolbox (https://github.com/liebermeister/mnt)

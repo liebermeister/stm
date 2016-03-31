@@ -1,0 +1,74 @@
+!!SBtab TableName='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'		
+!ID	!ReactionFormula	!IsReversible
+PTS	D_Glucose + Phosphoenolpyruvate <=> D_Glucose_6_phosphate + Pyruvate	True
+PGI	D_Glucose_6_phosphate <=> D_Fructose_6_phosphate	True
+PFK	D_Fructose_6_phosphate + ATP <=> D_Fructose_1_6_bisphosphate + ADP	True
+FBA	D_Fructose_1_6_bisphosphate <=> Glycerone_phosphate + D_Glyceraldehyde_3_phosphate	True
+TIM	D_Glyceraldehyde_3_phosphate <=> Glycerone_phosphate	True
+GAP	D_Glyceraldehyde_3_phosphate + Orthophosphate + NADplus <=> _3_Phospho_D_glyceroyl_phosphate + NADH	True
+PGK	_3_Phospho_D_glycerate + ATP <=> _3_Phospho_D_glyceroyl_phosphate + ADP	True
+PGM	_2_Phospho_D_glycerate <=> _3_Phospho_D_glycerate	True
+ENO	_2_Phospho_D_glycerate <=> Phosphoenolpyruvate + H2O	True
+PYK	Pyruvate + ATP <=> Phosphoenolpyruvate + ADP	True
+PDC	Pyruvate + NADplus + CoA <=> Acetyl_CoA + NADH + CO2	True
+ATPase	ATP + H2O <=> ADP + Orthophosphate	True
+NADHcons	NADH <=> NADplus	True
+%		
+!!SBtab TableName='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'		
+!ID	!Identifiers:kegg.compound	!IsConstant
+D_Glucose	C00031	True
+D_Glucose_6_phosphate	C00092	False
+D_Fructose_6_phosphate	C00085	False
+D_Fructose_1_6_bisphosphate	C00354	False
+Glycerone_phosphate	C00111	False
+_3_Phospho_D_glyceroyl_phosphate	C00236	False
+D_Glyceraldehyde_3_phosphate	C00661	False
+_2_Phospho_D_glycerate	C00631	False
+_3_Phospho_D_glycerate	C00197	False
+Phosphoenolpyruvate	C00074	False
+Pyruvate	C00022	False
+Acetyl_CoA	C00024	True
+ATP	C00002	False
+ADP	C00008	False
+Orthophosphate	C00009	False
+NADH	C00004	False
+NADplus	C00003	False
+CoA	C00010	True
+CO2	C00011	True
+H2O	C00001	True
+%		
+!!SBtab TableName='Positions' TableType='Position' Document='Model' SBtabVersion='0.9'		
+!Element	!PositionX	!PositionY
+D_Glucose	0.030783	0.884503
+D_Glucose_6_phosphate	0.307495	0.884447
+D_Fructose_6_phosphate	0.307572	0.785052
+D_Fructose_1_6_bisphosphate	0.307277	0.662531
+Glycerone_phosphate	0.251769	0.569913
+_3_Phospho_D_glyceroyl_phosphate	0.360602	0.432044
+D_Glyceraldehyde_3_phosphate	0.360118	0.548987
+_2_Phospho_D_glycerate	0.360602	0.18339
+_3_Phospho_D_glycerate	0.360602	0.304878
+Phosphoenolpyruvate	0.360333	0.05792
+Pyruvate	0.360333	-0.052291
+Acetyl_CoA	0.360535	-0.159014
+ATP	0.590747	0.289503
+ADP	0.589351	0.374603
+Orthophosphate	0.65492	0.406689
+NADH	0.030139	0.269972
+NADplus	0.029979	0.360652
+CoA	0.249157	-0.069032
+CO2	0.249157	-0.141576
+H2O	0.654377	0.2337
+PTS	0.151289	0.884465
+PGI	0.307572	0.832794
+PFK	0.307277	0.723843
+FBA	0.307277	0.609167
+TIM	0.307105	0.557358
+GAP	0.360602	0.496762
+PGK	0.360602	0.365055
+PGM	0.360602	0.249243
+ENO	0.360602	0.126619
+PYK	0.360333	0.002117
+PDC	0.360577	-0.105304
+ATPase	0.615315	0.331355
+NADHcons	0.030032	0.3188

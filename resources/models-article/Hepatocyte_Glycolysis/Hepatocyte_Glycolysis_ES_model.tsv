@@ -1,0 +1,465 @@
+!!SBtab TableName='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'					
+!ID	!ReactionFormula	!IsReversible	!KineticLaw:Name	!KineticLaw:Formula	
+GLUT2	glc_{ext} <=> glc	True	Common saturable (CM)	u_R1 * ( kC_R1 * sqrt( kEQ_R1  * kM_R1_glc_{ext} / kM_R1_glc ) * ( glc_{ext} / kM_R1_glc_{ext} ) - kC_R1 / sqrt( kEQ_R1  * kM_R1_glc_{ext} / kM_R1_glc ) * ( glc / kM_R1_glc ) ) / ( ( 1 + glc_{ext} / kM_R1_glc_{ext} ) + ( 1 + glc / kM_R1_glc ) - 1 )	
+Glucokinase	atp + glc <=> adp + glc6p	True	Common saturable (CM)	u_R2 * ( kC_R2 * sqrt( kEQ_R2  * kM_R2_atp * kM_R2_glc / kM_R2_adp / kM_R2_glc6p ) * ( atp / kM_R2_atp ) * ( glc / kM_R2_glc ) - kC_R2 / sqrt( kEQ_R2  * kM_R2_atp * kM_R2_glc / kM_R2_adp / kM_R2_glc6p ) * ( adp / kM_R2_adp ) * ( glc6p / kM_R2_glc6p ) ) / ( ( 1 + atp / kM_R2_atp ) * ( 1 + glc / kM_R2_glc ) + ( 1 + adp / kM_R2_adp ) * ( 1 + glc6p / kM_R2_glc6p ) - 1 )	
+G6Pase	h2o + glc6p <=> p + glc	True	Common saturable (CM)	u_R3 * ( kC_R3 * sqrt( kEQ_R3  * kM_R3_h2o * kM_R3_glc6p / kM_R3_p / kM_R3_glc ) * ( h2o / kM_R3_h2o ) * ( glc6p / kM_R3_glc6p ) - kC_R3 / sqrt( kEQ_R3  * kM_R3_h2o * kM_R3_glc6p / kM_R3_p / kM_R3_glc ) * ( p / kM_R3_p ) * ( glc / kM_R3_glc ) ) / ( ( 1 + h2o / kM_R3_h2o ) * ( 1 + glc6p / kM_R3_glc6p ) + ( 1 + p / kM_R3_p ) * ( 1 + glc / kM_R3_glc ) - 1 )	
+GPI	glc6p <=> fru6p	True	Common saturable (CM)	u_R4 * ( kC_R4 * sqrt( kEQ_R4  * kM_R4_glc6p / kM_R4_fru6p ) * ( glc6p / kM_R4_glc6p ) - kC_R4 / sqrt( kEQ_R4  * kM_R4_glc6p / kM_R4_fru6p ) * ( fru6p / kM_R4_fru6p ) ) / ( ( 1 + glc6p / kM_R4_glc6p ) + ( 1 + fru6p / kM_R4_fru6p ) - 1 )	
+G16PI	glc1p <=> glc6p	True	Common saturable (CM)	u_R5 * ( kC_R5 * sqrt( kEQ_R5  * kM_R5_glc1p / kM_R5_glc6p ) * ( glc1p / kM_R5_glc1p ) - kC_R5 / sqrt( kEQ_R5  * kM_R5_glc1p / kM_R5_glc6p ) * ( glc6p / kM_R5_glc6p ) ) / ( ( 1 + glc1p / kM_R5_glc1p ) + ( 1 + glc6p / kM_R5_glc6p ) - 1 )	
+UPGase	utp + glc1p <=> pp + udpglc	True	Common saturable (CM)	u_R6 * ( kC_R6 * sqrt( kEQ_R6  * kM_R6_utp * kM_R6_glc1p / kM_R6_pp / kM_R6_udpglc ) * ( utp / kM_R6_utp ) * ( glc1p / kM_R6_glc1p ) - kC_R6 / sqrt( kEQ_R6  * kM_R6_utp * kM_R6_glc1p / kM_R6_pp / kM_R6_udpglc ) * ( pp / kM_R6_pp ) * ( udpglc / kM_R6_udpglc ) ) / ( ( 1 + utp / kM_R6_utp ) * ( 1 + glc1p / kM_R6_glc1p ) + ( 1 + pp / kM_R6_pp ) * ( 1 + udpglc / kM_R6_udpglc ) - 1 )	
+PPase	pp + h2o <=> 2 p	True	Common saturable (CM)	u_R7 * ( kC_R7 * sqrt( kEQ_R7  * kM_R7_pp * kM_R7_h2o / power( kM_R7_p , 2 ) ) * ( pp / kM_R7_pp ) * ( h2o / kM_R7_h2o ) - kC_R7 / sqrt( kEQ_R7  * kM_R7_pp * kM_R7_h2o / power( kM_R7_p , 2 ) ) * power( p / kM_R7_p , 2 ) ) / ( ( 1 + pp / kM_R7_pp ) * ( 1 + h2o / kM_R7_h2o ) + power( 1 + p / kM_R7_p , 2 ) - 1 )	
+GS	udpglc <=> udp + glyglc	True	Common saturable (CM)	u_R8 * ( kC_R8 * sqrt( kEQ_R8  * kM_R8_udpglc / kM_R8_udp / kM_R8_glyglc ) * ( udpglc / kM_R8_udpglc ) - kC_R8 / sqrt( kEQ_R8  * kM_R8_udpglc / kM_R8_udp / kM_R8_glyglc ) * ( udp / kM_R8_udp ) * ( glyglc / kM_R8_glyglc ) ) / ( ( 1 + udpglc / kM_R8_udpglc ) + ( 1 + udp / kM_R8_udp ) * ( 1 + glyglc / kM_R8_glyglc ) - 1 )	
+GP	p + glyglc <=> glc1p	True	Common saturable (CM)	u_R9 * ( kC_R9 * sqrt( kEQ_R9  * kM_R9_p * kM_R9_glyglc / kM_R9_glc1p ) * ( p / kM_R9_p ) * ( glyglc / kM_R9_glyglc ) - kC_R9 / sqrt( kEQ_R9  * kM_R9_p * kM_R9_glyglc / kM_R9_glc1p ) * ( glc1p / kM_R9_glc1p ) ) / ( ( 1 + p / kM_R9_p ) * ( 1 + glyglc / kM_R9_glyglc ) + ( 1 + glc1p / kM_R9_glc1p ) - 1 )	
+NTK__GTP_	atp + gdp <=> adp + gtp	True	Common saturable (CM)	u_R10 * ( kC_R10 * sqrt( kEQ_R10  * kM_R10_atp * kM_R10_gdp / kM_R10_adp / kM_R10_gtp ) * ( atp / kM_R10_atp ) * ( gdp / kM_R10_gdp ) - kC_R10 / sqrt( kEQ_R10  * kM_R10_atp * kM_R10_gdp / kM_R10_adp / kM_R10_gtp ) * ( adp / kM_R10_adp ) * ( gtp / kM_R10_gtp ) ) / ( ( 1 + atp / kM_R10_atp ) * ( 1 + gdp / kM_R10_gdp ) + ( 1 + adp / kM_R10_adp ) * ( 1 + gtp / kM_R10_gtp ) - 1 )	
+NTK__UTP_	atp + udp <=> adp + utp	True	Common saturable (CM)	u_R11 * ( kC_R11 * sqrt( kEQ_R11  * kM_R11_atp * kM_R11_udp / kM_R11_adp / kM_R11_utp ) * ( atp / kM_R11_atp ) * ( udp / kM_R11_udp ) - kC_R11 / sqrt( kEQ_R11  * kM_R11_atp * kM_R11_udp / kM_R11_adp / kM_R11_utp ) * ( adp / kM_R11_adp ) * ( utp / kM_R11_utp ) ) / ( ( 1 + atp / kM_R11_atp ) * ( 1 + udp / kM_R11_udp ) + ( 1 + adp / kM_R11_adp ) * ( 1 + utp / kM_R11_utp ) - 1 )	
+AK	atp + amp <=> 2 adp	True	Common saturable (CM)	u_R12 * ( kC_R12 * sqrt( kEQ_R12  * kM_R12_atp * kM_R12_amp / power( kM_R12_adp , 2 ) ) * ( atp / kM_R12_atp ) * ( amp / kM_R12_amp ) - kC_R12 / sqrt( kEQ_R12  * kM_R12_atp * kM_R12_amp / power( kM_R12_adp , 2 ) ) * power( adp / kM_R12_adp , 2 ) ) / ( ( 1 + atp / kM_R12_atp ) * ( 1 + amp / kM_R12_amp ) + power( 1 + adp / kM_R12_adp , 2 ) - 1 )	
+PFK2	atp + fru6p <=> adp + fru26bp	True	Common saturable (CM)	u_R13 * ( kC_R13 * sqrt( kEQ_R13  * kM_R13_atp * kM_R13_fru6p / kM_R13_adp / kM_R13_fru26bp ) * ( atp / kM_R13_atp ) * ( fru6p / kM_R13_fru6p ) - kC_R13 / sqrt( kEQ_R13  * kM_R13_atp * kM_R13_fru6p / kM_R13_adp / kM_R13_fru26bp ) * ( adp / kM_R13_adp ) * ( fru26bp / kM_R13_fru26bp ) ) / ( ( 1 + atp / kM_R13_atp ) * ( 1 + fru6p / kM_R13_fru6p ) + ( 1 + adp / kM_R13_adp ) * ( 1 + fru26bp / kM_R13_fru26bp ) - 1 )	
+FBP2	h2o + fru26bp <=> p + fru6p	True	Common saturable (CM)	u_R14 * ( kC_R14 * sqrt( kEQ_R14  * kM_R14_h2o * kM_R14_fru26bp / kM_R14_p / kM_R14_fru6p ) * ( h2o / kM_R14_h2o ) * ( fru26bp / kM_R14_fru26bp ) - kC_R14 / sqrt( kEQ_R14  * kM_R14_h2o * kM_R14_fru26bp / kM_R14_p / kM_R14_fru6p ) * ( p / kM_R14_p ) * ( fru6p / kM_R14_fru6p ) ) / ( ( 1 + h2o / kM_R14_h2o ) * ( 1 + fru26bp / kM_R14_fru26bp ) + ( 1 + p / kM_R14_p ) * ( 1 + fru6p / kM_R14_fru6p ) - 1 )	
+PFK1	atp + fru6p <=> adp + fru16bp	True	Common saturable (CM)	u_R15 * ( kC_R15 * sqrt( kEQ_R15  * kM_R15_atp * kM_R15_fru6p / kM_R15_adp / kM_R15_fru16bp ) * ( atp / kM_R15_atp ) * ( fru6p / kM_R15_fru6p ) - kC_R15 / sqrt( kEQ_R15  * kM_R15_atp * kM_R15_fru6p / kM_R15_adp / kM_R15_fru16bp ) * ( adp / kM_R15_adp ) * ( fru16bp / kM_R15_fru16bp ) ) / ( ( 1 + atp / kM_R15_atp ) * ( 1 + fru6p / kM_R15_fru6p ) + ( 1 + adp / kM_R15_adp ) * ( 1 + fru16bp / kM_R15_fru16bp ) - 1 )	
+FBP1	h2o + fru16bp <=> p + fru6p	True	Common saturable (CM)	u_R16 * ( kC_R16 * sqrt( kEQ_R16  * kM_R16_h2o * kM_R16_fru16bp / kM_R16_p / kM_R16_fru6p ) * ( h2o / kM_R16_h2o ) * ( fru16bp / kM_R16_fru16bp ) - kC_R16 / sqrt( kEQ_R16  * kM_R16_h2o * kM_R16_fru16bp / kM_R16_p / kM_R16_fru6p ) * ( p / kM_R16_p ) * ( fru6p / kM_R16_fru6p ) ) / ( ( 1 + h2o / kM_R16_h2o ) * ( 1 + fru16bp / kM_R16_fru16bp ) + ( 1 + p / kM_R16_p ) * ( 1 + fru6p / kM_R16_fru6p ) - 1 )	
+ALD	fru16bp <=> grap + dhap	True	Common saturable (CM)	u_R17 * ( kC_R17 * sqrt( kEQ_R17  * kM_R17_fru16bp / kM_R17_grap / kM_R17_dhap ) * ( fru16bp / kM_R17_fru16bp ) - kC_R17 / sqrt( kEQ_R17  * kM_R17_fru16bp / kM_R17_grap / kM_R17_dhap ) * ( grap / kM_R17_grap ) * ( dhap / kM_R17_dhap ) ) / ( ( 1 + fru16bp / kM_R17_fru16bp ) + ( 1 + grap / kM_R17_grap ) * ( 1 + dhap / kM_R17_dhap ) - 1 )	
+TPI	dhap <=> grap	True	Common saturable (CM)	u_R18 * ( kC_R18 * sqrt( kEQ_R18  * kM_R18_dhap / kM_R18_grap ) * ( dhap / kM_R18_dhap ) - kC_R18 / sqrt( kEQ_R18  * kM_R18_dhap / kM_R18_grap ) * ( grap / kM_R18_grap ) ) / ( ( 1 + dhap / kM_R18_dhap ) + ( 1 + grap / kM_R18_grap ) - 1 )	
+GAPDH	nad + p + grap <=> nadh + h + bpg13	True	Common saturable (CM)	u_R19 * ( kC_R19 * sqrt( kEQ_R19  * kM_R19_nad * kM_R19_p * kM_R19_grap / kM_R19_nadh / kM_R19_h / kM_R19_bpg13 ) * ( nad / kM_R19_nad ) * ( p / kM_R19_p ) * ( grap / kM_R19_grap ) - kC_R19 / sqrt( kEQ_R19  * kM_R19_nad * kM_R19_p * kM_R19_grap / kM_R19_nadh / kM_R19_h / kM_R19_bpg13 ) * ( nadh / kM_R19_nadh ) * ( h / kM_R19_h ) * ( bpg13 / kM_R19_bpg13 ) ) / ( ( 1 + nad / kM_R19_nad ) * ( 1 + p / kM_R19_p ) * ( 1 + grap / kM_R19_grap ) + ( 1 + nadh / kM_R19_nadh ) * ( 1 + h / kM_R19_h ) * ( 1 + bpg13 / kM_R19_bpg13 ) - 1 )	
+PGK	adp + bpg13 <=> atp + pg3	True	Common saturable (CM)	u_R20 * ( kC_R20 * sqrt( kEQ_R20  * kM_R20_adp * kM_R20_bpg13 / kM_R20_atp / kM_R20_pg3 ) * ( adp / kM_R20_adp ) * ( bpg13 / kM_R20_bpg13 ) - kC_R20 / sqrt( kEQ_R20  * kM_R20_adp * kM_R20_bpg13 / kM_R20_atp / kM_R20_pg3 ) * ( atp / kM_R20_atp ) * ( pg3 / kM_R20_pg3 ) ) / ( ( 1 + adp / kM_R20_adp ) * ( 1 + bpg13 / kM_R20_bpg13 ) + ( 1 + atp / kM_R20_atp ) * ( 1 + pg3 / kM_R20_pg3 ) - 1 )	
+PGM	pg3 <=> pg2	True	Common saturable (CM)	u_R21 * ( kC_R21 * sqrt( kEQ_R21  * kM_R21_pg3 / kM_R21_pg2 ) * ( pg3 / kM_R21_pg3 ) - kC_R21 / sqrt( kEQ_R21  * kM_R21_pg3 / kM_R21_pg2 ) * ( pg2 / kM_R21_pg2 ) ) / ( ( 1 + pg3 / kM_R21_pg3 ) + ( 1 + pg2 / kM_R21_pg2 ) - 1 )	
+EN	pg2 <=> h2o + pep	True	Common saturable (CM)	u_R22 * ( kC_R22 * sqrt( kEQ_R22  * kM_R22_pg2 / kM_R22_h2o / kM_R22_pep ) * ( pg2 / kM_R22_pg2 ) - kC_R22 / sqrt( kEQ_R22  * kM_R22_pg2 / kM_R22_h2o / kM_R22_pep ) * ( h2o / kM_R22_h2o ) * ( pep / kM_R22_pep ) ) / ( ( 1 + pg2 / kM_R22_pg2 ) + ( 1 + h2o / kM_R22_h2o ) * ( 1 + pep / kM_R22_pep ) - 1 )	
+PK	adp + pep <=> atp + pyr	True	Common saturable (CM)	u_R23 * ( kC_R23 * sqrt( kEQ_R23  * kM_R23_adp * kM_R23_pep / kM_R23_atp / kM_R23_pyr ) * ( adp / kM_R23_adp ) * ( pep / kM_R23_pep ) - kC_R23 / sqrt( kEQ_R23  * kM_R23_adp * kM_R23_pep / kM_R23_atp / kM_R23_pyr ) * ( atp / kM_R23_atp ) * ( pyr / kM_R23_pyr ) ) / ( ( 1 + adp / kM_R23_adp ) * ( 1 + pep / kM_R23_pep ) + ( 1 + atp / kM_R23_atp ) * ( 1 + pyr / kM_R23_pyr ) - 1 )	
+PEPCK	gtp + oaa <=> gdp + co2 + pep	True	Common saturable (CM)	u_R24 * ( kC_R24 * sqrt( kEQ_R24  * kM_R24_gtp * kM_R24_oaa / kM_R24_gdp / kM_R24_co2 / kM_R24_pep ) * ( gtp / kM_R24_gtp ) * ( oaa / kM_R24_oaa ) - kC_R24 / sqrt( kEQ_R24  * kM_R24_gtp * kM_R24_oaa / kM_R24_gdp / kM_R24_co2 / kM_R24_pep ) * ( gdp / kM_R24_gdp ) * ( co2 / kM_R24_co2 ) * ( pep / kM_R24_pep ) ) / ( ( 1 + gtp / kM_R24_gtp ) * ( 1 + oaa / kM_R24_oaa ) + ( 1 + gdp / kM_R24_gdp ) * ( 1 + co2 / kM_R24_co2 ) * ( 1 + pep / kM_R24_pep ) - 1 )	
+PEPCK_{mito}	5 oaa_{mito} + 5 gtp_{mito} <=> 5 co2_{mito} + 5 pep_{mito} + 5 gdp_{mito} + 5 nadh_{mito} + 5 nad_{mito} + 5 h_{mito}	True	Common saturable (CM)	u_R25 * ( kC_R25 * sqrt( kEQ_R25  * power( kM_R25_oaa_{mito} , 5 ) * power( kM_R25_gtp_{mito} , 5 ) / power( kM_R25_co2_{mito} , 5 ) / power( kM_R25_pep_{mito} , 5 ) / power( kM_R25_gdp_{mito} , 5 ) / power( kM_R25_nadh_{mito} , 5 ) / power( kM_R25_nad_{mito} , 5 ) / power( kM_R25_h_{mito} , 5 ) ) * power( oaa_{mito} / kM_R25_oaa_{mito} , 5 ) * power( gtp_{mito} / kM_R25_gtp_{mito} , 5 ) - kC_R25 / sqrt( kEQ_R25  * power( kM_R25_oaa_{mito} , 5 ) * power( kM_R25_gtp_{mito} , 5 ) / power( kM_R25_co2_{mito} , 5 ) / power( kM_R25_pep_{mito} , 5 ) / power( kM_R25_gdp_{mito} , 5 ) / power( kM_R25_nadh_{mito} , 5 ) / power( kM_R25_nad_{mito} , 5 ) / power( kM_R25_h_{mito} , 5 ) ) * power( co2_{mito} / kM_R25_co2_{mito} , 5 ) * power( pep_{mito} / kM_R25_pep_{mito} , 5 ) * power( gdp_{mito} / kM_R25_gdp_{mito} , 5 ) * power( nadh_{mito} / kM_R25_nadh_{mito} , 5 ) * power( nad_{mito} / kM_R25_nad_{mito} , 5 ) * power( h_{mito} / kM_R25_h_{mito} , 5 ) ) / ( power( 1 + oaa_{mito} / kM_R25_oaa_{mito} , 5 ) * power( 1 + gtp_{mito} / kM_R25_gtp_{mito} , 5 ) + power( 1 + co2_{mito} / kM_R25_co2_{mito} , 5 ) * power( 1 + pep_{mito} / kM_R25_pep_{mito} , 5 ) * power( 1 + gdp_{mito} / kM_R25_gdp_{mito} , 5 ) * power( 1 + nadh_{mito} / kM_R25_nadh_{mito} , 5 ) * power( 1 + nad_{mito} / kM_R25_nad_{mito} , 5 ) * power( 1 + h_{mito} / kM_R25_h_{mito} , 5 ) - 1 )	
+PC	5 co2_{mito} + 5 pyr_{mito} + 5 atp_{mito} <=> 5 p_{mito} + 5 oaa_{mito} + 5 adp_{mito}	True	Common saturable (CM)	u_R26 * ( kC_R26 * sqrt( kEQ_R26  * power( kM_R26_co2_{mito} , 5 ) * power( kM_R26_pyr_{mito} , 5 ) * power( kM_R26_atp_{mito} , 5 ) / power( kM_R26_p_{mito} , 5 ) / power( kM_R26_oaa_{mito} , 5 ) / power( kM_R26_adp_{mito} , 5 ) ) * power( co2_{mito} / kM_R26_co2_{mito} , 5 ) * power( pyr_{mito} / kM_R26_pyr_{mito} , 5 ) * power( atp_{mito} / kM_R26_atp_{mito} , 5 ) - kC_R26 / sqrt( kEQ_R26  * power( kM_R26_co2_{mito} , 5 ) * power( kM_R26_pyr_{mito} , 5 ) * power( kM_R26_atp_{mito} , 5 ) / power( kM_R26_p_{mito} , 5 ) / power( kM_R26_oaa_{mito} , 5 ) / power( kM_R26_adp_{mito} , 5 ) ) * power( p_{mito} / kM_R26_p_{mito} , 5 ) * power( oaa_{mito} / kM_R26_oaa_{mito} , 5 ) * power( adp_{mito} / kM_R26_adp_{mito} , 5 ) ) / ( power( 1 + co2_{mito} / kM_R26_co2_{mito} , 5 ) * power( 1 + pyr_{mito} / kM_R26_pyr_{mito} , 5 ) * power( 1 + atp_{mito} / kM_R26_atp_{mito} , 5 ) + power( 1 + p_{mito} / kM_R26_p_{mito} , 5 ) * power( 1 + oaa_{mito} / kM_R26_oaa_{mito} , 5 ) * power( 1 + adp_{mito} / kM_R26_adp_{mito} , 5 ) - 1 )	
+LDH	nadh + h + pyr <=> nad + lac	True	Common saturable (CM)	u_R27 * ( kC_R27 * sqrt( kEQ_R27  * kM_R27_nadh * kM_R27_h * kM_R27_pyr / kM_R27_nad / kM_R27_lac ) * ( nadh / kM_R27_nadh ) * ( h / kM_R27_h ) * ( pyr / kM_R27_pyr ) - kC_R27 / sqrt( kEQ_R27  * kM_R27_nadh * kM_R27_h * kM_R27_pyr / kM_R27_nad / kM_R27_lac ) * ( nad / kM_R27_nad ) * ( lac / kM_R27_lac ) ) / ( ( 1 + nadh / kM_R27_nadh ) * ( 1 + h / kM_R27_h ) * ( 1 + pyr / kM_R27_pyr ) + ( 1 + nad / kM_R27_nad ) * ( 1 + lac / kM_R27_lac ) - 1 )	
+LacT	lac_{ext} <=> lac	True	Common saturable (CM)	u_R28 * ( kC_R28 * sqrt( kEQ_R28  * kM_R28_lac_{ext} / kM_R28_lac ) * ( lac_{ext} / kM_R28_lac_{ext} ) - kC_R28 / sqrt( kEQ_R28  * kM_R28_lac_{ext} / kM_R28_lac ) * ( lac / kM_R28_lac ) ) / ( ( 1 + lac_{ext} / kM_R28_lac_{ext} ) + ( 1 + lac / kM_R28_lac ) - 1 )	
+PyrT	pyr <=> 5 pyr_{mito}	True	Common saturable (CM)	u_R29 * ( kC_R29 * sqrt( kEQ_R29  * kM_R29_pyr / power( kM_R29_pyr_{mito} , 5 ) ) * ( pyr / kM_R29_pyr ) - kC_R29 / sqrt( kEQ_R29  * kM_R29_pyr / power( kM_R29_pyr_{mito} , 5 ) ) * power( pyr_{mito} / kM_R29_pyr_{mito} , 5 ) ) / ( ( 1 + pyr / kM_R29_pyr ) + power( 1 + pyr_{mito} / kM_R29_pyr_{mito} , 5 ) - 1 )	
+PepT	5 pep_{mito} <=> pep	True	Common saturable (CM)	u_R30 * ( kC_R30 * sqrt( kEQ_R30  * power( kM_R30_pep_{mito} , 5 ) / kM_R30_pep ) * power( pep_{mito} / kM_R30_pep_{mito} , 5 ) - kC_R30 / sqrt( kEQ_R30  * power( kM_R30_pep_{mito} , 5 ) / kM_R30_pep ) * ( pep / kM_R30_pep ) ) / ( power( 1 + pep_{mito} / kM_R30_pep_{mito} , 5 ) + ( 1 + pep / kM_R30_pep ) - 1 )	
+PDH	5 pyr_{mito} + 5 coa_{mito} + 5 nad_{mito} <=> 5 co2_{mito} + 5 acoa_{mito} + 5 nadh_{mito} + 5 h_{mito}	True	Common saturable (CM)	u_R31 * ( kC_R31 * sqrt( kEQ_R31  * power( kM_R31_pyr_{mito} , 5 ) * power( kM_R31_coa_{mito} , 5 ) * power( kM_R31_nad_{mito} , 5 ) / power( kM_R31_co2_{mito} , 5 ) / power( kM_R31_acoa_{mito} , 5 ) / power( kM_R31_nadh_{mito} , 5 ) / power( kM_R31_h_{mito} , 5 ) ) * power( pyr_{mito} / kM_R31_pyr_{mito} , 5 ) * power( coa_{mito} / kM_R31_coa_{mito} , 5 ) * power( nad_{mito} / kM_R31_nad_{mito} , 5 ) - kC_R31 / sqrt( kEQ_R31  * power( kM_R31_pyr_{mito} , 5 ) * power( kM_R31_coa_{mito} , 5 ) * power( kM_R31_nad_{mito} , 5 ) / power( kM_R31_co2_{mito} , 5 ) / power( kM_R31_acoa_{mito} , 5 ) / power( kM_R31_nadh_{mito} , 5 ) / power( kM_R31_h_{mito} , 5 ) ) * power( co2_{mito} / kM_R31_co2_{mito} , 5 ) * power( acoa_{mito} / kM_R31_acoa_{mito} , 5 ) * power( nadh_{mito} / kM_R31_nadh_{mito} , 5 ) * power( h_{mito} / kM_R31_h_{mito} , 5 ) ) / ( power( 1 + pyr_{mito} / kM_R31_pyr_{mito} , 5 ) * power( 1 + coa_{mito} / kM_R31_coa_{mito} , 5 ) * power( 1 + nad_{mito} / kM_R31_nad_{mito} , 5 ) + power( 1 + co2_{mito} / kM_R31_co2_{mito} , 5 ) * power( 1 + acoa_{mito} / kM_R31_acoa_{mito} , 5 ) * power( 1 + nadh_{mito} / kM_R31_nadh_{mito} , 5 ) * power( 1 + h_{mito} / kM_R31_h_{mito} , 5 ) - 1 )	
+CS	5 oaa_{mito} + 5 acoa_{mito} + 5 h2o_{mito} <=> 5 cit_{mito} + 5 coa_{mito}	True	Common saturable (CM)	u_R32 * ( kC_R32 * sqrt( kEQ_R32  * power( kM_R32_oaa_{mito} , 5 ) * power( kM_R32_acoa_{mito} , 5 ) * power( kM_R32_h2o_{mito} , 5 ) / power( kM_R32_cit_{mito} , 5 ) / power( kM_R32_coa_{mito} , 5 ) ) * power( oaa_{mito} / kM_R32_oaa_{mito} , 5 ) * power( acoa_{mito} / kM_R32_acoa_{mito} , 5 ) * power( h2o_{mito} / kM_R32_h2o_{mito} , 5 ) - kC_R32 / sqrt( kEQ_R32  * power( kM_R32_oaa_{mito} , 5 ) * power( kM_R32_acoa_{mito} , 5 ) * power( kM_R32_h2o_{mito} , 5 ) / power( kM_R32_cit_{mito} , 5 ) / power( kM_R32_coa_{mito} , 5 ) ) * power( cit_{mito} / kM_R32_cit_{mito} , 5 ) * power( coa_{mito} / kM_R32_coa_{mito} , 5 ) ) / ( power( 1 + oaa_{mito} / kM_R32_oaa_{mito} , 5 ) * power( 1 + acoa_{mito} / kM_R32_acoa_{mito} , 5 ) * power( 1 + h2o_{mito} / kM_R32_h2o_{mito} , 5 ) + power( 1 + cit_{mito} / kM_R32_cit_{mito} , 5 ) * power( 1 + coa_{mito} / kM_R32_coa_{mito} , 5 ) - 1 )	
+NDK_{mito}	5 atp_{mito} + 5 gdp_{mito} <=> 5 adp_{mito} + 5 gtp_{mito}	True	Common saturable (CM)	u_R33 * ( kC_R33 * sqrt( kEQ_R33  * power( kM_R33_atp_{mito} , 5 ) * power( kM_R33_gdp_{mito} , 5 ) / power( kM_R33_adp_{mito} , 5 ) / power( kM_R33_gtp_{mito} , 5 ) ) * power( atp_{mito} / kM_R33_atp_{mito} , 5 ) * power( gdp_{mito} / kM_R33_gdp_{mito} , 5 ) - kC_R33 / sqrt( kEQ_R33  * power( kM_R33_atp_{mito} , 5 ) * power( kM_R33_gdp_{mito} , 5 ) / power( kM_R33_adp_{mito} , 5 ) / power( kM_R33_gtp_{mito} , 5 ) ) * power( adp_{mito} / kM_R33_adp_{mito} , 5 ) * power( gtp_{mito} / kM_R33_gtp_{mito} , 5 ) ) / ( power( 1 + atp_{mito} / kM_R33_atp_{mito} , 5 ) * power( 1 + gdp_{mito} / kM_R33_gdp_{mito} , 5 ) + power( 1 + adp_{mito} / kM_R33_adp_{mito} , 5 ) * power( 1 + gtp_{mito} / kM_R33_gtp_{mito} , 5 ) - 1 )	
+oaa_{flx}	 <=> 5 oaa_{mito}	True	Common saturable (CM)	u_R34 * ( kC_R34 * sqrt( kEQ_R34  / power( kM_R34_oaa_{mito} , 5 ) ) - kC_R34 / sqrt( kEQ_R34  / power( kM_R34_oaa_{mito} , 5 ) ) * power( oaa_{mito} / kM_R34_oaa_{mito} , 5 ) ) / (  + power( 1 + oaa_{mito} / kM_R34_oaa_{mito} , 5 ) - 1 )	
+acoa_{flx}	5 acoa_{mito} <=> 	True	Common saturable (CM)	u_R35 * ( kC_R35 * sqrt( kEQ_R35  * power( kM_R35_acoa_{mito} , 5 ) ) * power( acoa_{mito} / kM_R35_acoa_{mito} , 5 ) - kC_R35 / sqrt( kEQ_R35  * power( kM_R35_acoa_{mito} , 5 ) ) ) / ( power( 1 + acoa_{mito} / kM_R35_acoa_{mito} , 5 ) +  - 1 )	
+vcit_{flx}	5 cit_{mito} <=> 	True	Common saturable (CM)	u_R36 * ( kC_R36 * sqrt( kEQ_R36  * power( kM_R36_cit_{mito} , 5 ) ) * power( cit_{mito} / kM_R36_cit_{mito} , 5 ) - kC_R36 / sqrt( kEQ_R36  * power( kM_R36_cit_{mito} , 5 ) ) ) / ( power( 1 + cit_{mito} / kM_R36_cit_{mito} , 5 ) +  - 1 )	
+%					
+!!SBtab TableName='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'					
+!ID	!IsConstant				
+atp	True				
+adp	True				
+amp	True				
+utp	False				
+udp	False				
+gtp	False				
+gdp	False				
+nad	True				
+nadh	True				
+p	True				
+pp	False				
+h2o	True				
+co2	True				
+h	True				
+glc1p	False				
+udpglc	False				
+glyglc	True				
+glc	False				
+glc6p	False				
+fru6p	False				
+fru16bp	False				
+fru26bp	False				
+grap	False				
+dhap	False				
+bpg13	False				
+pg3	False				
+pg2	False				
+pep	False				
+pyr	False				
+oaa	False				
+lac	False				
+glc_{ext}	True				
+lac_{ext}	True				
+co2_{mito}	True				
+p_{mito}	True				
+oaa_{mito}	False				
+pep_{mito}	False				
+acoa_{mito}	True				
+pyr_{mito}	False				
+cit_{mito}	True				
+atp_{mito}	True				
+adp_{mito}	True				
+gtp_{mito}	False				
+gdp_{mito}	False				
+coa_{mito}	True				
+nadh_{mito}	True				
+nad_{mito}	True				
+h_{mito}	True				
+h2o_{mito}	True				
+%					
+!!SBtab TableName='RateConstant' TableType='Quantity' Document='Model' SBtabVersion='0.9'					
+!QuantityType	!Reaction	!Compound	!Value	!Unit	!ID
+equilibrium constant	GLUT2		1.0361219	unitless	kEQ_R1
+equilibrium constant	Glucokinase		0.0037277854	unitless	kEQ_R2
+equilibrium constant	G6Pase		468.28683	unitless	kEQ_R3
+equilibrium constant	GPI		0.53699681	unitless	kEQ_R4
+equilibrium constant	G16PI		6.4187837e-17	unitless	kEQ_R5
+equilibrium constant	UPGase		0.040811285	unitless	kEQ_R6
+equilibrium constant	PPase		13935.014	unitless	kEQ_R7
+equilibrium constant	GS		626.8615	unitless	kEQ_R8
+equilibrium constant	GP		4.7201e-06	unitless	kEQ_R9
+equilibrium constant	NTK__GTP_		3.2074106e-18	unitless	kEQ_R10
+equilibrium constant	NTK__UTP_		1.0374146	unitless	kEQ_R11
+equilibrium constant	AK		5.5300182e-18	unitless	kEQ_R12
+equilibrium constant	PFK2		0.011839803	unitless	kEQ_R13
+equilibrium constant	FBP2		147.44104	unitless	kEQ_R14
+equilibrium constant	PFK1		9.1743084	unitless	kEQ_R15
+equilibrium constant	FBP1		0.19027841	unitless	kEQ_R16
+equilibrium constant	ALD		0.00010156861	unitless	kEQ_R17
+equilibrium constant	TPI		0.05632106	unitless	kEQ_R18
+equilibrium constant	GAPDH		0.085640151	unitless	kEQ_R19
+equilibrium constant	PGK		7.2321594	unitless	kEQ_R20
+equilibrium constant	PGM		0.18820729	unitless	kEQ_R21
+equilibrium constant	EN		0.055166283	unitless	kEQ_R22
+equilibrium constant	PK		1.3434737	unitless	kEQ_R23
+equilibrium constant	PEPCK		3.102802e-17	unitless	kEQ_R24
+equilibrium constant	PEPCK_{mito}		2.4265614e+09	unitless	kEQ_R25
+equilibrium constant	PC		4.1578738e-09	unitless	kEQ_R26
+equilibrium constant	LDH		8.8950618e-19	unitless	kEQ_R27
+equilibrium constant	LacT		1.5685194e-06	unitless	kEQ_R28
+equilibrium constant	PyrT		1.0409076e-10	unitless	kEQ_R29
+equilibrium constant	PepT		115081.58	unitless	kEQ_R30
+equilibrium constant	PDH		1.3518279e+12	unitless	kEQ_R31
+equilibrium constant	CS		1.8972436e+16	unitless	kEQ_R32
+equilibrium constant	NDK_{mito}		0.88867057	unitless	kEQ_R33
+equilibrium constant	oaa_{flx}		3.8710128e-28	unitless	kEQ_R34
+equilibrium constant	acoa_{flx}		3.7802859e-11	unitless	kEQ_R35
+equilibrium constant	vcit_{flx}		1.1536517e-15	unitless	kEQ_R36
+catalytic rate constant geometric mean	GLUT2		4.1543176	1/s	kC_R1
+catalytic rate constant geometric mean	Glucokinase		16.213605	1/s	kC_R2
+catalytic rate constant geometric mean	G6Pase		12.337605	1/s	kC_R3
+catalytic rate constant geometric mean	GPI		3.4723305	1/s	kC_R4
+catalytic rate constant geometric mean	G16PI		5.3800494e-11	1/s	kC_R5
+catalytic rate constant geometric mean	UPGase		1.8989373	1/s	kC_R6
+catalytic rate constant geometric mean	PPase		1.8989373	1/s	kC_R7
+catalytic rate constant geometric mean	GS		1.3563838	1/s	kC_R8
+catalytic rate constant geometric mean	GP		0.21973865	1/s	kC_R9
+catalytic rate constant geometric mean	NTK__GTP_		0	1/s	kC_R10
+catalytic rate constant geometric mean	NTK__UTP_		1.8989373	1/s	kC_R11
+catalytic rate constant geometric mean	AK		0	1/s	kC_R12
+catalytic rate constant geometric mean	PFK2		0.042714697	1/s	kC_R13
+catalytic rate constant geometric mean	FBP2		0.042714697	1/s	kC_R14
+catalytic rate constant geometric mean	PFK1		25.547649	1/s	kC_R15
+catalytic rate constant geometric mean	FBP1		22.307947	1/s	kC_R16
+catalytic rate constant geometric mean	ALD		5.7872176	1/s	kC_R17
+catalytic rate constant geometric mean	TPI		3.4723305	1/s	kC_R18
+catalytic rate constant geometric mean	GAPDH		34.723305	1/s	kC_R19
+catalytic rate constant geometric mean	PGK		16.204209	1/s	kC_R20
+catalytic rate constant geometric mean	PGM		6.9446611	1/s	kC_R21
+catalytic rate constant geometric mean	EN		11.574435	1/s	kC_R22
+catalytic rate constant geometric mean	PK		56.430881	1/s	kC_R23
+catalytic rate constant geometric mean	PEPCK		0	1/s	kC_R24
+catalytic rate constant geometric mean	PEPCK_{mito}		23624.55	1/s	kC_R25
+catalytic rate constant geometric mean	PC		869.2435	1/s	kC_R26
+catalytic rate constant geometric mean	LDH		1.4657265e-08	1/s	kC_R27
+catalytic rate constant geometric mean	LacT		50.672392	1/s	kC_R28
+catalytic rate constant geometric mean	PyrT		2.8016016	1/s	kC_R29
+catalytic rate constant geometric mean	PepT		24.822775	1/s	kC_R30
+catalytic rate constant geometric mean	PDH		5776.4249	1/s	kC_R31
+catalytic rate constant geometric mean	CS		86.723797	1/s	kC_R32
+catalytic rate constant geometric mean	NDK_{mito}		178.14669	1/s	kC_R33
+catalytic rate constant geometric mean	oaa_{flx}		0	1/s	kC_R34
+catalytic rate constant geometric mean	acoa_{flx}		0	1/s	kC_R35
+catalytic rate constant geometric mean	vcit_{flx}		0	1/s	kC_R36
+Michaelis constant	Glucokinase	atp	2.8	mM	kM_R2_atp
+Michaelis constant	NTK__GTP_	atp	2.8	mM	kM_R10_atp
+Michaelis constant	NTK__UTP_	atp	2.8	mM	kM_R11_atp
+Michaelis constant	AK	atp	2.8	mM	kM_R12_atp
+Michaelis constant	PFK2	atp	2.8	mM	kM_R13_atp
+Michaelis constant	PFK1	atp	2.8	mM	kM_R15_atp
+Michaelis constant	PGK	atp	2.8	mM	kM_R20_atp
+Michaelis constant	PK	atp	2.8	mM	kM_R23_atp
+Michaelis constant	Glucokinase	adp	0.8	mM	kM_R2_adp
+Michaelis constant	NTK__GTP_	adp	0.8	mM	kM_R10_adp
+Michaelis constant	NTK__UTP_	adp	0.8	mM	kM_R11_adp
+Michaelis constant	AK	adp	0.8	mM	kM_R12_adp
+Michaelis constant	PFK2	adp	0.8	mM	kM_R13_adp
+Michaelis constant	PFK1	adp	0.8	mM	kM_R15_adp
+Michaelis constant	PGK	adp	0.8	mM	kM_R20_adp
+Michaelis constant	PK	adp	0.8	mM	kM_R23_adp
+Michaelis constant	AK	amp	0.16	mM	kM_R12_amp
+Michaelis constant	UPGase	utp	0.52643439	mM	kM_R6_utp
+Michaelis constant	NTK__UTP_	utp	0.52643439	mM	kM_R11_utp
+Michaelis constant	GS	udp	0.15091626	mM	kM_R8_udp
+Michaelis constant	NTK__UTP_	udp	0.15091626	mM	kM_R11_udp
+Michaelis constant	NTK__GTP_	gtp	0.29	mM	kM_R10_gtp
+Michaelis constant	PEPCK	gtp	0.29	mM	kM_R24_gtp
+Michaelis constant	NTK__GTP_	gdp	0.1	mM	kM_R10_gdp
+Michaelis constant	PEPCK	gdp	0.1	mM	kM_R24_gdp
+Michaelis constant	GAPDH	nad	1.22	mM	kM_R19_nad
+Michaelis constant	LDH	nad	1.22	mM	kM_R27_nad
+Michaelis constant	GAPDH	nadh	0.00056	mM	kM_R19_nadh
+Michaelis constant	LDH	nadh	0.00056	mM	kM_R27_nadh
+Michaelis constant	G6Pase	p	5	mM	kM_R3_p
+Michaelis constant	PPase	p	5	mM	kM_R7_p
+Michaelis constant	GP	p	5	mM	kM_R9_p
+Michaelis constant	FBP2	p	5	mM	kM_R14_p
+Michaelis constant	FBP1	p	5	mM	kM_R16_p
+Michaelis constant	GAPDH	p	5	mM	kM_R19_p
+Michaelis constant	UPGase	pp	0.0018674319	mM	kM_R6_pp
+Michaelis constant	PPase	pp	0.0018674319	mM	kM_R7_pp
+Michaelis constant	G6Pase	h2o	1	mM	kM_R3_h2o
+Michaelis constant	PPase	h2o	1	mM	kM_R7_h2o
+Michaelis constant	FBP2	h2o	1	mM	kM_R14_h2o
+Michaelis constant	FBP1	h2o	1	mM	kM_R16_h2o
+Michaelis constant	EN	h2o	1	mM	kM_R22_h2o
+Michaelis constant	PEPCK	co2	5	mM	kM_R24_co2
+Michaelis constant	GAPDH	h	1	mM	kM_R19_h
+Michaelis constant	LDH	h	1	mM	kM_R27_h
+Michaelis constant	G16PI	glc1p	0.0056682505	mM	kM_R5_glc1p
+Michaelis constant	UPGase	glc1p	0.0056682505	mM	kM_R6_glc1p
+Michaelis constant	GP	glc1p	0.0056682505	mM	kM_R9_glc1p
+Michaelis constant	UPGase	udpglc	0.062649356	mM	kM_R6_udpglc
+Michaelis constant	GS	udpglc	0.062649356	mM	kM_R8_udpglc
+Michaelis constant	GS	glyglc	250	mM	kM_R8_glyglc
+Michaelis constant	GP	glyglc	250	mM	kM_R9_glyglc
+Michaelis constant	GLUT2	glc	7.9632192	mM	kM_R1_glc
+Michaelis constant	Glucokinase	glc	7.9632192	mM	kM_R2_glc
+Michaelis constant	G6Pase	glc	7.9632192	mM	kM_R3_glc
+Michaelis constant	Glucokinase	glc6p	0.093989032	mM	kM_R2_glc6p
+Michaelis constant	G6Pase	glc6p	0.093989032	mM	kM_R3_glc6p
+Michaelis constant	GPI	glc6p	0.093989032	mM	kM_R4_glc6p
+Michaelis constant	G16PI	glc6p	0.093989032	mM	kM_R5_glc6p
+Michaelis constant	GPI	fru6p	0.048488272	mM	kM_R4_fru6p
+Michaelis constant	PFK2	fru6p	0.048488272	mM	kM_R13_fru6p
+Michaelis constant	FBP2	fru6p	0.048488272	mM	kM_R14_fru6p
+Michaelis constant	PFK1	fru6p	0.048488272	mM	kM_R15_fru6p
+Michaelis constant	FBP1	fru6p	0.048488272	mM	kM_R16_fru6p
+Michaelis constant	PFK1	fru16bp	1.4084701	mM	kM_R15_fru16bp
+Michaelis constant	FBP1	fru16bp	1.4084701	mM	kM_R16_fru16bp
+Michaelis constant	ALD	fru16bp	1.4084701	mM	kM_R17_fru16bp
+Michaelis constant	PFK2	fru26bp	0.0018176856	mM	kM_R13_fru26bp
+Michaelis constant	FBP2	fru26bp	0.0018176856	mM	kM_R14_fru26bp
+Michaelis constant	ALD	grap	0.0027269477	mM	kM_R17_grap
+Michaelis constant	TPI	grap	0.0027269477	mM	kM_R18_grap
+Michaelis constant	GAPDH	grap	0.0027269477	mM	kM_R19_grap
+Michaelis constant	ALD	dhap	0.050398564	mM	kM_R17_dhap
+Michaelis constant	TPI	dhap	0.050398564	mM	kM_R18_dhap
+Michaelis constant	GAPDH	bpg13	2.4439024	mM	kM_R19_bpg13
+Michaelis constant	PGK	bpg13	2.4439024	mM	kM_R20_bpg13
+Michaelis constant	PGK	pg3	4.8514508	mM	kM_R20_pg3
+Michaelis constant	PGM	pg3	4.8514508	mM	kM_R21_pg3
+Michaelis constant	PGM	pg2	0.8771945	mM	kM_R21_pg2
+Michaelis constant	EN	pg2	0.8771945	mM	kM_R22_pg2
+Michaelis constant	EN	pep	0.046489776	mM	kM_R22_pep
+Michaelis constant	PK	pep	0.046489776	mM	kM_R23_pep
+Michaelis constant	PEPCK	pep	0.046489776	mM	kM_R24_pep
+Michaelis constant	PepT	pep	0.046489776	mM	kM_R30_pep
+Michaelis constant	PK	pyr	0.017143773	mM	kM_R23_pyr
+Michaelis constant	LDH	pyr	0.017143773	mM	kM_R27_pyr
+Michaelis constant	PyrT	pyr	0.017143773	mM	kM_R29_pyr
+Michaelis constant	PEPCK	oaa	0.01	mM	kM_R24_oaa
+Michaelis constant	LDH	lac	1.808252e-06	mM	kM_R27_lac
+Michaelis constant	LacT	lac	1.808252e-06	mM	kM_R28_lac
+Michaelis constant	GLUT2	glc_{ext}	8	mM	kM_R1_glc_{ext}
+Michaelis constant	LacT	lac_{ext}	1.2	mM	kM_R28_lac_{ext}
+Michaelis constant	PEPCK_{mito}	co2_{mito}	5	mM	kM_R25_co2_{mito}
+Michaelis constant	PC	co2_{mito}	5	mM	kM_R26_co2_{mito}
+Michaelis constant	PDH	co2_{mito}	5	mM	kM_R31_co2_{mito}
+Michaelis constant	PC	p_{mito}	5	mM	kM_R26_p_{mito}
+Michaelis constant	PEPCK_{mito}	oaa_{mito}	0.00024621272	mM	kM_R25_oaa_{mito}
+Michaelis constant	PC	oaa_{mito}	0.00024621272	mM	kM_R26_oaa_{mito}
+Michaelis constant	CS	oaa_{mito}	0.00024621272	mM	kM_R32_oaa_{mito}
+Michaelis constant	oaa_{flx}	oaa_{mito}	0.00024621272	mM	kM_R34_oaa_{mito}
+Michaelis constant	PEPCK_{mito}	pep_{mito}	0.053058231	mM	kM_R25_pep_{mito}
+Michaelis constant	PepT	pep_{mito}	0.053058231	mM	kM_R30_pep_{mito}
+Michaelis constant	PDH	acoa_{mito}	0.04	mM	kM_R31_acoa_{mito}
+Michaelis constant	CS	acoa_{mito}	0.04	mM	kM_R32_acoa_{mito}
+Michaelis constant	acoa_{flx}	acoa_{mito}	0.04	mM	kM_R35_acoa_{mito}
+Michaelis constant	PC	pyr_{mito}	0.0033647331	mM	kM_R26_pyr_{mito}
+Michaelis constant	PyrT	pyr_{mito}	0.0033647331	mM	kM_R29_pyr_{mito}
+Michaelis constant	PDH	pyr_{mito}	0.0033647331	mM	kM_R31_pyr_{mito}
+Michaelis constant	CS	cit_{mito}	0.32	mM	kM_R32_cit_{mito}
+Michaelis constant	vcit_{flx}	cit_{mito}	0.32	mM	kM_R36_cit_{mito}
+Michaelis constant	PC	atp_{mito}	2.8	mM	kM_R26_atp_{mito}
+Michaelis constant	NDK_{mito}	atp_{mito}	2.8	mM	kM_R33_atp_{mito}
+Michaelis constant	PC	adp_{mito}	0.8	mM	kM_R26_adp_{mito}
+Michaelis constant	NDK_{mito}	adp_{mito}	0.8	mM	kM_R33_adp_{mito}
+Michaelis constant	PEPCK_{mito}	gtp_{mito}	0.30118291	mM	kM_R25_gtp_{mito}
+Michaelis constant	NDK_{mito}	gtp_{mito}	0.30118291	mM	kM_R33_gtp_{mito}
+Michaelis constant	PEPCK_{mito}	gdp_{mito}	0.088817093	mM	kM_R25_gdp_{mito}
+Michaelis constant	NDK_{mito}	gdp_{mito}	0.088817093	mM	kM_R33_gdp_{mito}
+Michaelis constant	PDH	coa_{mito}	0.055	mM	kM_R31_coa_{mito}
+Michaelis constant	CS	coa_{mito}	0.055	mM	kM_R32_coa_{mito}
+Michaelis constant	PEPCK_{mito}	nadh_{mito}	0.24	mM	kM_R25_nadh_{mito}
+Michaelis constant	PDH	nadh_{mito}	0.24	mM	kM_R31_nadh_{mito}
+Michaelis constant	PEPCK_{mito}	nad_{mito}	0.98	mM	kM_R25_nad_{mito}
+Michaelis constant	PDH	nad_{mito}	0.98	mM	kM_R31_nad_{mito}
+Michaelis constant	PEPCK_{mito}	h_{mito}	1	mM	kM_R25_h_{mito}
+Michaelis constant	PDH	h_{mito}	1	mM	kM_R31_h_{mito}
+Michaelis constant	CS	h2o_{mito}	1	mM	kM_R32_h2o_{mito}
+concentration		atp	2.8	mM	c_atp
+concentration		adp	0.8	mM	c_adp
+concentration		amp	0.16	mM	c_amp
+concentration		utp	0.52643439	mM	c_utp
+concentration		udp	0.15091626	mM	c_udp
+concentration		gtp	0.29	mM	c_gtp
+concentration		gdp	0.1	mM	c_gdp
+concentration		nad	1.22	mM	c_nad
+concentration		nadh	0.00056	mM	c_nadh
+concentration		p	5	mM	c_p
+concentration		pp	0.0018674319	mM	c_pp
+concentration		h2o	1	mM	c_h2o
+concentration		co2	5	mM	c_co2
+concentration		h	1	mM	c_h
+concentration		glc1p	0.0056682505	mM	c_glc1p
+concentration		udpglc	0.062649356	mM	c_udpglc
+concentration		glyglc	250	mM	c_glyglc
+concentration		glc	7.9632192	mM	c_glc
+concentration		glc6p	0.093989032	mM	c_glc6p
+concentration		fru6p	0.048488272	mM	c_fru6p
+concentration		fru16bp	1.4084701	mM	c_fru16bp
+concentration		fru26bp	0.0018176856	mM	c_fru26bp
+concentration		grap	0.0027269477	mM	c_grap
+concentration		dhap	0.050398564	mM	c_dhap
+concentration		bpg13	2.4439024	mM	c_bpg13
+concentration		pg3	4.8514508	mM	c_pg3
+concentration		pg2	0.8771945	mM	c_pg2
+concentration		pep	0.046489776	mM	c_pep
+concentration		pyr	0.017143773	mM	c_pyr
+concentration		oaa	0.01	mM	c_oaa
+concentration		lac	1.808252e-06	mM	c_lac
+concentration		glc_{ext}	8	mM	c_glc_{ext}
+concentration		lac_{ext}	1.2	mM	c_lac_{ext}
+concentration		co2_{mito}	5	mM	c_co2_{mito}
+concentration		p_{mito}	5	mM	c_p_{mito}
+concentration		oaa_{mito}	0.00024621272	mM	c_oaa_{mito}
+concentration		pep_{mito}	0.053058231	mM	c_pep_{mito}
+concentration		acoa_{mito}	0.04	mM	c_acoa_{mito}
+concentration		pyr_{mito}	0.0033647331	mM	c_pyr_{mito}
+concentration		cit_{mito}	0.32	mM	c_cit_{mito}
+concentration		atp_{mito}	2.8	mM	c_atp_{mito}
+concentration		adp_{mito}	0.8	mM	c_adp_{mito}
+concentration		gtp_{mito}	0.30118291	mM	c_gtp_{mito}
+concentration		gdp_{mito}	0.088817093	mM	c_gdp_{mito}
+concentration		coa_{mito}	0.055	mM	c_coa_{mito}
+concentration		nadh_{mito}	0.24	mM	c_nadh_{mito}
+concentration		nad_{mito}	0.98	mM	c_nad_{mito}
+concentration		h_{mito}	1	mM	c_h_{mito}
+concentration		h2o_{mito}	1	mM	c_h2o_{mito}
+concentration of enzyme	GLUT2		1	mM	u_R1
+concentration of enzyme	Glucokinase		1	mM	u_R2
+concentration of enzyme	G6Pase		1	mM	u_R3
+concentration of enzyme	GPI		1	mM	u_R4
+concentration of enzyme	G16PI		1	mM	u_R5
+concentration of enzyme	UPGase		1	mM	u_R6
+concentration of enzyme	PPase		1	mM	u_R7
+concentration of enzyme	GS		1	mM	u_R8
+concentration of enzyme	GP		1	mM	u_R9
+concentration of enzyme	NTK__GTP_		1	mM	u_R10
+concentration of enzyme	NTK__UTP_		1	mM	u_R11
+concentration of enzyme	AK		1	mM	u_R12
+concentration of enzyme	PFK2		1	mM	u_R13
+concentration of enzyme	FBP2		1	mM	u_R14
+concentration of enzyme	PFK1		1	mM	u_R15
+concentration of enzyme	FBP1		1	mM	u_R16
+concentration of enzyme	ALD		1	mM	u_R17
+concentration of enzyme	TPI		1	mM	u_R18
+concentration of enzyme	GAPDH		1	mM	u_R19
+concentration of enzyme	PGK		1	mM	u_R20
+concentration of enzyme	PGM		1	mM	u_R21
+concentration of enzyme	EN		1	mM	u_R22
+concentration of enzyme	PK		1	mM	u_R23
+concentration of enzyme	PEPCK		1	mM	u_R24
+concentration of enzyme	PEPCK_{mito}		1	mM	u_R25
+concentration of enzyme	PC		1	mM	u_R26
+concentration of enzyme	LDH		1	mM	u_R27
+concentration of enzyme	LacT		1	mM	u_R28
+concentration of enzyme	PyrT		1	mM	u_R29
+concentration of enzyme	PepT		1	mM	u_R30
+concentration of enzyme	PDH		1	mM	u_R31
+concentration of enzyme	CS		1	mM	u_R32
+concentration of enzyme	NDK_{mito}		1	mM	u_R33
+concentration of enzyme	oaa_{flx}		1	mM	u_R34
+concentration of enzyme	acoa_{flx}		1	mM	u_R35
+concentration of enzyme	vcit_{flx}		1	mM	u_R36
+%					
+!!SBtab TableName='Positions' TableType='Position' Document='Model' SBtabVersion='0.9'					
+!Element	!PositionX	!PositionY			
+atp	0.223128	0.669819			
+adp	0.223128	0.761744			
+amp	0.150237	0.718257			
+utp	0.64248	0.945274			
+udp	0.747404	0.94909			
+gtp	0.278108	0.235607			
+gdp	0.323893	0.26613			
+nad	0.629126	0.569456			
+nadh	0.676819	0.496963			
+p	0.631034	0.807919			
+pp	0.665167	1.046784			
+h2o	0.72874	0.728247			
+co2	0.216689	0.139209			
+h	0.664286	0.502658			
+glc1p	0.553505	0.99881			
+udpglc	0.693988	0.99869			
+glyglc	0.860332	0.99881			
+glc	0.436189	1.066649			
+glc6p	0.435571	0.998671			
+fru6p	0.435571	0.900356			
+fru16bp	0.435571	0.788755			
+fru26bp	0.335481	0.89861			
+grap	0.435571	0.674497			
+dhap	0.285333	0.674781			
+bpg13	0.435571	0.565553			
+pg3	0.436061	0.452449			
+pg2	0.435571	0.337038			
+pep	0.435571	0.217466			
+pyr	0.435976	0.136528			
+oaa	0.362047	0.102067			
+lac	0.676947	0.234333			
+glc_{ext}	0.436189	1.142722			
+lac_{ext}	0.834747	0.234333			
+co2_{mito}	0.537168	-0.188432			
+p_{mito}	0.476295	-0.075638			
+oaa_{mito}	0.372251	-0.108479			
+pep_{mito}	0.53203	0.146145			
+acoa_{mito}	0.749684	0.030854			
+pyr_{mito}	0.539758	0.085585			
+cit_{mito}	0.871405	-0.140212			
+atp_{mito}	0.529529	-0.070886			
+adp_{mito}	0.529529	-0.050123			
+gtp_{mito}	0.541987	-0.033512			
+gdp_{mito}	0.546139	-0.018978			
+coa_{mito}	0.711157	-0.021934			
+nadh_{mito}	0.554511	0.028777			
+nad_{mito}	0.548282	0.04954			
+h_{mito}	0.558663	0.003861			
+h2o_{mito}	0.882713	-0.020136			
+GLUT2	0.436189	1.095305			
+Glucokinase	0.436189	1.033403			
+G6Pase	0.384939	1.033029			
+GPI	0.435641	0.940058			
+G16PI	0.496351	0.99881			
+UPGase	0.63322	0.99881			
+PPase	0.688662	1.09769			
+GS	0.757724	0.99836			
+GP	0.688265	0.861335			
+NTK__GTP_	0.150291	0.514132			
+NTK__UTP_	0.69208	0.926197			
+AK	0.188446	0.718257			
+PFK2	0.384507	0.886353			
+FBP2	0.384507	0.908824			
+PFK1	0.398383	0.843651			
+FBP1	0.474389	0.843455			
+ALD	0.435571	0.724984			
+TPI	0.359733	0.674781			
+GAPDH	0.435571	0.610726			
+PGK	0.435571	0.499125			
+PGM	0.435571	0.395496			
+EN	0.435718	0.286147			
+PK	0.435911	0.173025			
+PEPCK	0.390663	0.145945			
+PEPCK_{mito}	0.405082	-0.00652			
+PC	0.47561	-0.037665			
+LDH	0.620887	0.234333			
+LacT	0.753771	0.234333			
+PyrT	0.471392	0.113906			
+PepT	0.479763	0.186577			
+PDH	0.634481	0.063362			
+CS	0.859959	-0.065811			
+NDK_{mito}	0.606352	-0.054275			
+oaa_{flx}	0.370609	-0.196489			
+acoa_{flx}	0.774685	0.094449			
+vcit_{flx}	0.886721	-0.185083			

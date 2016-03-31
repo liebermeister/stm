@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_control_analysis</title>
+  <meta name="keywords" content="es_control_analysis">
+  <meta name="description" content="ES_CONTROL_ANALYSIS - Compute various control and response coefficients">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">elasticity_sampling</a> &gt; <a href="#">es_functions</a> &gt; es_control_analysis.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/elasticity_sampling/es_functions&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>es_control_analysis
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>ES_CONTROL_ANALYSIS - Compute various control and response coefficients</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ES_CONTROL_ANALYSIS - Compute various control and response coefficients
+
+ control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)
+
+ Given parameter response matrices RSp and RJp and tensors RSpp and RJpp, 
+ compute the corresponding matrices and tensors for enzymes and external 
+ metabolites separately and compute all scaled response coefficients
+ 
+ Distinguish between response coefficients for enzymes (u) and external 
+ metabolites s = c(ind_ext), while p denotes all parameters p = [u; s]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././elasticity_sampling/es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>	ES_SAMPLE_ELASTICITIES - Elasticity phase</li></ul>
+<!-- crossreference -->
+
+
+
+<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

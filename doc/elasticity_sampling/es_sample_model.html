@@ -59,76 +59,11 @@ This function calls:
 <li><a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>	ES_SAMPLE_ELASTICITIES - Elasticity phase</li><li><a href="es_sample_steady_state.html" class="code" title="function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)">es_sample_steady_state</a>	ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href=".././demo/es_demo_ecoli_glycolysis.html" class="code" title="">es_demo_ecoli_glycolysis</a>	ES_DEMO Demo script for thermodynamically feasible elasticity sampling</li><li><a href=".././elasticity_sampling/es_mcmc/es_mcmc_utils/elasticity_sampling_sample_prior.html" class="code" title="function result = elasticity_sampling_sample_prior(p)">elasticity_sampling_sample_prior</a>	result = elasticity_sampling_sample_prior(p)</li><li><a href=".././elasticity_sampling/es_perturbations/es_discover_perturbation_sample.html" class="code" title="function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation_sample</a>	function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...</li><li><a href=".././elasticity_sampling/es_perturbations/es_simulate_perturbation_sample.html" class="code" title="function [res, es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)">es_simulate_perturbation_sample</a>	[res,es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)</li><li><a href="es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>	ES_SAMPLE_MULTIPLE - Create model ensemble and collect values for an output function</li><li><a href=".././elasticity_sampling/es_synergies/interaction_statistics.html" class="code" title="function res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)">interaction_statistics</a>	res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)</li></ul>
+<li><a href=".././elasticity_sampling/demo/article_figures/es_figure_4_hepatonet_utp_paradoxical.html" class="code" title="">es_figure_4_hepatonet_utp_paradoxical</a>	----------------------------------------------------------------------------------</li><li><a href=".././elasticity_sampling/demo/article_figures/es_figure_5_synergies.html" class="code" title="">es_figure_5_synergies</a>	---------------------------------------------------------------------</li><li><a href=".././elasticity_sampling/demo/demo_e_coli_glycolysis.html" class="code" title="">demo_e_coli_glycolysis</a>	ES_DEMO Demo script for thermodynamically feasible elasticity sampling</li><li><a href=".././elasticity_sampling/demo/elasticity_sampling_workflow.html" class="code" title="">elasticity_sampling_workflow</a>	---------------------------------------------------------</li><li><a href=".././elasticity_sampling/elasticity_sampling/es_mcmc/es_mcmc_utils/elasticity_sampling_sample_prior.html" class="code" title="function result = elasticity_sampling_sample_prior(p)">elasticity_sampling_sample_prior</a>	result = elasticity_sampling_sample_prior(p)</li><li><a href=".././elasticity_sampling/elasticity_sampling/es_metabolite_fluctuations/energetics_control_and_noise.html" class="code" title="function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, c, v, mu, omega_list, tau_list, omega_fast, omega_slow, psfile_dir, basename, es_options, es_constraints, volume)">energetics_control_and_noise</a>	[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, v, mu, omega_list, tau_list, psfile_dir, basename, es_options, es_constraints, volume)</li><li><a href=".././elasticity_sampling/elasticity_sampling/es_perturbations/es_discover_perturbation_sample.html" class="code" title="function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation_sample</a>	function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...</li><li><a href=".././elasticity_sampling/elasticity_sampling/es_perturbations/es_simulate_perturbation_sample.html" class="code" title="function [res, es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)">es_simulate_perturbation_sample</a>	[res,es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)</li><li><a href=".././elasticity_sampling/elasticity_sampling/es_simple/es_reference_state.html" class="code" title="function [result, fluxes, es_options, es_constraints] = es_reference_state(network, es_options, es_constraints)">es_reference_state</a>	[result, fluxes, es_options, es_constraints] = es_reference_state(network, es_options, es_constraints)</li><li><a href=".././elasticity_sampling/elasticity_sampling/es_simple/es_sbml_to_model.html" class="code" title="function [network, result, options, constraints] = es_sbml_to_model(sbml_filename, external_metabolites, cofactors, v_sign)">es_sbml_to_model</a>	[network, result, options, constraints] = es_sbml_to_model(sbml_filename, external_metabolites, cofactors, v_sign)</li><li><a href=".././elasticity_sampling/elasticity_sampling/es_synergies/interaction_statistics.html" class="code" title="function res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)">interaction_statistics</a>	res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)</li><li><a href="es_sample_multiple.html" class="code" title="function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)">es_sample_multiple</a>	ES_SAMPLE_MULTIPLE - Create model ensemble and collect values for an output function</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)</a>
-0002 
-0003 <span class="comment">% ES_SAMPLE_MODEL - Sample all model parameters for a network</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% result = es_sample_model(N, W, ind_ext, es_constraints, es_options)</span>
-0006 <span class="comment">%</span>
-0007 <span class="comment">% This script reconstructs one model instance, including the sampled elasticities.</span>
-0008 <span class="comment">% For samplig multiple model instances, see 'es_sample_multiple'.</span>
-0009 <span class="comment">%</span>
-0010 <span class="comment">%</span>
-0011 <span class="comment">% Inputs (with nm: # metabolites; nr: # reactions)</span>
-0012 <span class="comment">%   N         - Stoichiometric matrix (nm x nr)</span>
-0013 <span class="comment">%   W         - Allosteric regulation matrix (nr x nm)</span>
-0014 <span class="comment">%   ind_ext   - indices of external metabolites</span>
-0015 <span class="comment">%</span>
-0016 <span class="comment">%   For the inputs 'es_constraints' and 'es_options', see 'es_default_options'</span>
-0017 <span class="comment">%</span>
-0018 <span class="comment">%</span>
-0019 <span class="comment">% Outputs</span>
-0020 <span class="comment">%   All output data are stored in a data structure 'result' (see 'es_sample_elasticities')</span>
-0021 <span class="comment">%   es_options and es_constraints are returned with the (possible) changes made.</span>
-0022 <span class="comment">%</span>
-0023 <span class="comment">%</span>
-0024 <span class="comment">% Sampling consists of two stages:</span>
-0025 <span class="comment">%   1. Steady state          (calling 'es_sample_steady_state')</span>
-0026 <span class="comment">%   2. Elasticities and MCA  (calling 'es_sample_elasticities')</span>
-0027 
-0028 
-0029 <span class="comment">% ----------------------------------------------------------------</span>
-0030 <span class="comment">% Initialise</span>
-0031 
-0032 es_options.flag_test = 0;
-0033 
-0034 <span class="keyword">if</span> ~isnan(es_options.seed), randn(<span class="string">'state'</span>,es_options.seed); <span class="keyword">end</span>
-0035 
-0036 
-0037 <span class="comment">% ----------------------------------------------------------------</span>
-0038 <span class="comment">% Check reaction sum formulae for large stoichoimetric coefficients</span>
-0039 <span class="comment">% they are compensated by setting smaller cooperativities</span>
-0040 <span class="comment">% such that m+ and m- reach maximally the threshold value</span>
-0041 <span class="comment">% (in es_options.limit_cooperativity)</span>
-0042 <span class="comment">% Currently, the settings for reaction affinities are NOT changed</span>
-0043 
-0044 M_max = es_options.limit_cooperativity;
-0045 
-0046 <span class="keyword">if</span>  max(max(abs(N))) &gt; M_max,
-0047   display(<span class="string">' * Large stoichiometric coefficients encountered. Compensating them by small'</span>);
-0048   display(<span class="string">'   reaction cooperativities h; predefined reaction affinities and equilibrium'</span>); 
-0049   display(<span class="string">'   constants are adjusted'</span>);
-0050   ind = find(max(abs(N)) &gt; M_max);
-0051   es_options.h(ind) = M_max./max(abs(N(:,ind)));
-0052   <span class="comment">%es_constraints.dmu_fix(ind) = es_constraints.dmu_fix(ind) ./ es_options.h(ind);</span>
-0053   <span class="comment">%es_constraints.Keq_fix(ind) = es_constraints.Keq_fix(ind) .^ es_options.h(ind);</span>
-0054 <span class="keyword">end</span>
-0055 
-0056 
-0057 <span class="comment">% ----------------------------------------------------------------</span>
-0058 <span class="comment">% Steady-state phase: sample feasible steady quantities</span>
-0059 
-0060 [c0, c, u, J, Keq, mu, K, Kma, zeta, A] = <a href="es_sample_steady_state.html" class="code" title="function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)">es_sample_steady_state</a>(N, W, ind_ext, es_constraints, es_options);
-0061 
-0062 <span class="comment">% ----------------------------------------------------------------</span>
-0063 <span class="comment">% Kinetics phase: sample saturation values compute all the rest</span>
-0064 
-0065 result = <a href="es_sample_elasticities.html" class="code" title="function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)">es_sample_elasticities</a>(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A);</pre></div>
-<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

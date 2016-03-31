@@ -5,19 +5,58 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(
 % [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)
 %
 % Sample thermodynamically consistent steady states, including concentrations,
-% fluxes, and thermodynamic quantities. Enzyme levels are freely sampled.
-%
+%   fluxes, and thermodynamic quantities. Enzyme levels are freely sampled.
 %
 % Inputs (with nm: # metabolites; nr: # reactions)
-%   N         - Stoichiometric matrix (nm x nr)
-%   W         - Allosteric regulation matrix (nr x nm)
-%   ind_ext   - indices of external metabolites
+%   N                            - Stoichiometric matrix (nm x nr)
+%   W                            - Allosteric regulation matrix (nr x nm)
+%   ind_ext                      - indices of external metabolites
+%   es_constraints, es_options:  - explained below (also see 'es_default_options')
 %
-%   For the inputs 'es_constraints' and 'es_options', see 'es_default_options'
+% Outputs (with nm: # metabolites; nr: # reactions)
+%   c0        - Vector of chemical equilibrium concentrations (optional)
+%   c         - Vector of concentrations
+%   u         - Vector of enzyme levels
+%   J         - Flux vector
+%   Keq       - Vector of equilibrium constants
+%   mu        - Vector of chemical potentials
+%   K         - Kernel matrix 
+%   Kma       - Vector of mass-action ratios
+%   zeta      - zeta vector computed from reaction affinities
+%   A         - Vector of reaction affinities (thermodynamic driving forces)
+%
+%
+% Sampling methods used:
+%
+%   Fluxes: 
+%     If a flux vector is predefined in es_constraints.v_fix (no missing values), 
+%     this flux vector is directly used. Otherwise, a method to determine the
+%     fluxes must be given in 'es_options.sampling_method':
+%     
+%     'accept_flux':         use values given in  es_constraints.v_mean
+%     'sample_and_discard':  sample flux values from the distribution defined by
+%                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.v_sign
+%                            and omit unfeasible cycles
+%     'convex_optimisation': sample fluxes based on convex FBA from the distribution defined by 
+%                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.dmu_fix
+%                            and omit unfeasible cycles
+%     'v and mu',            sample flux values using sample_feasible_v.m
+%     'v from data':         sample flux values from the distribution defined by
+%                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.v_sign
+%   
+%   Concentrations: 
+%     Concentrations given in log_c_fix will be directly used. The remaining 
+%     concentrations are randomly sampled based on log_c_mean and log_c_std.
+%   
+%   Chemical potentials
+%     The method chosen to determine concentrations and flux depends on the 
+%     information provided in the "[..]_fix" fields of es_constraints:
+%     mu_fix, dmu_fix, Keq_fix, mu0_fix.
+%
 %
 %  Fields in 'es_constraints' and 'es_options' relevant to this function:
 %    es_options.seed               - Random seed used
-%    es_options.sampling_methods   - Procedures for sampling 
+%    es_options.sampling_methods   - Alternative sampling procedures
 %                                    'v from data'
 %                                    'v and mu'
 %                                    'c0 and c'
@@ -32,7 +71,7 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(
 %    es_constraints.log_c_mean     - Mean metabolite concentration (for sampling)
 %    es_constraints.log_c_std      - Std dev for metabolite concentrations (for sampling)
 %  
-%   Additionally required, depending on 'es_options.sampling_method':
+%   Additional fields required, depending on 'es_options.sampling_method':
 %     'v from data'          es_constraints.v_mean
 %                            es_constraints.v_std
 %   
@@ -46,23 +85,11 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(
 %     'convex_optimisation'  es_constraints.dmu_fix
 %                            es_options.cycle_correction
 %  
-%   For some methods, additionally:
+%   For some methods, additionally required:
 %      es_options.ind_ignore  reactions to be ignored in thermodynamic loops 
 %                             (only needed for flux correction by loop substraction)
 %                             (only needed for flux correction by convex FBA)
 %
-%
-% Outputs (with nm: # metabolites; nr: # reactions)
-%   c0        - Vector of chemical equilibrium concentrations (optional)
-%   c         - Vector of concentrations
-%   u         - Vector of enzyme levels
-%   J         - Flux vector
-%   Keq       - Vector of equilibrium constants
-%   mu        - Vector of chemical potentials
-%   K         - Kernel matrix 
-%   Kma       - Vector of mass-action ratios
-%   zeta      - zeta vector computed from reaction affinities
-%   A         - Vector of reaction affinities (thermodynamic driving forces)
 
 % ---------------------------------------------------------------------------------
 % initialise
@@ -73,6 +100,7 @@ if ~isnan(es_options.seed),
 end
 
 [nm,nr] = size(N);
+
 
 all_c_given   = sum(isnan(es_constraints.log_c_fix)) == 0;
 all_v_given   = sum(isnan(es_constraints.v_fix))     == 0;
@@ -99,7 +127,6 @@ all_dmu_given = sum(isnan(es_constraints.dmu_fix)) == 0;
 if all_v_given,
   
   display(' Using given flux distribution');
-
   v = es_constraints.v_fix; 
 
 else
@@ -158,10 +185,12 @@ c        = exp(es_constraints.log_c_mean + es_constraints.log_c_std .* randn(nm,
 ind_c    = find(isfinite(es_constraints.log_c_fix));
 c(ind_c) = exp(es_constraints.log_c_fix(ind_c));
 Kma      = exp(N' * log(c));
+
 % safety fix
 Kma(Kma<10^-10) = 10^-10;
 
 if all_mu_given,
+
   display(' Using given chemical potentials');
   mu   = es_constraints.mu_fix;
   A    = - N' * mu;
@@ -169,12 +198,15 @@ if all_mu_given,
   Keq  = exp(A/RT) .* Kma;
 
 elseif all_dmu_given,
+
   display(' Using given chemical potential differences');
   A    = - es_constraints.dmu_fix;
   zeta = exp(es_options.h .* A/RT);
   Keq  = exp(A/RT) .* Kma;
+
   %% safety fix
-  Keq(Keq>10^50) = 10^50;
+  %% Keq(Keq>10^50) = 10^50;
+
   %% JUST FOR SAFETY ..REMOVE THIS LATER:
   if ~isfield(es_constraints,'mu_eqconstraint'),
     es_constraints.mu_eqconstraint = [];
@@ -187,12 +219,14 @@ elseif all_dmu_given,
   display(' * Computing mu from A by pseudoinverse (in es_sample_steady_state)');
 
 elseif all_keq_given,
+
   display(' Using given equilibrium constants');
   Keq  = es_constraints.Keq_fix;
   A    = RT * log(Keq ./ Kma);
   zeta = exp(es_options.h .* A/RT);
 
 else,
+
   %% sample mu
   if es_options.verbose, display(' Computing extreme feasible mu vectors ..'); end
   [mu_list, feasible] = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options);
@@ -208,8 +242,14 @@ else,
   A      = RT * log(Keq./Kma);
 end
 
-if find([v~=0].*[abs(A) < es_constraints.dmu_limit_min]), error('Overly small reaction affinity encountered'); end
-if find([v~=0].*[abs(A) > [1+10^-5]*es_constraints.dmu_limit]),     error('Overly large reaction affinity encountered'); end
+if find([v~=0] .* [abs(A) < es_constraints.dmu_limit_min]),
+  ind = find([v~=0] .* [abs(A) < es_constraints.dmu_limit_min]);
+  error(sprintf('Overly small reaction affinity %f encountered', A(ind) .* sign(v(ind)))); 
+end
+
+if find([v~=0].*[abs(A) > [1+10^-5]*es_constraints.dmu_limit]), 
+  error(sprintf('Overly large reaction affinity %f encountered', max(abs(A)))); 
+end
 
 
 % ----------------------------------------------------------------------
@@ -221,12 +261,12 @@ u = exp(es_constraints.log_u_mean + es_constraints.log_u_std .* randn(nr,1));
 % ----------------------------------------------------------------------
 % safety checks
 
-if sum(v .* A<0), 
-  [v,A, sign(v)~=sign(A)]
+if sum([v .* A]<0), 
+  [v, A, sign(v)~=sign(A)]
   error('Signs of reaction rates and affinities disagree!!!'); 
 end 
 
-if sum(log(Keq./Kma) .* A<0), error('Problem with equilibrium constants'); end 
+if sum([log(Keq./Kma) .* A] <0), error('Problem with equilibrium constants'); end 
 
 if sum(Keq==0),     error('Vanishing equilibrium constant'); end
 if sum(isinf(Keq)), error('Infinite equilibrium constant'); end

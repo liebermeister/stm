@@ -32,19 +32,58 @@
  [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)
 
  Sample thermodynamically consistent steady states, including concentrations,
- fluxes, and thermodynamic quantities. Enzyme levels are freely sampled.
-
+   fluxes, and thermodynamic quantities. Enzyme levels are freely sampled.
 
  Inputs (with nm: # metabolites; nr: # reactions)
-   N         - Stoichiometric matrix (nm x nr)
-   W         - Allosteric regulation matrix (nr x nm)
-   ind_ext   - indices of external metabolites
+   N                            - Stoichiometric matrix (nm x nr)
+   W                            - Allosteric regulation matrix (nr x nm)
+   ind_ext                      - indices of external metabolites
+   es_constraints, es_options:  - explained below (also see 'es_default_options')
 
-   For the inputs 'es_constraints' and 'es_options', see 'es_default_options'
+ Outputs (with nm: # metabolites; nr: # reactions)
+   c0        - Vector of chemical equilibrium concentrations (optional)
+   c         - Vector of concentrations
+   u         - Vector of enzyme levels
+   J         - Flux vector
+   Keq       - Vector of equilibrium constants
+   mu        - Vector of chemical potentials
+   K         - Kernel matrix 
+   Kma       - Vector of mass-action ratios
+   zeta      - zeta vector computed from reaction affinities
+   A         - Vector of reaction affinities (thermodynamic driving forces)
+
+
+ Sampling methods used:
+
+   Fluxes: 
+     If a flux vector is predefined in es_constraints.v_fix (no missing values), 
+     this flux vector is directly used. Otherwise, a method to determine the
+     fluxes must be given in 'es_options.sampling_method':
+     
+     'accept_flux':         use values given in  es_constraints.v_mean
+     'sample_and_discard':  sample flux values from the distribution defined by
+                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.v_sign
+                            and omit unfeasible cycles
+     'convex_optimisation': sample fluxes based on convex FBA from the distribution defined by 
+                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.dmu_fix
+                            and omit unfeasible cycles
+     'v and mu',            sample flux values using sample_feasible_v.m
+     'v from data':         sample flux values from the distribution defined by
+                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.v_sign
+   
+   Concentrations: 
+     Concentrations given in log_c_fix will be directly used. The remaining 
+     concentrations are randomly sampled based on log_c_mean and log_c_std.
+   
+   Chemical potentials
+     The method chosen to determine concentrations and flux depends on the 
+     information provided in the &quot;[..]_fix&quot; fields of es_constraints:
+     mu_fix, dmu_fix, Keq_fix, mu0_fix.
+
 
   Fields in 'es_constraints' and 'es_options' relevant to this function:
     es_options.seed               - Random seed used
-    es_options.sampling_methods   - Procedures for sampling 
+    es_options.sampling_methods   - Alternative sampling procedures
                                     'v from data'
                                     'v and mu'
                                     'c0 and c'
@@ -59,7 +98,7 @@
     es_constraints.log_c_mean     - Mean metabolite concentration (for sampling)
     es_constraints.log_c_std      - Std dev for metabolite concentrations (for sampling)
   
-   Additionally required, depending on 'es_options.sampling_method':
+   Additional fields required, depending on 'es_options.sampling_method':
      'v from data'          es_constraints.v_mean
                             es_constraints.v_std
    
@@ -73,23 +112,10 @@
      'convex_optimisation'  es_constraints.dmu_fix
                             es_options.cycle_correction
   
-   For some methods, additionally:
+   For some methods, additionally required:
       es_options.ind_ignore  reactions to be ignored in thermodynamic loops 
                              (only needed for flux correction by loop substraction)
-                             (only needed for flux correction by convex FBA)
-
-
- Outputs (with nm: # metabolites; nr: # reactions)
-   c0        - Vector of chemical equilibrium concentrations (optional)
-   c         - Vector of concentrations
-   u         - Vector of enzyme levels
-   J         - Flux vector
-   Keq       - Vector of equilibrium constants
-   mu        - Vector of chemical potentials
-   K         - Kernel matrix 
-   Kma       - Vector of mass-action ratios
-   zeta      - zeta vector computed from reaction affinities
-   A         - Vector of reaction affinities (thermodynamic driving forces)</pre></div>
+                             (only needed for flux correction by convex FBA)</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -102,240 +128,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)</a>
-0002 
-0003 <span class="comment">% ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)</span>
-0006 <span class="comment">%</span>
-0007 <span class="comment">% Sample thermodynamically consistent steady states, including concentrations,</span>
-0008 <span class="comment">% fluxes, and thermodynamic quantities. Enzyme levels are freely sampled.</span>
-0009 <span class="comment">%</span>
-0010 <span class="comment">%</span>
-0011 <span class="comment">% Inputs (with nm: # metabolites; nr: # reactions)</span>
-0012 <span class="comment">%   N         - Stoichiometric matrix (nm x nr)</span>
-0013 <span class="comment">%   W         - Allosteric regulation matrix (nr x nm)</span>
-0014 <span class="comment">%   ind_ext   - indices of external metabolites</span>
-0015 <span class="comment">%</span>
-0016 <span class="comment">%   For the inputs 'es_constraints' and 'es_options', see 'es_default_options'</span>
-0017 <span class="comment">%</span>
-0018 <span class="comment">%  Fields in 'es_constraints' and 'es_options' relevant to this function:</span>
-0019 <span class="comment">%    es_options.seed               - Random seed used</span>
-0020 <span class="comment">%    es_options.sampling_methods   - Procedures for sampling</span>
-0021 <span class="comment">%                                    'v from data'</span>
-0022 <span class="comment">%                                    'v and mu'</span>
-0023 <span class="comment">%                                    'c0 and c'</span>
-0024 <span class="comment">%                                    'sample_and_discard'</span>
-0025 <span class="comment">%                                    'convex_optimisation'</span>
-0026 <span class="comment">%    es_constraints.v_fix          - Predefined fluxes (vector, NaNs are ignored)</span>
-0027 <span class="comment">%    es_constraints.v_min          - Lower flux bounds (vector, NaNs are ignored)</span>
-0028 <span class="comment">%    es_constraints.v_max          - Upper flux bounds (vector, NaNs are ignored)</span>
-0029 <span class="comment">%    es_constraints.v_sign         - Flux signs (vector, NaNs are ignored)</span>
-0030 <span class="comment">%    es_constraints.log_u_mean     - Mean enzyme level (for sampling)</span>
-0031 <span class="comment">%    es_constraints.log_u_std      - Std dev for enzyme levels (for sampling)</span>
-0032 <span class="comment">%    es_constraints.log_c_mean     - Mean metabolite concentration (for sampling)</span>
-0033 <span class="comment">%    es_constraints.log_c_std      - Std dev for metabolite concentrations (for sampling)</span>
-0034 <span class="comment">%</span>
-0035 <span class="comment">%   Additionally required, depending on 'es_options.sampling_method':</span>
-0036 <span class="comment">%     'v from data'          es_constraints.v_mean</span>
-0037 <span class="comment">%                            es_constraints.v_std</span>
-0038 <span class="comment">%</span>
-0039 <span class="comment">%     'v and mu'             es_constraints.mu_fix</span>
-0040 <span class="comment">%</span>
-0041 <span class="comment">%     'c0 and c'             es_constraints.log_c0</span>
-0042 <span class="comment">%                            es_constraints.log_c0_std</span>
-0043 <span class="comment">%</span>
-0044 <span class="comment">%     'sample_and_discard'   es_options.cycle_correction</span>
-0045 <span class="comment">%</span>
-0046 <span class="comment">%     'convex_optimisation'  es_constraints.dmu_fix</span>
-0047 <span class="comment">%                            es_options.cycle_correction</span>
-0048 <span class="comment">%</span>
-0049 <span class="comment">%   For some methods, additionally:</span>
-0050 <span class="comment">%      es_options.ind_ignore  reactions to be ignored in thermodynamic loops</span>
-0051 <span class="comment">%                             (only needed for flux correction by loop substraction)</span>
-0052 <span class="comment">%                             (only needed for flux correction by convex FBA)</span>
-0053 <span class="comment">%</span>
-0054 <span class="comment">%</span>
-0055 <span class="comment">% Outputs (with nm: # metabolites; nr: # reactions)</span>
-0056 <span class="comment">%   c0        - Vector of chemical equilibrium concentrations (optional)</span>
-0057 <span class="comment">%   c         - Vector of concentrations</span>
-0058 <span class="comment">%   u         - Vector of enzyme levels</span>
-0059 <span class="comment">%   J         - Flux vector</span>
-0060 <span class="comment">%   Keq       - Vector of equilibrium constants</span>
-0061 <span class="comment">%   mu        - Vector of chemical potentials</span>
-0062 <span class="comment">%   K         - Kernel matrix</span>
-0063 <span class="comment">%   Kma       - Vector of mass-action ratios</span>
-0064 <span class="comment">%   zeta      - zeta vector computed from reaction affinities</span>
-0065 <span class="comment">%   A         - Vector of reaction affinities (thermodynamic driving forces)</span>
-0066 
-0067 <span class="comment">% ---------------------------------------------------------------------------------</span>
-0068 <span class="comment">% initialise</span>
-0069 
-0070 <span class="keyword">if</span> ~isnan(es_options.seed), 
-0071   randn(<span class="string">'state'</span>,es_options.seed); 
-0072   rand(<span class="string">'state'</span>,es_options.seed); 
-0073 <span class="keyword">end</span>
-0074 
-0075 [nm,nr] = size(N);
-0076 
-0077 all_c_given   = sum(isnan(es_constraints.log_c_fix)) == 0;
-0078 all_v_given   = sum(isnan(es_constraints.v_fix))     == 0;
-0079 all_mu0_given = sum(isnan(es_constraints.mu0_fix))   == 0;
-0080 
-0081 <span class="comment">% if all_mu0_given,</span>
-0082 <span class="comment">%   es_constraints.Keq_fix = exp(-1/RT * N' * es_constraints.mu0_fix);</span>
-0083 <span class="comment">% end</span>
-0084 all_keq_given = sum(isnan(es_constraints.Keq_fix))   == 0;
-0085 
-0086 <span class="comment">% if all_c_given * all_mu0_given,</span>
-0087 <span class="comment">%   es_constraints.mu_fix = es_constraints.mu0_fix + RT * es_constraints.log_c_fix;</span>
-0088 <span class="comment">% end</span>
-0089 all_mu_given  = sum(isnan(es_constraints.mu_fix)) == 0;
-0090 
-0091 <span class="comment">%if all_mu_given,</span>
-0092 <span class="comment">%  es_constraints.dmu_fix = N' * es_constraints.mu_fix;</span>
-0093 <span class="comment">%end</span>
-0094 all_dmu_given = sum(isnan(es_constraints.dmu_fix)) == 0;
-0095 
-0096 <span class="comment">% ---------------------------------------------------------------------------------</span>
-0097 <span class="comment">% determine fluxes</span>
-0098 
-0099 <span class="keyword">if</span> all_v_given,
-0100   
-0101   display(<span class="string">' Using given flux distribution'</span>);
-0102 
-0103   v = es_constraints.v_fix; 
-0104 
-0105 <span class="keyword">else</span>
-0106 
-0107   v = [];
-0108   es_constraints.v_min(es_constraints.v_sign ==  1) = 0;
-0109   es_constraints.v_max(es_constraints.v_sign == -1) = 0;
-0110 
-0111   <span class="keyword">switch</span> es_options.sampling_method,
-0112     
-0113     <span class="keyword">case</span> <span class="string">'accept_flux'</span>,
-0114       v = es_constraints.v_mean;      
-0115     
-0116     <span class="keyword">case</span> <span class="string">'sample_and_discard'</span>,
-0117       es_options.sampling_cycle_correction = 1;    
-0118       [sample_v, best_v] = sample_fluxes_given_data(N, ind_ext, es_constraints.v_mean, es_constraints.v_std, 1, 1, 1, es_options.ind_ignore, es_constraints.v_sign);
-0119       v = best_v.v;
-0120     
-0121     <span class="keyword">case</span> <span class="string">'convex_optimisation'</span>,
-0122       es_options.sampling_cycle_correction = 1;
-0123       [sample_v, best_v, res] = sample_fluxes_by_convex_fba(N,ind_ext,es_constraints.v_mean,es_constraints.v_std,struct,-es_constraints.dmu_fix);
-0124       v                   = best_v.v;
-0125       es_constraints.dmu_fix = -res.A;    <span class="comment">%</span>
-0126     
-0127     <span class="keyword">case</span> <span class="string">'v and mu'</span>,
-0128       v = sample_feasible_v(N,ind_ext,es_constraints,es_options);  
-0129     
-0130     <span class="keyword">case</span> <span class="string">'v from data'</span>,
-0131       sample_v = sample_fluxes_given_data(N, ind_ext, es_constraints.v_mean, es_constraints.v_std, 1, 1, 1, es_options.ind_ignore, es_constraints.v_sign);
-0132       v        = sample_v.v{1};
-0133       
-0134     <span class="keyword">otherwise</span>,
-0135     error(sprintf(<span class="string">'unknown method %s'</span>,  es_options.sampling_method));
-0136   <span class="keyword">end</span>  
-0137 
-0138   <span class="keyword">if</span> length(v),
-0139     <span class="keyword">if</span> es_options.sampling_cycle_correction,
-0140       <span class="comment">%% correct        = es_check_flux_es_constraints(es_constraints.v_mean,N,ind_ext,es_constraints,1,epsilon_stationary,cycles);</span>
-0141       <span class="comment">%% correct mean fluxes by Nathan's method (requires variable 'ind_ignore')</span>
-0142       [v_feas, C] = eba_make_feasible(v, N, <span class="string">'loose'</span>, nan, es_options.ind_ignore, <span class="string">'efmtool'</span>);
-0143       v = v_feas;  <span class="comment">% if not given -&gt; fluxes are sampled again</span>
-0144     <span class="keyword">end</span>
-0145   <span class="keyword">end</span>
-0146 
-0147 <span class="keyword">end</span>
-0148 
-0149 <span class="comment">% ---------------------------------------------------------------------------------</span>
-0150 <span class="comment">% now do the rest</span>
-0151 
-0152 <span class="comment">%% sample c freely, determine Keq, A, zeta, depending on given information</span>
-0153 
-0154 c0       = [];
-0155 mu       = [];
-0156 K        = [];
-0157 c        = exp(es_constraints.log_c_mean + es_constraints.log_c_std .* randn(nm,1));
-0158 ind_c    = find(isfinite(es_constraints.log_c_fix));
-0159 c(ind_c) = exp(es_constraints.log_c_fix(ind_c));
-0160 Kma      = exp(N' * log(c));
-0161 <span class="comment">% safety fix</span>
-0162 Kma(Kma&lt;10^-10) = 10^-10;
-0163 
-0164 <span class="keyword">if</span> all_mu_given,
-0165   display(<span class="string">' Using given chemical potentials'</span>);
-0166   mu   = es_constraints.mu_fix;
-0167   A    = - N' * mu;
-0168   zeta = exp(es_options.h .* A/RT);
-0169   Keq  = exp(A/RT) .* Kma;
-0170 
-0171 <span class="keyword">elseif</span> all_dmu_given,
-0172   display(<span class="string">' Using given chemical potential differences'</span>);
-0173   A    = - es_constraints.dmu_fix;
-0174   zeta = exp(es_options.h .* A/RT);
-0175   Keq  = exp(A/RT) .* Kma;
-0176   <span class="comment">%% safety fix</span>
-0177   Keq(Keq&gt;10^50) = 10^50;
-0178   <span class="comment">%% JUST FOR SAFETY ..REMOVE THIS LATER:</span>
-0179   <span class="keyword">if</span> ~isfield(es_constraints,<span class="string">'mu_eqconstraint'</span>),
-0180     es_constraints.mu_eqconstraint = [];
-0181   <span class="keyword">end</span>
-0182   <span class="keyword">if</span> isempty(es_constraints.mu_eqconstraint),
-0183     mu   = -pinv(full(N'))*A;
-0184   <span class="keyword">else</span>,
-0185     mu = pinv([-full(N'); es_constraints.mu_eqconstraint.matrix'])*[-A; es_constraints.mu_eqconstraint.vector];
-0186   <span class="keyword">end</span>
-0187   display(<span class="string">' * Computing mu from A by pseudoinverse (in es_sample_steady_state)'</span>);
-0188 
-0189 <span class="keyword">elseif</span> all_keq_given,
-0190   display(<span class="string">' Using given equilibrium constants'</span>);
-0191   Keq  = es_constraints.Keq_fix;
-0192   A    = RT * log(Keq ./ Kma);
-0193   zeta = exp(es_options.h .* A/RT);
-0194 
-0195 <span class="keyword">else</span>,
-0196   <span class="comment">%% sample mu</span>
-0197   <span class="keyword">if</span> es_options.verbose, display(<span class="string">' Computing extreme feasible mu vectors ..'</span>); <span class="keyword">end</span>
-0198   [mu_list, feasible] = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options);
-0199   <span class="keyword">if</span> es_options.verbose, display(<span class="string">' .. done'</span>); <span class="keyword">end</span>
-0200   <span class="keyword">if</span> ~feasible, error(<span class="string">'Unfeasible flux distribution'</span>); <span class="keyword">end</span>
-0201   display(<span class="string">'  Choosing chemical potentials mu randomly from extreme points of the allowed region'</span>);
-0202   mu     = mu_list(:,ceil(rand*size(mu_list,2)));
-0203   log_c  = log(c);
-0204   log_c0 = log_c - mu/RT;
-0205   Keq    = exp(N'*log_c0);
-0206   Kma    = exp(N' * log(c));
-0207   zeta   = [Keq./Kma].^es_options.h;
-0208   A      = RT * log(Keq./Kma);
-0209 <span class="keyword">end</span>
-0210 
-0211 <span class="keyword">if</span> find([v~=0].*[abs(A) &lt; es_constraints.dmu_limit_min]), error(<span class="string">'Overly small reaction affinity encountered'</span>); <span class="keyword">end</span>
-0212 <span class="keyword">if</span> find([v~=0].*[abs(A) &gt; [1+10^-5]*es_constraints.dmu_limit]),     error(<span class="string">'Overly large reaction affinity encountered'</span>); <span class="keyword">end</span>
-0213 
-0214 
-0215 <span class="comment">% ----------------------------------------------------------------------</span>
-0216 <span class="comment">% output quantities</span>
-0217 
-0218 u = exp(es_constraints.log_u_mean + es_constraints.log_u_std .* randn(nr,1));
-0219 
-0220 
-0221 <span class="comment">% ----------------------------------------------------------------------</span>
-0222 <span class="comment">% safety checks</span>
-0223 
-0224 <span class="keyword">if</span> sum(v .* A&lt;0), 
-0225   [v,A, sign(v)~=sign(A)]
-0226   error(<span class="string">'Signs of reaction rates and affinities disagree!!!'</span>); 
-0227 <span class="keyword">end</span> 
-0228 
-0229 <span class="keyword">if</span> sum(log(Keq./Kma) .* A&lt;0), error(<span class="string">'Problem with equilibrium constants'</span>); <span class="keyword">end</span> 
-0230 
-0231 <span class="keyword">if</span> sum(Keq==0),     error(<span class="string">'Vanishing equilibrium constant'</span>); <span class="keyword">end</span>
-0232 <span class="keyword">if</span> sum(isinf(Keq)), error(<span class="string">'Infinite equilibrium constant'</span>); <span class="keyword">end</span>
-0233 <span class="keyword">if</span> sum(isnan(Keq)), error(<span class="string">'Unknown equilibrium constant'</span>); <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

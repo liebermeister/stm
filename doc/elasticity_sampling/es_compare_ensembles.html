@@ -72,77 +72,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href=".././elasticity_sampling/es_synergies/influence_anova.html" class="code" title="function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)">influence_anova</a>	function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)</li><li><a href=".././elasticity_sampling/es_synergies/interaction_anova.html" class="code" title="function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)">interaction_anova</a>	function p = influence_anova(D, n_per, fdr, ind_intervention)</li></ul>
+<li><a href=".././elasticity_sampling/elasticity_sampling/es_synergies/influence_anova.html" class="code" title="function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)">influence_anova</a>	function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)</li><li><a href=".././elasticity_sampling/elasticity_sampling/es_synergies/interaction_anova.html" class="code" title="function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)">interaction_anova</a>	function p = influence_anova(D, n_per, fdr, ind_intervention)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href=".././demo/es_demo_ecoli_glycolysis.html" class="code" title="">es_demo_ecoli_glycolysis</a>	ES_DEMO Demo script for thermodynamically feasible elasticity sampling</li></ul>
+<li><a href=".././elasticity_sampling/demo/demo_e_coli_glycolysis.html" class="code" title="">demo_e_coli_glycolysis</a>	ES_DEMO Demo script for thermodynamically feasible elasticity sampling</li><li><a href=".././elasticity_sampling/demo/elasticity_sampling_workflow.html" class="code" title="">elasticity_sampling_workflow</a>	---------------------------------------------------------</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)</a>
-0002 
-0003 <span class="comment">% ES_COMPARE_ENSEMBLES - Compare an output function between two model ensembles</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)</span>
-0006 <span class="comment">%</span>
-0007 <span class="comment">% Significance test for model outputs obtained from multiple elasticity sampling</span>
-0008 <span class="comment">%</span>
-0009 <span class="comment">% Significant differences are computed from the outputs of a previous multiple</span>
-0010 <span class="comment">% elasticity sampling for two model variants (see 'es_sample_multiple').</span>
-0011 <span class="comment">% Both model variants must have the same number of metabolites and reactions.</span>
-0012 <span class="comment">%</span>
-0013 <span class="comment">% Inputs</span>
-0014 <span class="comment">%</span>
-0015 <span class="comment">%   output1  - Matrix or tensor from 1st model variant (from 'es_sample_multiple')</span>
-0016 <span class="comment">%   output2  - Matrix or tensor from 2nd model variant (from 'es_sample_multiple')</span>
-0017 <span class="comment">%   n_per    - Number of samples in permutation test</span>
-0018 <span class="comment">%   fdr      - False discovery rate</span>
-0019 <span class="comment">%</span>
-0020 <span class="comment">% Output: Data structure 'res' with fields:</span>
-0021 <span class="comment">%</span>
-0022 <span class="comment">%   res.mean_total               - Mean value for all samples (total mean)</span>
-0023 <span class="comment">%   res.mean_a                   - Mean value for 1st variant</span>
-0024 <span class="comment">%   res.mean_b                   - Mean value for 2nd variant</span>
-0025 <span class="comment">%   res.mean_delta               - Difference between values for both variants</span>
-0026 <span class="comment">%</span>
-0027 <span class="comment">%   res.p_value_mean_total       - p value of [mean value for all samples ~= total mean]</span>
-0028 <span class="comment">%   res.p_value_mean_a           - p value of [mean value for 1st variant ~= total mean]</span>
-0029 <span class="comment">%   res.p_value_mean_b           - p value of [mean value for 2nd variant ~= total mean]</span>
-0030 <span class="comment">%   res.p_value_mean_delta       - p value of [difference between values for both variants</span>
-0031 <span class="comment">%                                - ~= difference between values from shuffled variants]</span>
-0032 <span class="comment">%</span>
-0033 <span class="comment">%   res.mean_total_significant   - Significant elements for mean value for all samples</span>
-0034 <span class="comment">%   res.mean_a_significant       - Significant elements for mean value for 1st variant</span>
-0035 <span class="comment">%   res.mean_b_significant       - Significant elements for mean value for 2nd variant</span>
-0036 <span class="comment">%   res.mean_delta_significant   - Significant elements for difference between variants</span>
-0037 <span class="comment">%                                - Values: 1 (significantly high),  -1 (significantly low)</span>
-0038 <span class="comment">%</span>
-0039 <span class="comment">%   res.n_mean_total_significant - # significant elements for mean value for all samples</span>
-0040 <span class="comment">%   res.n_mean_a_significant     - # significant elements for mean value for 1st variant</span>
-0041 <span class="comment">%   res.n_mean_b_significant     - # significant elements for mean value for 2nd variant</span>
-0042 <span class="comment">%   res.n_mean_delta_significant - # significant elements for difference between variants</span>
-0043 
-0044 
-0045 eval(default(<span class="string">'n_per'</span>,<span class="string">'100'</span>,<span class="string">'fdr'</span>,<span class="string">'0.05'</span>, <span class="string">'verbose'</span>, <span class="string">'0'</span>));
-0046 
-0047 <span class="keyword">if</span> norm(size(output1)-size(output1)), 
-0048   error(<span class="string">'function arguments output1 and output2 must have the same size'</span>); 
-0049 <span class="keyword">end</span>
-0050 
-0051 <span class="keyword">switch</span> length(size(output1)),
-0052   
-0053   <span class="keyword">case</span> 2,
-0054     D(:,:,1) = output1;
-0055     D(:,:,2) = output2;
-0056     res = <a href=".././elasticity_sampling/es_synergies/influence_anova.html" class="code" title="function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)">influence_anova</a>(D, n_per, fdr, [], verbose);
-0057   
-0058   <span class="keyword">case</span> 3,
-0059     D(:,:,:,1) = output1;
-0060     D(:,:,:,1) = output2;
-0061     res = <a href=".././elasticity_sampling/es_synergies/interaction_anova.html" class="code" title="function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)">interaction_anova</a>(D, n_per, fdr, [], verbose);
-0062 
-0063 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 09-Nov-2014 11:05:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

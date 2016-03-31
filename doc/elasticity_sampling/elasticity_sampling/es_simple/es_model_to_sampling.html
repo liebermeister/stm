@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_model_to_sampling</title>
+  <meta name="keywords" content="es_model_to_sampling">
+  <meta name="description" content="result = es_model_to_sampling(network, network_CoHid, v, target_reaction, ind_ignore, print_graphics, psfile_dir, graphics_file)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">elasticity_sampling</a> &gt; <a href="#">elasticity_sampling</a> &gt; <a href="#">es_simple</a> &gt; es_model_to_sampling.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./elasticity_sampling/elasticity_sampling/es_simple&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>es_model_to_sampling
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>result = es_model_to_sampling(network, network_CoHid, v, target_reaction, ind_ignore, print_graphics, psfile_dir, graphics_file)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function result = es_model_to_sampling(network, network_CoHid, v, target_reaction, ind_ignore, print_graphics, psfile_dir, graphics_file) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> result = es_model_to_sampling(network, network_CoHid, v, target_reaction, ind_ignore, print_graphics, psfile_dir, graphics_file)
+
+ Calculate a reference metabolic state and show graphics
+ 
+ This function is a wrapper for es_reference_state and some following graphics routines
+
+ Function arguments:
+  network         network data structure
+  network_CoHid   network data structure for graphics
+  v               flux distribution (must be thermodynamically feasible)
+  target_reaction name of target reaction (for synergy calculation)
+  ind_ignore      indices of reactions to be ignored 
+  print_graphics  flag
+  psfile_dir      directory name 
+  graphics_file   file name</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="es_reference_state.html" class="code" title="function [result, fluxes, es_options, es_constraints] = es_reference_state(network, es_options, es_constraints)">es_reference_state</a>	[result, fluxes, es_options, es_constraints] = es_reference_state(network, es_options, es_constraints)</li><li><a href="../../.././elasticity_sampling/es_default_options.html" class="code" title="function [es_options,es_constraints] = es_default_options(N)">es_default_options</a>	ES_DEFAULT_OPTIONS - Set default values in 'es_options' and 'es_constraints'</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

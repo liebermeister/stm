@@ -1,0 +1,38 @@
+----------------------------------------------------------------
+Metabolic fluxes in Escherichia coli (aerobic growth on glucose)
+----------------------------------------------------------------
+
+
+Model construction:
+-------------------
+
+1. The network structure of the genome-wide E. coli model iAF1260 was taken from [1].
+
+2. A flux distribution for aerobic growth on glucose (with 593 active reactions) was taken from [2].
+
+3. A kinetic model was constructed, based on network structure and flux distributions, 
+   by elasticity sampling (data in struct 'reference_state' in files .._reference_state). 
+
+
+Model files:
+------------
+
+1. Escherichia_coli_iAF1260.xml                  SBML file
+2. Escherichia_coli_iAF1260.mat                  MATLAB .mat file (for MNT toolbox)
+3. Escherichia_coli_iAF1260_reference_state.mat  MATLAB .mat file (for MNT toolbox)
+
+
+References:
+-----------
+
+[1] A.M. Feist, C.S. Henry, J.L. Reed, M. Krummenacker, A.R. Joyce, P.D. Karp, 
+    L.J. Broadbelt, V. Hatzimanikatis, and B.Ø. Palsson. 
+    A genome-scale metabolic reconstruction for Escherichia coli K-12 MG1655 
+    that accounts for 1260 ORFs and thermodynamic information.
+    Molecular Systems Biology, 3:121, 2007.
+
+[2] N. Tepper, E. Noor, D. Amador-Noguez, H.S. Haraldsdttir, R. Milo, 
+    J. Rabinowitz, W. Liebermeister, and T. Shlomi.
+    Steady-state metabolite concentrations reflect a balance between 
+    maximizing enzyme efficiency and minimizing total metabolite load. 
+    Under review.

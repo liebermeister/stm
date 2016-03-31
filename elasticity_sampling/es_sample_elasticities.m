@@ -32,7 +32,7 @@ function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_optio
 %   es_constraints.beta_I_fix     - predefined beta values (only used if non-zero)
 %   es_options.kinetic_law        - Rate law {'cs','ms', ...}
 %   es_options.h                  - vector of Hill exponents (one for each reaction)
-%   es_options.no_equilibrium     - For inactive reactions: assume no equilibrium (Boolean)
+%   es_options.no_equilibrium     - flag: assume no equilibrium for inactive reactions
 %   es_options.KV_prior_mean      - .. and KV value to be used in this case
 %   es_options.flag_test          - Run tests? (Boolean)
 %   es_options.flag_second_order  - Compute second-order elasticities? (Boolean)
@@ -152,6 +152,13 @@ v_minus_fallback = ones(size(v));
 
 E = compute_modular_elasticities(es_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback, es_options.flag_second_order);
 
+if find(~isfinite(E.un_E_c)), 
+  warning('Elasticity matrix contains non-finite values; I replace them by zeros'); 
+  E.un_E_c(isfinite(E.un_E_c)==0) = 0;
+  E.un_E_u(isfinite(E.un_E_u)==0) = 0;
+end
+
+
 % -------------------------------------------------------------
 % Compute unscaled and scaled response coefficients 
 
@@ -228,12 +235,13 @@ else
   control.RSs_un = control.RSp(:,end-n_ext+1:end);
   control.RJs_un = control.RJp(:,end-n_ext+1:end);
 
-  %% Second order effects on specified target reaction 
+  %% Second order effects on specified target function 
+  %% (some linear function of concentrations and fluxes)
   if [length(es_options.zc) + length(es_options.zv)],    
     [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(...
-        es_options.zc, es_options.zv, es_options.kinetic_law,N, W, ...
+        es_options.zc, es_options.zv, es_options.kinetic_law, N, W, ...
         ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, ...
-        v_plus_fallback, v_minus_fallback,CS,CJ);
+        v_plus_fallback, v_minus_fallback, CS, CJ);
   end
   
 end

@@ -4,7 +4,7 @@
 <head>
   <title>Description of es_fix_constraint_violations</title>
   <meta name="keywords" content="es_fix_constraint_violations">
-  <meta name="description" content="[c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)">
+  <meta name="description" content="ES_FIX_CONSTRAINT_VIOLATIONS Change metabolic state variables to enforce a feasible state">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,15 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>[c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)</strong></div>
+<div class="box"><strong>ES_FIX_CONSTRAINT_VIOLATIONS Change metabolic state variables to enforce a feasible state</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function [c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)
+<div class="fragment"><pre class="comment">ES_FIX_CONSTRAINT_VIOLATIONS Change metabolic state variables to enforce a feasible state
+
+ [c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)
 
  1. Threshold small and large concentrations
  2. Recalculate reaction affinities accordingly
@@ -46,6 +48,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+<hr><address>Generated on Thu 31-Mar-2016 20:58:01 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

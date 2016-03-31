@@ -1,4 +1,4 @@
-% ES_DEMO Demo script for thermodynamically feasible elasticity sampling 
+% demo_e_coli_glycolysis - Demo script for thermodynamically feasible elasticity sampling 
 
 es_dependencies;
 

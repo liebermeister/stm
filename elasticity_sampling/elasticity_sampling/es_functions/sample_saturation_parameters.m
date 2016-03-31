@@ -1,5 +1,7 @@
 function [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options,es_constraints)
 
+%SAMPLE_SATURATION_PARAMETERS - Sampling of saturation parameters
+%
 % [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options)
 
 if ~isfield(es_options,'seed'), es_options.seed = nan;     end

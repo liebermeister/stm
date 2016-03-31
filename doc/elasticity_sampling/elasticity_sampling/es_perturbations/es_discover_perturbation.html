@@ -4,7 +4,7 @@
 <head>
   <title>Description of es_discover_perturbation</title>
   <meta name="keywords" content="es_discover_perturbation">
-  <meta name="description" content="[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">
+  <meta name="description" content="ES_DISCOVER_PERTURBATION - Most likely expression perturbation that creates a given state change">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,15 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</strong></div>
+<div class="box"><strong>ES_DISCOVER_PERTURBATION - Most likely expression perturbation that creates a given state change</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)
+<div class="fragment"><pre class="comment">ES_DISCOVER_PERTURBATION - Most likely expression perturbation that creates a given state change
+
+ [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)
 
  Compute the most likely perturbation of enzyme expression (u) and external metabolites (s)
  that would give rise to a given differential profile of balanced concentrations c and fluxes j
@@ -51,14 +53,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>	[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</li><li><a href="../../.././elasticity_sampling/elasticity_sampling/es_perturbations/es_perturbations_utils/solve_quadratic2.html" class="code" title="function x = solve_quadratic2(A,c,B,D,seed)">solve_quadratic2</a>	x = solve_quadratic2(A,c,B,D,seed)</li><li><a href="es_simulate_perturbation.html" class="code" title="function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)">es_simulate_perturbation</a>	r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)</li></ul>
+<li><a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>	ES_DISCOVER_PERTURBATION - Most likely expression perturbation that creates a given state change</li><li><a href="../../.././elasticity_sampling/elasticity_sampling/es_perturbations/es_perturbations_utils/solve_quadratic2.html" class="code" title="function x = solve_quadratic2(A,c,B,D,seed)">solve_quadratic2</a>	x = solve_quadratic2(A,c,B,D,seed)</li><li><a href="es_simulate_perturbation.html" class="code" title="function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)">es_simulate_perturbation</a>	ES_SIMULATE_PERTURBATION - Predict the effects of a given differential profile</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>	[u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)</li><li><a href="es_discover_perturbation_sample.html" class="code" title="function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation_sample</a>	function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...</li></ul>
+<li><a href="es_discover_perturbation.html" class="code" title="function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation</a>	ES_DISCOVER_PERTURBATION - Most likely expression perturbation that creates a given state change</li><li><a href="es_discover_perturbation_sample.html" class="code" title="function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)">es_discover_perturbation_sample</a>	ES_DISCOVER_PERTURBATION_SAMPLE</li></ul>
 <!-- crossreference -->
 
 
 
-<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+<hr><address>Generated on Thu 31-Mar-2016 20:58:01 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

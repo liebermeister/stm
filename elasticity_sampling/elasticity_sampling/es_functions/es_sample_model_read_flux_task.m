@@ -1,9 +1,10 @@
-function [result, es_options, es_constraints] = es_sample_model_naama_read(N,W,ind_ext,es_constraints,es_options,filename)
+function [result, es_options, es_constraints] = es_sample_model_read_flux_task(N,W,ind_ext,es_constraints,es_options,filename)
 
-% result = es_sample_model_naama_read(N, W, ind_ext, es_constraints, es_options, filename)
+%ES_SAMPLE_MODEL_READ_FLUX_TASK - Sample model with thermodynamic calculations
 % 
-% same as es_sample_model, but using Naama's thermodynamics calculations
-% (filename: Naama's result file; see also es_sample_model_naama_write)
+% result = es_sample_model_read_flux_task(N, W, ind_ext, es_constraints, es_options, filename)
+% 
+% Same as es_sample_model, but using thermodynamics calculations
 
 
 % ----------------------------------------------------------------

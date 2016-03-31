@@ -1,5 +1,7 @@
 function E = unscale_elasticities(E, vplus, vminus, u, c);
 
+% UNSCALE_ELASTICITIES - Convert scaled into unscaled elasticities
+% 
 % E = unscale_elasticities(E, vplus, vminus, u, c);
 
 nr = length(vplus);

@@ -1,5 +1,7 @@
 function es_constraints_show(es_constraints,network,pars)
 
+% ES_CONSTRAINTS_SHOW  Display options (from struct es_constraints)
+% 
 % es_constraints_show(es_constraints,network,pars)
 
 eval(default('pars','struct'));

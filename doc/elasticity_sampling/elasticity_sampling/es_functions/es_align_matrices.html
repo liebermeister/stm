@@ -4,7 +4,7 @@
 <head>
   <title>Description of es_align_matrices</title>
   <meta name="keywords" content="es_align_matrices">
-  <meta name="description" content="aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)">
+  <meta name="description" content="ES_ALIGN_MATRICES Align matrices corresponding to different metabolic models">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,15 +21,20 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)</strong></div>
+<div class="box"><strong>ES_ALIGN_MATRICES Align matrices corresponding to different metabolic models</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)
+<div class="fragment"><pre class="comment">ES_ALIGN_MATRICES Align matrices corresponding to different metabolic models
+
+ aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)
  
- align matrices corresponding to different metabolic models</pre></div>
+ fields of 'r': [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list]
+ can be prepared by es_align_models
+
+ type_rows, type_columns: either 'metabolite' or 'reaction'</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -43,6 +48,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+<hr><address>Generated on Thu 31-Mar-2016 20:58:01 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <head>
   <title>Description of interaction_anova</title>
   <meta name="keywords" content="interaction_anova">
-  <meta name="description" content="function p = influence_anova(D, n_per, fdr, ind_intervention)">
+  <meta name="description" content="INFLUENCE_ANOVA - Anova of a variable characterising pairs reactions">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,15 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function p = influence_anova(D, n_per, fdr, ind_intervention)</strong></div>
+<div class="box"><strong>INFLUENCE_ANOVA - Anova of a variable characterising pairs reactions</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> function p = influence_anova(D, n_per, fdr, ind_intervention)
+<div class="fragment"><pre class="comment">INFLUENCE_ANOVA - Anova of a variable characterising pairs reactions 
+
+p = influence_anova(D, n_per, fdr, ind_intervention)
 
  Anova of a variable characterising pairs reactions 
    (e.g., all second-order control coefficients for a single objective)
@@ -71,11 +73,11 @@ This function calls:
 <li><a href="../../.././elasticity_sampling/elasticity_sampling/utils/multiple_testing_fdr.html" class="code" title="function significant = multiple_testing_fdr(all_p, false_discovery_rate)">multiple_testing_fdr</a>	significant = multiple_testing_fdr(all_p, false_discovery_rate)</li><li><a href="../../.././elasticity_sampling/elasticity_sampling/utils/pvalue_from_countnumber.html" class="code" title="function p = pvalue_from_countnumber(value,value_list)">pvalue_from_countnumber</a>	formula stems from the mean of a beta distribution</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="interaction_statistics.html" class="code" title="function res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)">interaction_statistics</a>	res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)</li><li><a href="../../.././elasticity_sampling/es_compare_ensembles.html" class="code" title="function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)">es_compare_ensembles</a>	ES_COMPARE_ENSEMBLES - Compare an output function between two model ensembles</li></ul>
+<li><a href="interaction_statistics.html" class="code" title="function res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)">interaction_statistics</a>	INTERACTION_STATISTICS - Run elasticity sampling repeatedly and compute statistics over the influence values</li><li><a href="../../.././elasticity_sampling/es_compare_ensembles.html" class="code" title="function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)">es_compare_ensembles</a>	ES_COMPARE_ENSEMBLES - Compare an output function between two model ensembles</li></ul>
 <!-- crossreference -->
 
 
 
-<hr><address>Generated on Thu 31-Mar-2016 13:10:43 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+<hr><address>Generated on Thu 31-Mar-2016 20:58:01 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

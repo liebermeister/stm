@@ -1,8 +1,8 @@
 function [result, fluxes, es_options, es_constraints] = es_reference_state(network, es_options, es_constraints)
 
-% [result, fluxes, es_options, es_constraints] = es_reference_state(network, es_options, es_constraints)
+%ES_REFERENCE_STATE - Elasticity sampling
 %
-% Elasticity sampling
+% [result, fluxes, es_options, es_constraints] = es_reference_state(network, es_options, es_constraints)
 %
 % Construct a reference state and compute the elasticities, 
 % assuming half-saturation (i.e., saturation values alpha = 0.5)

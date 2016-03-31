@@ -1,6 +1,8 @@
-function r = es_sample_model_naama_write(network,es_constraints,es_options,filename)
+function r = es_sample_model_write_flux_task(network,es_constraints,es_options,filename)
 
-% result = es_sample_model_naama_write(N, W, ind_ext, es_constraints, es_options)
+% ES_SAMPLE_MODEL_WRITE_FLUX_TASK
+%
+% result = es_sample_model_write_flux_task(N, W, ind_ext, es_constraints, es_options)
 %
 % analogous to es_sample_model; write task file for naama to compute feasible flux distribution
 
@@ -10,7 +12,7 @@ if 0,
   filenames       = elasticity_sampling_filenames(model_name,condition_name); 
   cd([filenames.es_dir]); load(filenames.model_data_file);   
   filename = '~/projekte/elasticity_sampling/matlab_elasticity_sampling/models_for_naama/eccm_for_naama';
-  r = es_sample_model_naama_write(network,es_constraints,es_options);
+  r = es_sample_model_write_flux_task(network,es_constraints,es_options);
 end
 
 eval(default('filename','[]'));

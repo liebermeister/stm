@@ -1,5 +1,7 @@
 function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)
 
+%ES_SIMULATE_PERTURBATION - Predict the effects of a given differential profile 
+%
 % r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)
 %
 % Compute the predicted effects of a given differential profile 

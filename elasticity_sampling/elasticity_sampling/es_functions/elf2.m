@@ -1,3 +1,5 @@
+% ELF2 - Auxiliary function
+
 function [C,Ceq] = elf2(x,N,epsilon)
 
 eval(default('epsilon','10^-5'));

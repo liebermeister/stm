@@ -1,5 +1,7 @@
 function result = es_model_to_sampling(network, network_CoHid, v, target_reaction, ind_ignore, print_graphics, psfile_dir, graphics_file)
 
+%ES_MODEL_TO_SAMPLING - Wrapper function for es_reference_state plus some graphics routines
+%
 % result = es_model_to_sampling(network, network_CoHid, v, target_reaction, ind_ignore, print_graphics, psfile_dir, graphics_file)
 %
 % Calculate a reference metabolic state and show graphics

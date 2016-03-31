@@ -1,8 +1,8 @@
 function c = es_constraints_set(es_constraints,network,varargin)
 
-% c = es_constraints_set(es_constraints,network,varargin)
+% ES_CONSTRAINTS_SET Convenience function to define es_constraints
 %
-% convenience function to define es_constraints
+% c = es_constraints_set(es_constraints,network,varargin)
 
 c = es_constraints;
 

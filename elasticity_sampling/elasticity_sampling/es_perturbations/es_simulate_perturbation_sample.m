@@ -1,5 +1,7 @@
 function [res, es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)
 
+%ES_SIMULATE_PERTURBATION_SAMPLE Predict the effects of a given differential profile 
+%
 % [res,es_result_list] = es_simulate_perturbation_sample(N,W,ind_ext,constraints,options,u_ratio,s_ratio,expansion,expansion_order,nrun)
 %
 % Compute the predicted effects of a given differential profile 

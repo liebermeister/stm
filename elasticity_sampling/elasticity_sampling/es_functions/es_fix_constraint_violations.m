@@ -1,5 +1,7 @@
 function [c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)
 
+%ES_FIX_CONSTRAINT_VIOLATIONS Change metabolic state variables to enforce a feasible state
+%
 % [c,dmu] = es_fix_constraint_violations(v,c,dmu,constraints,N)
 %
 % 1. Threshold small and large concentrations

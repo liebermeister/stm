@@ -1,3 +1,5 @@
+% ES_DEPENDENCIES - Check for dependencies of the ES toolbox
+
 function es_dependencies()
 
 if ~exist('mnt_version','file'),

@@ -1,9 +1,7 @@
-% ------------------------------------------------------------
 % Prediction of static metabolite fluctuations for different types of 
 % variations (variable 'scenario_name') in a single reference state 
 %
 % See Article Figure 6
-% ------------------------------------------------------------
 
 % -----------------------------------------------------------------------------
 % load variables network, network_CoHid, v, mu, reference_state

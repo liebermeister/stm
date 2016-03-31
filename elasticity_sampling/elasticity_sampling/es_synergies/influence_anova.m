@@ -1,6 +1,8 @@
 function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)
 
-% function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)
+%INFLUENCE_ANOVA - Anova of a variable characterising single reactions 
+%
+%p = influence_anova(D, n_per, fdr, ind_intervention, verbose)
 %
 % Anova of a variable characterising single reactions 
 %   (e.g., all first-order control coefficients for a single objective)

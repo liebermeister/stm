@@ -1,5 +1,7 @@
 function [network, result, options, constraints] = es_sbml_to_model(sbml_filename, external_metabolites, cofactors, v_sign)
 
+%ES_SBML_TO_MODEL Wrapper function around es_sample_model
+%
 % [network, result, options, constraints] = es_sbml_to_model(sbml_filename, external_metabolites, cofactors, v_sign)
 %
 % Wrapper function around es_sample_model

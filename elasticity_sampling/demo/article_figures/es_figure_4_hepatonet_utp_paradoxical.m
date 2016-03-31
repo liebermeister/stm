@@ -1,11 +1,9 @@
-% ----------------------------------------------------------------------------------
 % Hepatonet elasticity sampling // analysis for UTP rephosphorylation
 % Analysis of effective self-inhibition
 % Example anaerobic UTP rephosphorylation with saturation values alpha = 0.5 in reference state
-% ----------------------------------------------------------------------------------
 
-%% ----------------------------------------------------------------------------------
-%% Load model 
+% ----------------------------------------------------------------------------------
+% Load model 
 % ----------------------------------------------------------------------------------
 
 model_dir  = [es_BASEDIR '/../resources/models-article/Hepatonet_CCM_Fluxes'];

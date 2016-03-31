@@ -1,3 +1,8 @@
+%METABOLIC_CORRELATIONS_GRAPHICS Graphics for metabolic correlations 
+% 
+% metabolic_correlations_graphics(network,R_list,C_list,corr_list,fignum)
+
+
 function metabolic_correlations_graphics(network,R_list,C_list,corr_list,fignum)
 
 eval(default('fignum','1:3'));

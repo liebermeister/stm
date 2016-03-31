@@ -1,5 +1,7 @@
 function [sample, likeli, acceptance_rate] =  es_mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)
 
+%MCMC_PRIOR_LIKELIHOOD_SAMPLING - MCMC posterior sampling
+%
 % [sample, likeli, acceptance_rate] =  mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)
 %
 % mcmc posterior sampling using sampling from the prior 

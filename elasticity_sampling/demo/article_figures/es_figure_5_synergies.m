@@ -1,6 +1,7 @@
-% ---------------------------------------------------------------------
 % Run elasticity sampling and analyse synergies 
-% ---------------------------------------------------------------------
+%
+% See Article Figure 5
+
 
 model_dir  = [es_BASEDIR '/../resources/models-article/Example_Loop_Pathway'];
 model_name = 'Example_Loop_Pathway'; 

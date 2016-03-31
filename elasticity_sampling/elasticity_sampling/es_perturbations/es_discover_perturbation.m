@@ -1,5 +1,7 @@
 function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)
 
+%ES_DISCOVER_PERTURBATION - Most likely expression perturbation that creates a given state change
+%
 % [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,W,ind_ext,c_ratio,v_ratio,es_result,expansion,expansion_order,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)
 %
 % Compute the most likely perturbation of enzyme expression (u) and external metabolites (s)

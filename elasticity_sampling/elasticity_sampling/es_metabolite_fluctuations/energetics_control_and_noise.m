@@ -1,8 +1,8 @@
 function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, c, v, mu, omega_list, tau_list, omega_fast, omega_slow, psfile_dir, basename, es_options, es_constraints, volume)
 
-%[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, v, mu, omega_list, tau_list, psfile_dir, basename, es_options, es_constraints, volume)
+%ENERGETICS_CONTROL_AND_NOISE - Analyse control coefficients and noise levels (assuming uniform white noise in each reaction!)
 %
-% Analyse control coefficients and noise levels (assuming uniform white noise in each reaction!)
+%[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, v, mu, omega_list, tau_list, psfile_dir, basename, es_options, es_constraints, volume)
 %
 % Recommended units: 
 %  Enzyme levels in  mol

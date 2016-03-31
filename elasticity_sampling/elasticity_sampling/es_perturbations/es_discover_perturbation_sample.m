@@ -1,6 +1,8 @@
 function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)
 
-% function [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...
+%ES_DISCOVER_PERTURBATION_SAMPLE
+%
+% [ris, es_result_list] = es_discover_perturbation_sample(N,W,ext_ind,constraints,...
 %  options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_sigma_prior)
 %
 % Compute the most likely perturbation of enzyme expression (u) and external metabolites (s)

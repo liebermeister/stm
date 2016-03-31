@@ -1,6 +1,8 @@
 function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)
 
-% function p = influence_anova(D, n_per, fdr, ind_intervention)
+%INFLUENCE_ANOVA - Anova of a variable characterising pairs reactions 
+%
+%p = influence_anova(D, n_per, fdr, ind_intervention)
 %
 % Anova of a variable characterising pairs reactions 
 %   (e.g., all second-order control coefficients for a single objective)

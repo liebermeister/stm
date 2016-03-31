@@ -1,6 +1,8 @@
 function epistasis = simple_epistasis(f_ref,f_single,f_double)
 
-% Simple epistasis measure
+% LOG_EPISTASIS Simple epistasis measure
+%
+% epistasis = simple_epistasis(f_ref,f_single,f_double)
 %
 % Input 
 % f_ref    wildtype fitness (number)

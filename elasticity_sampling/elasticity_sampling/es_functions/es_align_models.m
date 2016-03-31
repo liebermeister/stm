@@ -1,5 +1,7 @@
 function r = es_align_models(model_list, field_metabolite_id, field_reaction_id, how)
 
+% ES_ALIGN_MODELS
+% 
 % [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list] = es_align_models(model_list,field_metabolite_id,field_reaction_id)
 % 
 % fields of 'r': [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list]
@@ -8,7 +10,6 @@ function r = es_align_models(model_list, field_metabolite_id, field_reaction_id,
 % 'union'        -> items appearing in any model
 
 eval(default('how','''intersection''')); %% alternative: 'union'
-
 
 if 0,
   model_name      = 'eccm'; 

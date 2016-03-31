@@ -1,5 +1,7 @@
 function res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)
 
+%INTERACTION_STATISTICS - Run elasticity sampling repeatedly and compute statistics over the influence values
+%
 % res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)
 %
 % Run elasticity sampling repeatedly and compute statistics 

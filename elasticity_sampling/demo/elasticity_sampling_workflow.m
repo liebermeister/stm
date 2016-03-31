@@ -1,11 +1,9 @@
-%---------------------------------------------------------
-% ELASTICITY_SAMPLING_WORKFLOW
+% elasticity_sampling_workflow - Demo script
 %
 % Demo script for thermodynamically feasible elasticity sampling 
 % 
 % In this script, we load a metabolic network model, run elasticity sampling 
 % with two types of rate laws, and compare the results of the two model ensembles 
-%---------------------------------------------------------
 
 
 %-------------------------------------------------------------------------------

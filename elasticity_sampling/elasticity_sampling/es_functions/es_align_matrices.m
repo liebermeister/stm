@@ -1,9 +1,9 @@
 function aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)
 
+%ES_ALIGN_MATRICES Align matrices corresponding to different metabolic models
+%
 % aligned_matrices = es_align_matrices(matrix_list,r,type_rows,type_columns)
 % 
-% align matrices corresponding to different metabolic models
-
 % fields of 'r': [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list]
 % can be prepared by es_align_models
 %

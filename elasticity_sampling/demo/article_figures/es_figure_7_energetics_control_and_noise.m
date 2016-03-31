@@ -1,8 +1,6 @@
-% ---------------------------------------------------------------
 % How do reaction affinities influence control coefficients and chemical noise?
 %
 % See Article Figure 7
-% ---------------------------------------------------------------
 
 % -----------------------------------------------------------------------------
 % It is assumed that the fluxes in the reference state come in units of mM/s

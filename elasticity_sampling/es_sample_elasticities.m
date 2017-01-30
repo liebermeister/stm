@@ -212,17 +212,21 @@ if es_options.flag_second_order * [length(es_options.zc) + length(es_options.zv)
    %% "response" effect of external metabolite to itself
    RSp(ind_ext,nr+1:np) = eye(length(ind_ext));
    control              = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext);
+
 else
   
   [RSp_un,RJp_un] = response_coefficients(CS,Ec,Ep);
   %% "response" effect of external metabolite to itself
   np  = size(Ep,2);
   RSp_un(ind_ext,nr+1:np) = eye(length(ind_ext));
+  [RSp_sc, RJp_sc] = norm_response_coefficients(c, v, [u; c(ind_ext)], RSp_un, RJp_un);
 
   control.CS  = CS;
   control.CJ  = CJ;
   control.RSp = RSp_un;
   control.RJp = RJp_un;
+  control.RSp_sc = RSp_sc;
+  control.RJp_sc = RJp_sc;
   control.CS_sc  = diag(1./(c)) * control.CS  * diag(v);
   control.CJ_sc  = diag(1./(v)) * control.CJ  * diag(v);
   n_ext = length(ind_ext);

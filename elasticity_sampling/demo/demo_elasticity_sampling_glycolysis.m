@@ -1,4 +1,4 @@
-% demo_e_coli_glycolysis - Demo script for thermodynamically feasible elasticity sampling 
+% demo_elasticity_sampling_glycolysis - Demo script for thermodynamically feasible elasticity sampling 
 
 es_dependencies;
 
@@ -23,7 +23,7 @@ clc
 %-------------------------------------------------------------------------------
 % Load network model from SBML file
 
-network = network_sbml_import('e_coli_glycolysis_network.xml')
+network = network_sbml_import('demo_e_coli_glycolysis_model.xml')
 
 % Network structures can also be defined within matlab 
 % by using the function 'network_construct'
@@ -35,7 +35,7 @@ clc
 %-------------------------------------------------------------------------------
 % Read graphics information for the network model from file
 %
-network = netgraph_read_positions(network,'e_coli_glycolysis_Positions.tsv');
+network = netgraph_read_positions(network,'demo_e_coli_glycolysis_Positions.tsv');
  
 % Press key to continue
  

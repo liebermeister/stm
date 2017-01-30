@@ -28,7 +28,8 @@ REQUIREMENTS
     SBtab toolbox  - SBtab format (https://github.com/liebermeister/sbtab-matlab)
     Tensor toolbox - Tensors (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
     efmtool        - Elementary flux modes (see http://www.csb.ethz.ch/tools/efmtool)
-
+ 
+  If CPLEX for matlab is installed in your system, this will speed up some calculations,
 
 STATE OF THE SOFTWARE.
 

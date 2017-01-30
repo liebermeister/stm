@@ -21,6 +21,7 @@ function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expa
 % output r contains the ratios etc.
 
 p_ratio = [u_ratio; s_ratio];
+p_ratio(isnan(p_ratio)) = 1; 
 
 [nm,nr] = size(N);
 nsample = size(u_ratio,2);
@@ -57,12 +58,12 @@ switch expansion,
               squeeze(RJppsc(:,:,:)),...
               log(p_ratio(:,i2)),2,1),log(p_ratio(:,i2)),2,1);
         end
-        
+
         d_c = squeeze(RSpsc(:,:)) * log(p_ratio) + 0.5 * dlogS2;
         d_v = squeeze(RJpsc(:,:)) * log(p_ratio) + 0.5 * dlogJ2;
     end
 
-    d_c(ind_ext) = log(s_ratio);
+    d_c(ind_ext,:) = log(s_ratio);
     
   case 'non-logarithmic',
     
@@ -130,9 +131,9 @@ switch expansion,
     r.c_ratio  = exp(d_c);
     r.c_new    = r.c_ratio .* r.c_init;
     % ensure stationarity: 
-    K = null(N(find(ind_ext==0),:)); % kernel matrix
+    K = null(full(N(find(ind_ext==0),:))); % kernel matrix
     dum = exp(d_v); dum(isnan(dum))=0; 
-    d_v_nonlog = K * pinv(K) * [r.v_init .* dum];
+    d_v_nonlog = K * pinv(K) * [r.v_init .* dum] - r.v_init;
     r.v_ratio  = 1 + d_v_nonlog./r.v_init;
     r.v_new    = r.v_init + d_v_nonlog;
 

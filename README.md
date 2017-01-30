@@ -1,7 +1,7 @@
 Elasticity Sampling functions for Matlab
 ========================================
 
-Wolfram Liebermeister (2014)
+Wolfram Liebermeister (2016)
 
 The functions for elasticity sampling depend on the Metabolic Network Toolbox (https://github.com/liebermeister/mnt). Some functions depend on the following Matlab toolboxes:
 
@@ -12,5 +12,11 @@ The functions for elasticity sampling depend on the Metabolic Network Toolbox (h
   o Tensor Toolbox             (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
 
   o efmtool                    (http://www.csb.ethz.ch/tools/efmtool)
+
+If CPLEX for matlab is installed in your system, this will speed up some calculations,
+
+For getting started, please see the instructions on 
+
+http://www.metabolic-economics.de/elasticity-sampling/workflow-matlab.html
 
 Contact: <wolfram.liebermeister@gmail.com>

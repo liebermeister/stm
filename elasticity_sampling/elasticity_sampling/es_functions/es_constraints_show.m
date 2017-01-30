@@ -18,6 +18,8 @@ pars.actvalues   = nan*es_constraints.v_fix;
 pars.actvalues(find(isfinite(es_constraints.v_fix))) = 1;
 pars.actvalues(find(es_constraints.v_fix==0))        = -1;
 
+if isfield(es_constraints,'ext_sign');
 pars.metvalues = es_constraints.ext_sign;
 pars.colorbar=0;
 clf; netgraph_concentrations(network,[],[],1,pars); 
+end

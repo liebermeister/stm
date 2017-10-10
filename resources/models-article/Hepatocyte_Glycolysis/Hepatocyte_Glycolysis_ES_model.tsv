@@ -89,7 +89,7 @@ nad_{mito}	True
 h_{mito}	True				
 h2o_{mito}	True				
 %					
-!!SBtab TableName='RateConstant' TableType='Quantity' Document='Model' SBtabVersion='0.9'					
+!!SBtab TableName='Parameter' TableType='Quantity' Document='Model' SBtabVersion='0.9'					
 !QuantityType	!Reaction	!Compound	!Value	!Unit	!ID
 equilibrium constant	GLUT2		1.0361219	unitless	kEQ_R1
 equilibrium constant	Glucokinase		0.0037277854	unitless	kEQ_R2
@@ -376,7 +376,7 @@ concentration of enzyme	oaa_{flx}		1	mM	u_R34
 concentration of enzyme	acoa_{flx}		1	mM	u_R35
 concentration of enzyme	vcit_{flx}		1	mM	u_R36
 %					
-!!SBtab TableName='Positions' TableType='Position' Document='Model' SBtabVersion='0.9'					
+!!SBtab TableName='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'					
 !Element	!PositionX	!PositionY			
 atp	0.223128	0.669819			
 adp	0.223128	0.761744			

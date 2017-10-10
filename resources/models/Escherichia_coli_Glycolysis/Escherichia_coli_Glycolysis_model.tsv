@@ -37,7 +37,7 @@ CoA	C00010	True
 CO2	C00011	True
 H2O	C00001	True
 %		
-!!SBtab TableName='Positions' TableType='Position' Document='Model' SBtabVersion='0.9'		
+!!SBtab TableName='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'		
 !Element	!PositionX	!PositionY
 D_Glucose	0.030783	0.884503
 D_Glucose_6_phosphate	0.307495	0.884447

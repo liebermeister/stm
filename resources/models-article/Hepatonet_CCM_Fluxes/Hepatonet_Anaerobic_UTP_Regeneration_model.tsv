@@ -48,7 +48,7 @@ Thiamin__c_	HC00316_c	False
 Thiamin__s_	HC00316_s	False	
 _2PG__c_	HC00463_c	False	
 %			
-!!SBtab TableName='Positions' TableType='Position' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableName='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'			
 !Element	!PositionX	!PositionY	
 H2O__c_	0.34965	0.532324	
 H2O__s_	0.277106	0.522204	

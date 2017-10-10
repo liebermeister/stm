@@ -15,7 +15,7 @@ S4	False
 S5	False				
 X6	True				
 %					
-!!SBtab TableName='RateConstant' TableType='Quantity' Document='Model' SBtabVersion='0.9'					
+!!SBtab TableName='Parameter' TableType='Quantity' Document='Model' SBtabVersion='0.9'					
 !QuantityType	!Reaction	!Compound	!Value	!Unit	!ID
 equilibrium constant	E1		1	unitless	kEQ_R1
 equilibrium constant	E2		1	unitless	kEQ_R2
@@ -49,7 +49,7 @@ concentration of enzyme	E3		1	mM	u_R3
 concentration of enzyme	E4		1	mM	u_R4
 concentration of enzyme	E5		1	mM	u_R5
 %					
-!!SBtab TableName='Positions' TableType='Position' Document='Model' SBtabVersion='0.9'					
+!!SBtab TableName='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'					
 !Element	!PositionX	!PositionY			
 X1	-0.667293	0.267545			
 S2	-0.124668	0.267545			

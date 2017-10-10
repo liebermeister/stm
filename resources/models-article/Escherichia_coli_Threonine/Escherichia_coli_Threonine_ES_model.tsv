@@ -22,7 +22,7 @@ nadph	NADPH	C00005	True
 adp	ADP	C00008	True				
 atp	ATP	C00002	True				
 %							
-!!SBtab TableName='RateConstant' TableType='Quantity' Document='Model' SBtabVersion='0.9'							
+!!SBtab TableName='Parameter' TableType='Quantity' Document='Model' SBtabVersion='0.9'							
 !QuantityType	!Reaction	!Compound	!Value	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound	!ID
 equilibrium constant	vak		0.00013019949	unitless	R00480		kEQ_R1
 equilibrium constant	vasd		151.24935	unitless	R02291		kEQ_R2
@@ -86,7 +86,7 @@ concentration of enzyme	vhk		1	mM	R01771		u_R5
 concentration of enzyme	vnadph_endo		1	mM			u_R6
 concentration of enzyme	vatpase		1	mM			u_R7
 %							
-!!SBtab TableName='Positions' TableType='Position' Document='Model' SBtabVersion='0.9'							
+!!SBtab TableName='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'							
 !Element	!PositionX	!PositionY					
 aspp	-1.109561	-0.581242					
 asa	-0.217409	-0.581242					

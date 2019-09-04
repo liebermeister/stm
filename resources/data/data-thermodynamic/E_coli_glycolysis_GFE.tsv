@@ -1,4 +1,4 @@
-!!SBtab					
+!!SBtab TableType='Quantity'							
 !QuantityType	!Unit	!Compound:Identifiers:kegg.compound	!Compound:Name	!Value	!Reference
 standard chemical potential	kJ/mol	C00631	2_Phospho_D_glycerate	-1340.2259	Improved group contribution method
 standard chemical potential	kJ/mol	C00197	3_Phospho_D_glycerate	-1344.875	Improved group contribution method

@@ -1,4 +1,4 @@
-!!SBtab TableName='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'					
+!!SBtab TableID='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'					
 !ID	!ReactionFormula	!IsReversible	!KineticLaw:Name	!KineticLaw:Formula	
 GLUT2	glc_{ext} <=> glc	True	Common saturable (CM)	u_R1 * ( kC_R1 * sqrt( kEQ_R1  * kM_R1_glc_{ext} / kM_R1_glc ) * ( glc_{ext} / kM_R1_glc_{ext} ) - kC_R1 / sqrt( kEQ_R1  * kM_R1_glc_{ext} / kM_R1_glc ) * ( glc / kM_R1_glc ) ) / ( ( 1 + glc_{ext} / kM_R1_glc_{ext} ) + ( 1 + glc / kM_R1_glc ) - 1 )	
 Glucokinase	atp + glc <=> adp + glc6p	True	Common saturable (CM)	u_R2 * ( kC_R2 * sqrt( kEQ_R2  * kM_R2_atp * kM_R2_glc / kM_R2_adp / kM_R2_glc6p ) * ( atp / kM_R2_atp ) * ( glc / kM_R2_glc ) - kC_R2 / sqrt( kEQ_R2  * kM_R2_atp * kM_R2_glc / kM_R2_adp / kM_R2_glc6p ) * ( adp / kM_R2_adp ) * ( glc6p / kM_R2_glc6p ) ) / ( ( 1 + atp / kM_R2_atp ) * ( 1 + glc / kM_R2_glc ) + ( 1 + adp / kM_R2_adp ) * ( 1 + glc6p / kM_R2_glc6p ) - 1 )	
@@ -37,7 +37,7 @@ oaa_{flx}	 <=> 5 oaa_{mito}	True	Common saturable (CM)	u_R34 * ( kC_R34 * sqrt( 
 acoa_{flx}	5 acoa_{mito} <=> 	True	Common saturable (CM)	u_R35 * ( kC_R35 * sqrt( kEQ_R35  * power( kM_R35_acoa_{mito} , 5 ) ) * power( acoa_{mito} / kM_R35_acoa_{mito} , 5 ) - kC_R35 / sqrt( kEQ_R35  * power( kM_R35_acoa_{mito} , 5 ) ) ) / ( power( 1 + acoa_{mito} / kM_R35_acoa_{mito} , 5 ) +  - 1 )	
 vcit_{flx}	5 cit_{mito} <=> 	True	Common saturable (CM)	u_R36 * ( kC_R36 * sqrt( kEQ_R36  * power( kM_R36_cit_{mito} , 5 ) ) * power( cit_{mito} / kM_R36_cit_{mito} , 5 ) - kC_R36 / sqrt( kEQ_R36  * power( kM_R36_cit_{mito} , 5 ) ) ) / ( power( 1 + cit_{mito} / kM_R36_cit_{mito} , 5 ) +  - 1 )	
 %					
-!!SBtab TableName='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'					
+!!SBtab TableID='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'					
 !ID	!IsConstant				
 atp	True				
 adp	True				
@@ -89,7 +89,7 @@ nad_{mito}	True
 h_{mito}	True				
 h2o_{mito}	True				
 %					
-!!SBtab TableName='Parameter' TableType='Quantity' Document='Model' SBtabVersion='0.9'					
+!!SBtab TableID='Parameter' TableType='Quantity' Document='Model' SBtabVersion='0.9'					
 !QuantityType	!Reaction	!Compound	!Value	!Unit	!ID
 equilibrium constant	GLUT2		1.0361219	unitless	kEQ_R1
 equilibrium constant	Glucokinase		0.0037277854	unitless	kEQ_R2
@@ -376,7 +376,7 @@ concentration of enzyme	oaa_{flx}		1	mM	u_R34
 concentration of enzyme	acoa_{flx}		1	mM	u_R35
 concentration of enzyme	vcit_{flx}		1	mM	u_R36
 %					
-!!SBtab TableName='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'					
+!!SBtab TableID='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'					
 !Element	!PositionX	!PositionY			
 atp	0.223128	0.669819			
 adp	0.223128	0.761744			

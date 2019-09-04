@@ -1,4 +1,4 @@
-!!SBtab TableName='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'			
 !ID	!ReactionFormula	!IsReversible	!SBML:reaction:id
 r0017	O2__m_ + 4 Hplus_PG___m_ + 4 Ferrocytochrome_C__m_ <=> 2 H2O__m_ + 4 Hplus_PG___c_ + 4 Ferricytochrome_C__m_	True	r0017
 r0019	H2O__m_ + ATP__m_ + 3 Hplus_PG___m_ <=> ADP__m_ + Pi__m_ + 3 Hplus_PG___c_	True	r0019
@@ -39,7 +39,7 @@ r1114	NADplus__m_ + CoA__m_ + AKG__m_ <=> NADH__m_ + CO2__m_ + Succinyl_CoA__m_	
 r1422	Hplus_PG___c_ + L_Lactate__c_ <=> Hplus_PG___m_ + L_Lactate__m_	True	r1422
 r2418	ATP__m_ + ADP__c_ <=> ATP__c_ + ADP__m_	True	r2418
 %			
-!!SBtab TableName='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'			
 !ID	!SBML:species:id	!IsConstant	
 H2O__c_	HC00011_c	False	
 H2O__m_	HC00011_m	False	
@@ -97,7 +97,7 @@ Ubiquinone__m_	HC00329_m	False
 _2PG__c_	HC00463_c	False	
 Oxalosuccinate__m_	HC01434_m	False	
 %			
-!!SBtab TableName='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'			
 !Element	!PositionX	!PositionY	
 H2O__c_	0.34965	0.532324	
 H2O__m_	0.38623	0.359076	

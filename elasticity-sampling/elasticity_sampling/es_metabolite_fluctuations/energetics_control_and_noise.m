@@ -20,6 +20,9 @@ function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz,
 
 eval(default('es_options','[]', 'es_constraints','[]','volume','1'));
 
+if isempty(omega_slow), omega_slow = omega_list(1);   end
+if isempty(omega_fast), omega_fast = omega_list(end); end
+
 [nm,nr] = size(network.N);
 
 [K, L, N0, G, pinv_N_R, indep] = network_analyse(network);
@@ -42,8 +45,6 @@ es_constraints        = join_struct(es_def_constraints,es_constraints);
 es_constraints.mu_fix = mu;
 es_constraints.v_fix  = v;
 es_options.flag_second_order = 0;
-
-
 % run elasticity sampling
 
 result = es_sample_model(network.N,network.regulation_matrix,find(network.external),es_constraints,es_options);
@@ -190,11 +191,13 @@ netgraph_metabolite_interactions(network_CoHid, diag(dum), dum, rb_colors, struc
 gp = struct('relative_threshold',0.1,'arrowstyle','none','actprintnames',1,'metprintnames',0);
 
 % 1/(1000) 1/sec  (16.7 minutes period)
-dum = Sigma_j_list{ find(omega_list == 2 * pi * 1/(1000)) };
+%dum = Sigma_j_list{ find(omega_list == 2 * pi * 1/(1000)) };
+dum = Sigma_j_list{ find(omega_list == omega_fast) };
 figure(112); interaction_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp); 
 
 % 1/sec
-dum = Sigma_j_list{ find(omega_list == 2 * pi * 1) };
+%dum = Sigma_j_list{ find(omega_list == 2 * pi * 1) };
+dum = Sigma_j_list{ find(omega_list == omega_slow)};
 figure(113); interaction_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp); 
 
 % -------------------------------------------------

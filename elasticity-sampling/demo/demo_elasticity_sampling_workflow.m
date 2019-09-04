@@ -135,8 +135,8 @@ data_files = {[resource_dir 'data-thermodynamic/E_coli_glycolysis_GFE.tsv'], ...
               [resource_dir 'data-metabolite/E_coli_glucose_concentration.tsv']}';
 
 data_quantities = {'standard chemical potential','equilibrium constant', 'Michaelis constant', 'concentration','reaction affinity'}';
-model_data      = data_integration_load_kinetic_data(data_quantities, [], network, data_files, 0, 1, 1, 0);
-% data_integration_display_kinetic_data(model_data,network,1);
+model_data      = kinetic_data_load(data_quantities, [], network, data_files, 0, 1, 1, 0);
+% kinetic_data_print(model_data,network,1);
 
 % There are various possibilities to do this: here, we see an estimation based on existing
 % experimental data (concentrations, Gibbs free energies of formation, and reaction affinities)

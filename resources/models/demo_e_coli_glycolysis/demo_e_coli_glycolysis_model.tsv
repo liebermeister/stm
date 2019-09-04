@@ -1,4 +1,4 @@
-!!SBtab TableName='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'			
 !ID	!ReactionFormula	!Identifiers:kegg.reaction	!IsReversible
 PTS	D_Glucose + Phosphoenolpyruvate <=> D_Glucose_6_phosphate + Pyruvate	R00299	True
 PGI	D_Glucose_6_phosphate <=> D_Fructose_6_phosphate	R00771	True
@@ -14,7 +14,7 @@ PDC	Pyruvate + NADplus + CoA <=> Acetyl_CoA + NADH + CO2	R00014_R03270_R02569	Tr
 ATPase	ATP + H2O <=> ADP + Orthophosphate	R00086	True
 NADHcons	NADH <=> NADplus	X2	True
 %			
-!!SBtab TableName='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'			
 !ID	!Identifiers:kegg.compound	!IsConstant	
 D_Glucose	C00031	True	
 D_Glucose_6_phosphate	C00092	False	
@@ -37,7 +37,7 @@ CoA	C00010	True
 CO2	C00011	True	
 H2O	C00001	True	
 %			
-!!SBtab TableName='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'			
 !Element	!PositionX	!PositionY	
 D_Glucose	0.030783	0.884503	
 D_Glucose_6_phosphate	0.307495	0.884447	

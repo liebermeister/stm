@@ -1,4 +1,4 @@
-!!SBtab TableName='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'			
 !ID	!ReactionFormula	!IsReversible	!SBML:reaction:id
 r0037	ATP__c_ + UDP__c_ <=> ADP__c_ + UTP__c_	True	r0037
 r0054	ATP__c_ + Pyruvate__c_ <=> ADP__c_ + PEP__c_	True	r0054
@@ -18,7 +18,7 @@ r1032	Glucose__s_ <=> Glucose__c_	True	r1032
 r2078	Hplus_PG___s_ + L_Lactate__s_ <=> Hplus_PG___c_ + L_Lactate__c_	True	r2078
 r2138	Hplus_PG___c_ + Thiamin__s_ <=> Hplus_PG___s_ + Thiamin__c_	True	r2138
 %			
-!!SBtab TableName='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'			
 !ID	!SBML:species:id	!IsConstant	
 H2O__c_	HC00011_c	False	
 H2O__s_	HC00011_s	True	
@@ -48,7 +48,7 @@ Thiamin__c_	HC00316_c	False
 Thiamin__s_	HC00316_s	False	
 _2PG__c_	HC00463_c	False	
 %			
-!!SBtab TableName='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Layouts' TableType='Position' Document='Model' SBtabVersion='0.9'			
 !Element	!PositionX	!PositionY	
 H2O__c_	0.34965	0.532324	
 H2O__s_	0.277106	0.522204	

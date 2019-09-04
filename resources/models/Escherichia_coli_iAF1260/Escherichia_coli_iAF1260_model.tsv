@@ -1,4 +1,4 @@
-!!SBtab TableName='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Reaction' TableType='Reaction' Document='Model' SBtabVersion='0.9'			
 !ID	!ReactionFormula	!Name	!IsReversible
 _3HAD100	_3hdecACP_c_ <=> h2o_c_ + tdec2eACP_c_	 3-hydroxyacyl-[acyl-carrier-protein] dehydratase (n-C10:0)	False
 _3HAD120	_3hddecACP_c_ <=> h2o_c_ + tddec2eACP_c_	 3-hydroxyacyl-[acyl-carrier-protein] dehydratase (n-C12:0)	False
@@ -594,7 +594,7 @@ XYLI2	glc_D_c_ <=> fru_c_	xylose isomerase	True
 ZN2tpp	zn2_p_ <=> zn2_c_	zinc transport in via permease (no H+)	False
 Zn2tex	zn2_e_ <=> zn2_p_	zinc (Zn+2) transport via diffusion (extracellular to periplasm)	True
 %			
-!!SBtab TableName='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'			
+!!SBtab TableID='Compound' TableType='Compound' Document='Model' SBtabVersion='0.9'			
 !ID	!Name	!IsConstant	
 _10fthf_c_	10-Formyltetrahydrofolate	False	
 _13dpg_c_	3-Phospho-D-glyceroyl phosphate	False	

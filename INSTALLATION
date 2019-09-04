@@ -10,7 +10,7 @@ INSTALLATION
   1. Unpack the files
   2. Include the subdirectory 'elasticity_sampling' into your Matlab path
   3. Make sure that the following toolboxes are installed:
-      o Metabolic Network Toolbox (https://github.com/liebermeister/mnt)
+      o Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox)
       o SBML Toolbox    (http://sbml.org/Software/SBMLToolbox)
       o SBtab           (https://github.com/liebermeister/sbtab-matlab)
       o Tensor Toolbox  (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
@@ -23,7 +23,7 @@ REQUIREMENTS
   The functions have been developed and tested with matlab6 
     
   They require 
-    Metabolic Network Toolbox (https://github.com/liebermeister/mnt)
+    Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox)
     SBMLtoolbox    - SBML import / export  (see http://sbml.org/Software/SBMLToolbox)
     SBtab toolbox  - SBtab format (https://github.com/liebermeister/sbtab-matlab)
     Tensor toolbox - Tensors (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)

@@ -1,7 +1,9 @@
 Elasticity Sampling functions for Matlab
 ========================================
 
-Wolfram Liebermeister (2016)
+[Elasticity sampling](https://www.metabolic-economics.de/elasticity-sampling/index.html) is a computational method to determine consistent states of kinetic metabolic models. It follows the paradigm of Structural Kinetic Modelling, but accounts for thermodynamic laws to yield a consistent description of reversible biochemical reaction kinetics.
+
+This repository contains Matlab functions for Elasticity Sampling that extend the [Metabolic Network Toolbox](https://github.com/liebermeister/metabolic-network-toolbox).
 
 ## Dependencies: 
 

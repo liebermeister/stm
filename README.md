@@ -3,6 +3,8 @@ Elasticity Sampling functions for Matlab
 
 Wolfram Liebermeister (2016)
 
+## Dependencies: 
+
 The functions for elasticity sampling depend on the Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox). Some functions depend on the following Matlab toolboxes:
 
   o SBML Toolbox               (http://sbml.org/Software/SBMLToolbox)
@@ -17,8 +19,16 @@ Please make sure that these matlab packages are installed in your system and tha
 
 If CPLEX for matlab is installed in your system, this will speed up some calculations,
 
-For getting started, please see the instructions on 
+For getting started, please see the instructions at
 
 http://www.metabolic-economics.de/elasticity-sampling/workflow-matlab.html
 
-Contact: <wolfram.liebermeister@gmail.com>
+## License
+This package is released under the [GNU General Public License](LICENSE).
+
+## Contact
+Please contact [Wolfram Liebermeister](wolfram.liebermeister@gmail.com) with any questions or comments.
+
+## References
+Elasticity sampling links thermodynamics to metabolic control
+Liebermeister W. (2013), [arXiv:1309.0267](https://arxiv.org/abs/1309.0267)

@@ -5,7 +5,7 @@ Elasticity Sampling functions for Matlab
 
 This repository contains Matlab functions for Elasticity Sampling that extend the [Metabolic Network Toolbox](https://github.com/liebermeister/metabolic-network-toolbox).
 
-## Dependencies: 
+## Dependencies
 
 The functions for elasticity sampling depend on the Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox). Some functions depend on the following Matlab toolboxes:
 
@@ -32,5 +32,5 @@ This package is released under the [GNU General Public License](LICENSE).
 Please contact [Wolfram Liebermeister](wolfram.liebermeister@gmail.com) with any questions or comments.
 
 ## References
-Elasticity sampling links thermodynamics to metabolic control
-Liebermeister W. (2013), [arXiv:1309.0267](https://arxiv.org/abs/1309.0267)
+Liebermeister W. (2013), *Elasticity sampling links thermodynamics to metabolic control*
+[arXiv:1309.0267](https://arxiv.org/abs/1309.0267)

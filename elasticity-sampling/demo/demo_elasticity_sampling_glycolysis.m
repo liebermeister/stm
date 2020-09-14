@@ -17,7 +17,7 @@ clc
 %---------------------------------------------------------
  
 % Press key to continue
- 
+
 pause
 clc
 %-------------------------------------------------------------------------------
@@ -25,8 +25,11 @@ clc
 
 network = network_sbml_import('demo_e_coli_glycolysis_model.xml')
 
-% Network structures can also be defined within matlab 
-% by using the function 'network_construct'
+% Possible alternatives: 
+% 1. Load network model from SBtab file
+%      nn = sbtab_load_network_model_and_data('demo_e_coli_glycolysis_model.tsv'); 
+%      network = nn.network;
+% 2. Define network structure within matlab by using the function 'network_construct'
  
 % Press key to continue
  
@@ -135,7 +138,7 @@ clc
  
 es_options.kinetic_law = 'cs';
  
-output1 = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function);
+output1 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
  
 % This was the first ensemble
  
@@ -147,7 +150,7 @@ clc
  
 es_options.kinetic_law = 'ms';
  
-output2 = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function);
+output2 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
 
 % This was the second ensemble
  

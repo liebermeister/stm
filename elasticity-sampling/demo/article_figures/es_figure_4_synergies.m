@@ -3,6 +3,9 @@
 % See Article Figure 5
 
 
+% -------------------------------------------------------------
+% load model and choose reference state
+
 model_dir  = [es_BASEDIR '/../resources/models-article/Example_Loop_Pathway'];
 model_name = 'Example_Loop_Pathway'; 
 ref_state  = 'Example_Loop_Pathway_reference_state'; 
@@ -18,7 +21,7 @@ v = reference_state.v;
 
 dmu = -reference_state.A;    
 mu  = [];    
-v = 1/max(abs(v)) * v;
+v   = 1/max(abs(v)) * v;
 
 
 % -------------------------------------------------------------

@@ -17,7 +17,8 @@ cd(model_dir); load(model_name);
 % Determine thermodynamic state variables by parameter balancing
 % -----------------------------------------------------
 
-% Since human data are not available, E coli data are being used as proxies.
+% load thermodynamic data
+% (since human data are not available, E coli data are used as proxies)
 
 state_data_dir = [es_BASEDIR '/../resources/data/kinetic-data/'];
 
@@ -26,7 +27,7 @@ data_files     = {[state_data_dir 'E_coli_glycolysis_GFE.tsv'], ...
                   [state_data_dir 'E_coli_glucose_concentration.tsv'], ...
                   [state_data_dir 'ATPase_affinity.tsv']}';
 
-% fix some concentrations
+% predefine some of the concentrations
 
 ind_water     = label_names({'H2O [c]','H2O [m]'},  network.metabolites);
 ind_phosphate = label_names({'Pi [c]', 'Pi [m]'},   network.metabolites); 

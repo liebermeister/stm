@@ -101,7 +101,6 @@ end
 
 [nm,nr] = size(N);
 
-
 all_c_given   = sum(isnan(es_constraints.log_c_fix)) == 0;
 all_v_given   = sum(isnan(es_constraints.v_fix))     == 0;
 all_mu0_given = sum(isnan(es_constraints.mu0_fix))   == 0;
@@ -120,6 +119,11 @@ all_mu_given  = sum(isnan(es_constraints.mu_fix)) == 0;
 %  es_constraints.dmu_fix = N' * es_constraints.mu_fix;
 %end
 all_dmu_given = sum(isnan(es_constraints.dmu_fix)) == 0;
+
+if all_c_given,
+  display(' Using given metabolite profile');
+end
+
 
 % ---------------------------------------------------------------------------------
 % determine fluxes

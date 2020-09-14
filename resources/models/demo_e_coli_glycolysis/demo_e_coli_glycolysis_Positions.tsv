@@ -1,4 +1,4 @@
-!!SBtab TableType='Position'
+!!SBtab TableID='Position' TableType='Position'
 !Element	!PositionX	!PositionY
 2_Phospho_D_glycerate	0.307980	0.178521
 3_Phospho_D_glycerate	0.308775	0.287972

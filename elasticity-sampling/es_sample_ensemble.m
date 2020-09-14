@@ -1,8 +1,8 @@
-function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)
+function [output, output_list] = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)
 
-% ES_SAMPLE_MULTIPLE - Create model ensemble and collect values for an output function
+% ES_SAMPLE_ENSEMBLE - Create model ensemble and collect values for an output function
 %
-% [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)
+% [output, output_list] = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)
 %
 % Run elasticity sampling repeatedly, compute every time an output function 
 % (any kind of matlab variable), and return a list of the output values.
@@ -41,7 +41,7 @@ function [output, output_list] = es_sample_multiple(N, W, ind_ext, es_constraint
 %      instead of simple repeated sampling.
 %
 
-% test script: test_es_sample_multiple.m
+% test script: test_es_sample_ensemble.m
 
 
 eval(default('select_function','[]','score_function','[]','function_args','[]'));

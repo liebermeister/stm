@@ -5,7 +5,7 @@ function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, e
 % result = es_sample_model(N, W, ind_ext, es_constraints, es_options)
 % 
 % This script reconstructs one model instance, including the sampled elasticities.
-% For samplig multiple model instances, see 'es_sample_multiple'.
+% For samplig multiple model instances, see 'es_sample_ensemble'.
 %
 %
 % Inputs (with nm: # metabolites; nr: # reactions)
@@ -58,6 +58,7 @@ end
 % Steady-state phase: sample feasible steady quantities
 
 [c0, c, u, J, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state(N, W, ind_ext, es_constraints, es_options);
+
 
 % ----------------------------------------------------------------
 % Kinetics phase: sample saturation values compute all the rest

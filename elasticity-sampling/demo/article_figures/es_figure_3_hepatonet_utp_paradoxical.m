@@ -69,7 +69,7 @@ my_options.n_samples         = 1000;
 my_options.set_alpha_to_half = 0;
 my_options.flag_second_order = 0;
 
-output = es_sample_multiple(N, W, ind_ext, es_constraints, my_options, readout,[],[],zz);
+output = es_sample_ensemble(N, W, ind_ext, es_constraints, my_options, readout,[],[],zz);
 
 R_prod_joint_upregulation = output(it_v_target,:)' * ones(length(it_v_target),1);
 

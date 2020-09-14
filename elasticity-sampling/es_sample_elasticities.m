@@ -67,6 +67,15 @@ function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_optio
 % See also: es_sample_model
 
 
+%% Set global variables to speed up function modular_velocities
+global global_structure_matrices 
+global_structure_matrices = 1;
+global Mplus Mminus Wplus Wminus nm nr ind_M ind_Wp ind_Wm
+h = ones(nr,1);
+[Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h);
+%% END Set global variables
+ 
+  
 % ----------------------------------------------------------------
 % sample alpha, values and compute beta and gamma values
 
@@ -80,7 +89,6 @@ function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_optio
 KA               = alpha_to_k(alpha_A,c);
 KI               = alpha_to_k(alpha_I,c);
 KM               = alpha_to_k(alpha_M,c);
-
 
 % ----------------------------------------------------------------
 % compute remaining model parameters (KV, Kplus, Kminus)
@@ -134,7 +142,7 @@ if es_options.flag_test,
     def_keq_mismatch  = [log(Keq) - N' * log(c0)]
     v_eq = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c0,KA,KI,KM,KV,Keq,es_options.h)
     max(abs( def_keq_mismatch)) 
-  max(abs( v_eq  )) 
+    max(abs( v_eq  )) 
   end
   sign_J_A_mismatch = [sign(J) - sign(A)];
   max(abs( dc_td)) 

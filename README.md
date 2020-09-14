@@ -29,7 +29,7 @@ http://www.metabolic-economics.de/elasticity-sampling/workflow-matlab.html
 This package is released under the [GNU General Public License](LICENSE).
 
 ## Contact
-Please contact [Wolfram Liebermeister](wolfram.liebermeister@gmail.com) with any questions or comments.
+Please contact [Wolfram Liebermeister](mailto:wolfram.liebermeister@gmail.com) with any questions or comments.
 
 ## References
 Liebermeister W. (2013), *Elasticity sampling links thermodynamics to metabolic control*

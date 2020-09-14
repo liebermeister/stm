@@ -1,17 +1,17 @@
-function [es_options,es_constraints] = es_default_options(N)
+function [es_options, es_constraints] = es_default_options(N)
 
 % ES_DEFAULT_OPTIONS - Set default values in 'es_options' and 'es_constraints'
 %
 % [es_options, es_constraints] = es_default_options(N)
 % 
-% Initialise structures 'es_options' and 'es_constraints'
-% used to define tasks in elasticity sampling
+% Initialise structures 'es_options' and 'es_constraints' used to define tasks in elasticity sampling
 % 
-% N is either the (complete) stoichiometric matrix 
-% or a network data structure from the Metabolic Network Toolbox)
+% Function arguments: 
+% N can be the (complete) stoichiometric matrix or a 'network' data structure from the Metabolic Network Toolbox)
 % 
-%  1. The structure es_constraints contains information for defining 
-%     the constraints in model sampling
+% Function outputs:
+% 
+% Structure 'es_constraints': directives for defining the constraints in model sampling
 %
 % Field name                        Size    Meaning
 % ----------                        ----    -------
@@ -59,7 +59,7 @@ function [es_options,es_constraints] = es_default_options(N)
 % For defining only some entries in a vector, replace the others by 'nan'
 %
 %
-% 2. The structure es_options contains general directives for the algorithm
+% 2. Structure 'es_options': general directives for the algorithm
 %
 % Name                        Type/default   Meaning 
 % ----                        ------------   -------

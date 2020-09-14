@@ -7,13 +7,13 @@ function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)
 % Significance test for model outputs obtained from multiple elasticity sampling
 %
 % Significant differences are computed from the outputs of a previous multiple 
-% elasticity sampling for two model variants (see 'es_sample_multiple').
+% elasticity sampling for two model variants (see 'es_sample_ensemble').
 % Both model variants must have the same number of metabolites and reactions.
 %
 % Inputs
 %
-%   output1  - Matrix or tensor from 1st model variant (from 'es_sample_multiple')
-%   output2  - Matrix or tensor from 2nd model variant (from 'es_sample_multiple')
+%   output1  - Matrix or tensor from 1st model variant (from 'es_sample_ensemble')
+%   output2  - Matrix or tensor from 2nd model variant (from 'es_sample_ensemble')
 %   n_per    - Number of samples in permutation test
 %   fdr      - False discovery rate
 %

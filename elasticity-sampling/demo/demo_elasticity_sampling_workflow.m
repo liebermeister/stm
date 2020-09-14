@@ -2,8 +2,8 @@
 %
 % Demo script for thermodynamically feasible elasticity sampling 
 % 
-% In this script, we load a metabolic network model, run elasticity sampling 
-% with two types of rate laws, and compare the results of the two model ensembles 
+% In this script, we load a metabolic network model (core carbon metabolism in E coli), 
+% run elasticity sampling with two types of rate laws, and compare the results of the two model ensembles 
 
 
 %-------------------------------------------------------------------------------
@@ -114,6 +114,17 @@ if 0,
   v = K(:,1) * sign(K(1));              
 end
 
+% OR: load a stationary flux distribution from a data file
+
+if 0,
+  flux_data_file = [resource_dir 'data-flux/fluxes_demo_example.tsv'];
+  my_v   = sbtab_table_get_column(v_sbtab.tables.Flux,'Value',1);
+  my_rea = sbtab_table_get_column(v_sbtab.tables.Flux,'Reaction');
+  v = nan*ones(size(network.actions));
+  ll = label_names(network.actions,my_rea);
+  v(find(ll)) = my_v(ll(find(ll)));
+end
+
 
 % ------------------------------------------------------------------------------
 % If necessary, modify the flux distribution such that it becomes thermodynamically feasible ("loopless")
@@ -135,7 +146,7 @@ data_files = {[resource_dir 'data-thermodynamic/E_coli_glycolysis_GFE.tsv'], ...
               [resource_dir 'data-metabolite/E_coli_glucose_concentration.tsv']}';
 
 data_quantities = {'standard chemical potential','equilibrium constant', 'Michaelis constant', 'concentration','reaction affinity'}';
-model_data      = kinetic_data_load(data_quantities, [], network, data_files, 0, 1, 1, 0);
+model_data      = kinetic_data_load(data_quantities, [], network, data_files, struct('use_sbml_ids',0,'use_kegg_ids',1,'flag_invent_std',1,'verbose',0));
 % kinetic_data_print(model_data,network,1);
 
 % There are various possibilities to do this: here, we see an estimation based on existing
@@ -347,7 +358,7 @@ output_function  = inline('sum(result.control.CJ .^2)','result','other');
  
 es_options.kinetic_law = 'cs';
  
-output1 = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function);
+output1 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
  
 % This was the first ensemble
  
@@ -356,7 +367,7 @@ output1 = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_f
  
 es_options.kinetic_law = 'ms';
  
-output2 = es_sample_multiple(N, W, ind_ext, es_constraints, es_options, output_function);
+output2 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
 
 % This was the second ensemble
  

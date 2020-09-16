@@ -344,3 +344,6 @@ if 0,
     [norm(full(Ec)) - norm(full(E.un_E_c))]
   end
 end
+
+%% Clear global variables
+clearvars -global global_structure_matrices Mplus Mminus Wplus Wminus nm nr ind_M ind_Wp ind_Wm

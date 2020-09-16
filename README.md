@@ -7,7 +7,11 @@ This repository contains Matlab functions for Elasticity Sampling that extend th
 
 ## Dependencies
 
-The functions for elasticity sampling depend on the Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox). Some functions depend on the following Matlab toolboxes:
+The functions for elasticity sampling depend on the
+
+  o Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox).
+
+Some functions depend on the following Matlab toolboxes:
 
   o SBML Toolbox               (http://sbml.org/Software/SBMLToolbox)
 

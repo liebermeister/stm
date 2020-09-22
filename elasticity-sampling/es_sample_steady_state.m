@@ -101,32 +101,46 @@ end
 
 [nm,nr] = size(N);
 
-all_c_given   = sum(isnan(es_constraints.log_c_fix)) == 0;
 all_v_given   = sum(isnan(es_constraints.v_fix))     == 0;
+all_c_given   = sum(isnan(es_constraints.log_c_fix)) == 0;
 all_mu0_given = sum(isnan(es_constraints.mu0_fix))   == 0;
 
-% if all_mu0_given,
-%   es_constraints.Keq_fix = exp(-1/RT * N' * es_constraints.mu0_fix);
-% end
-all_keq_given = sum(isnan(es_constraints.Keq_fix))   == 0;
+if all_mu0_given,
+  es_constraints.Keq_fix = exp(-1/RT * N' * es_constraints.mu0_fix);
+end
 
-% if all_c_given * all_mu0_given,
-%   es_constraints.mu_fix = es_constraints.mu0_fix + RT * es_constraints.log_c_fix;
-% end
+all_keq_given = sum(isnan(es_constraints.Keq_fix)) == 0;
+
+if all_c_given * all_mu0_given,
+  es_constraints.mu_fix = es_constraints.mu0_fix + RT * es_constraints.log_c_fix;
+end
+
 all_mu_given  = sum(isnan(es_constraints.mu_fix)) == 0;
 
-%if all_mu_given,
-%  es_constraints.dmu_fix = N' * es_constraints.mu_fix;
-%end
+if all_mu_given,
+  es_constraints.dmu_fix = N' * es_constraints.mu_fix;
+end
+
+if all_keq_given * all_c_given,
+  es_constraints.dmu_fix = -RT * [es_constraints.Keq_fix - N' * es_constraints.log_c_fix];
+end
+
 all_dmu_given = sum(isnan(es_constraints.dmu_fix)) == 0;
 
-if all_c_given,
-  display(' Using given metabolite profile');
+% check 
+
+if ~sum(isnan([es_constraints.v_fix; es_constraints.Keq_fix; es_constraints.log_c_fix])),
+  my_v = es_constraints.v_fix;
+  my_theta = log(es_constraints.Keq_fix) - N'*es_constraints.log_c_fix;
+  if sum([sign(my_v.*my_theta)==-1].*[my_v~=0]), 
+    sign([my_v,my_theta])
+    error('Predefined metabolic state is thermodynamically infeasible')
+  end
 end
 
 
 % ---------------------------------------------------------------------------------
-% determine fluxes
+% determine fluxes v
 
 if all_v_given,
   
@@ -178,22 +192,37 @@ else
 end
 
 % ---------------------------------------------------------------------------------
-% now do the rest
+% given the fluxes, determine c, mu, Kma, Keq
 
 %% sample c freely, determine Keq, A, zeta, depending on given information
 
 c0       = [];
 mu       = [];
 K        = [];
-c        = exp(es_constraints.log_c_mean + es_constraints.log_c_std .* randn(nm,1));
-ind_c    = find(isfinite(es_constraints.log_c_fix));
-c(ind_c) = exp(es_constraints.log_c_fix(ind_c));
-Kma      = exp(N' * log(c));
+
+if all_c_given,
+  c        = exp(es_constraints.log_c_fix);
+  display(' Using given metabolite profile');
+else
+  c        = exp(es_constraints.log_c_mean + es_constraints.log_c_std .* randn(nm,1));
+  ind_c    = find(isfinite(es_constraints.log_c_fix));
+  c(ind_c) = exp(es_constraints.log_c_fix(ind_c));
+end
+
+% mass action ratios
+Kma = exp(N' * log(c));
 
 % safety fix
 Kma(Kma<10^-10) = 10^-10;
 
-if all_mu_given,
+if all_keq_given,
+
+  display(' Using given equilibrium constants');
+  Keq  = es_constraints.Keq_fix;
+  A    = RT * log(Keq ./ Kma);
+  zeta = exp(es_options.h .* A/RT);
+
+elseif all_mu_given,
 
   display(' Using given chemical potentials');
   mu   = es_constraints.mu_fix;
@@ -207,7 +236,7 @@ elseif all_dmu_given,
   A    = - es_constraints.dmu_fix;
   zeta = exp(es_options.h .* A/RT);
   Keq  = exp(A/RT) .* Kma;
-
+  
   %% safety fix
   %% Keq(Keq>10^50) = 10^50;
 
@@ -215,19 +244,14 @@ elseif all_dmu_given,
   if ~isfield(es_constraints,'mu_eqconstraint'),
     es_constraints.mu_eqconstraint = [];
   end
+  
   if isempty(es_constraints.mu_eqconstraint),
-    mu   = -pinv(full(N'))*A;
+    mu = -pinv(full(N'))*A;
   else,
     mu = pinv([-full(N'); es_constraints.mu_eqconstraint.matrix'])*[-A; es_constraints.mu_eqconstraint.vector];
   end
+  
   display(' * Computing mu from A by pseudoinverse (in es_sample_steady_state)');
-
-elseif all_keq_given,
-
-  display(' Using given equilibrium constants');
-  Keq  = es_constraints.Keq_fix;
-  A    = RT * log(Keq ./ Kma);
-  zeta = exp(es_options.h .* A/RT);
 
 else,
 
@@ -244,6 +268,11 @@ else,
   Kma    = exp(N' * log(c));
   zeta   = [Keq./Kma].^es_options.h;
   A      = RT * log(Keq./Kma);
+end
+
+if isempty(mu),
+  mu   = pinv(full(N')) * es_constraints.dmu_fix;
+  c0   = exp(mu/RT) ./ c;
 end
 
 if find([v~=0] .* [abs(A) < es_constraints.dmu_limit_min]),

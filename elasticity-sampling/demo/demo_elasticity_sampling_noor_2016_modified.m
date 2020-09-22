@@ -70,7 +70,7 @@ es_constraints.dmu_limit_min = 0.05;
 es_options.ind_ignore        = [];
 es_options.flag_second_order = 0;
 es_options.sampling_method   = 'v from data';
-es_options.kinetic_law       = 'cs'
+es_options.kinetic_law       = 'cs';
 es_options.flag_second_order = 1;
 es_options.print_graphics    = 0;
 
@@ -86,4 +86,5 @@ es_options.print_graphics    = 0;
 
 target_reaction    = 'Overflow'; 
 
+ca;
 es_reference_state_graphics(network, es_options, result, target_reaction);

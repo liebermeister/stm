@@ -1,2 +1,2 @@
-NOTE THAT THE FILE IN THIS DIRECTORY IS A COPY OF THE FILES FROM github/cellular-enzyme-demands/resources/models/e_coli_noor_2016_drain/
-==================
+model made by ecoli_noor_2016_modified_make_reference_state.m
+copy from ~/projekte/elasticity_sampling/project_mattia/roberto/matlab/wolf/model_ecoli_noor_2016_modified/model_and_metabolic_state/e_coli_noor_2016_plus_overflow_oxa_internal_ModelState.tsv

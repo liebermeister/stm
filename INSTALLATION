@@ -10,6 +10,7 @@ INSTALLATION
   1. Unpack the files
   2. Include the subdirectory 'elasticity_sampling' into your Matlab path
   3. Make sure that the following toolboxes are installed:
+      o Matlab utility functions (https://github.com/liebermeister/matlab-utils)
       o Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox)
       o SBML Toolbox    (http://sbml.org/Software/SBMLToolbox)
       o SBtab           (https://github.com/liebermeister/sbtab-matlab)
@@ -22,14 +23,9 @@ REQUIREMENTS
 
   The functions have been developed and tested with matlab6 
     
-  They require 
-    Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox)
-    SBMLtoolbox    - SBML import / export  (see http://sbml.org/Software/SBMLToolbox)
-    SBtab toolbox  - SBtab format (https://github.com/liebermeister/sbtab-matlab)
-    Tensor toolbox - Tensors (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
-    efmtool        - Elementary flux modes (see http://www.csb.ethz.ch/tools/efmtool)
+  They require the matlab toolboxes mentioned above.
  
-  If CPLEX for matlab is installed in your system, this will speed up some calculations,
+  If CPLEX for matlab is installed in your system, this will speed up some calculations.
 
 STATE OF THE SOFTWARE.
 

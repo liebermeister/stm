@@ -5,21 +5,23 @@ Elasticity Sampling functions for Matlab
 
 This repository contains Matlab functions for Elasticity Sampling that extend the [Metabolic Network Toolbox](https://github.com/liebermeister/metabolic-network-toolbox).
 
+For demo scripts, see the subdirectory elasticity-sampling/demo. To see the commands used, please have a look at the scripts.
+
 ## Dependencies
 
-The functions for elasticity sampling depend on the
+The functions in this toolbox depend on the
 
-  o Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox).
+  * Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox).
 
 Some functions depend on the following Matlab toolboxes:
 
-  o SBML Toolbox               (http://sbml.org/Software/SBMLToolbox)
+  * SBML Toolbox               (http://sbml.org/Software/SBMLToolbox)
 
-  o SBtab functions            (https://github.com/liebermeister/sbtab-matlab)
+  * SBtab functions            (https://github.com/liebermeister/sbtab-matlab)
 
-  o Tensor Toolbox             (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
+  * Tensor Toolbox             (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
 
-  o efmtool                    (http://www.csb.ethz.ch/tools/efmtool)
+  * efmtool                    (http://www.csb.ethz.ch/tools/efmtool)
 
 Please make sure that these matlab packages are installed in your system and that all these directories and subdirectories are included in your matlab path.
 

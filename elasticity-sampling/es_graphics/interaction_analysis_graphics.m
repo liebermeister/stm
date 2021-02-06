@@ -47,11 +47,11 @@ ind_ext = find(network.external);
 %  make sure they are omitted from statistics later on
 
 if isempty(R_target_u_sc),
-  % ind_target     = find(strcmp(target_reaction,network.actions));
-  % R_target_u_sc  = column(result.control.RJu_sc(ind_target,:));
-  % R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
-  R_target_u_sc  = result.control.Rtarget_sc_u;
-  R_target_uu_sc = result.control.Rtarget_sc_uu;
+  ind_target     = find(strcmp(target_reaction,network.actions));
+  R_target_u_sc  = column(result.control.RJu_sc(ind_target,:));
+  R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
+  % R_target_u_sc  = result.control.Rtarget_sc_u;
+  % R_target_uu_sc = result.control.Rtarget_sc_uu;
 end
 influence   = R_target_u_sc;
 interaction = R_target_uu_sc - diag(diag(R_target_uu_sc));

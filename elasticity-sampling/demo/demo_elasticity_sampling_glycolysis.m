@@ -1,5 +1,7 @@
 % demo_elasticity_sampling_glycolysis - Demo script for thermodynamically feasible elasticity sampling 
 
+clear; clearvars -global
+
 es_dependencies;
 
 model_dir = [es_BASEDIR '/../resources/models/demo_e_coli_glycolysis'];

@@ -177,36 +177,36 @@ dum = nan*ones(nm,1);
 dum = zeros(nm,nm);
 dum(ind_int,ind_int) = Sigma_c_list{ find(omega_list == omega_slow) }; 
 figure(110); 
-netgraph_metabolite_interactions(network_CoHid, diag(dum), dum, rb_colors, struct('relative_threshold',0.1)); 
+netgraph_metabolite_synergies(network_CoHid, diag(dum), dum, rb_colors, struct('relative_threshold',0.1,'actprintnames',0,'metprintnames',0)); 
 
 % 1/sec
 dum(ind_int,ind_int) = Sigma_c_list{ find(omega_list == omega_fast) };  
 figure(111);
-netgraph_metabolite_interactions(network_CoHid, diag(dum), dum, rb_colors, struct('relative_threshold',0.1)); 
+netgraph_metabolite_synergies(network_CoHid, diag(dum), dum, rb_colors, struct('relative_threshold',0.1)); 
 
 
 % -------------------------------------------------
 % Spectral flux correlations (threshold for display: 10%)
 
-gp = struct('relative_threshold',0.1,'arrowstyle','none','actprintnames',1,'metprintnames',0);
+gp = struct('relative_threshold',0.1,'arrowstyle','none','actprintnames',0,'metprintnames',0);
 
 % 1/(1000) 1/sec  (16.7 minutes period)
 %dum = Sigma_j_list{ find(omega_list == 2 * pi * 1/(1000)) };
 dum = Sigma_j_list{ find(omega_list == omega_fast) };
-figure(112); interaction_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp); 
+figure(112); synergy_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp); 
 
 % 1/sec
 %dum = Sigma_j_list{ find(omega_list == 2 * pi * 1) };
 dum = Sigma_j_list{ find(omega_list == omega_slow)};
-figure(113); interaction_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp); 
+figure(113); synergy_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp); 
 
 % -------------------------------------------------
 
-figure(20); netgraph_concentrations(network_CoHid, [],abs(result.A),1,struct('colormap',rb_colors,'arrowstyle','none')); 
+figure(20); netgraph_concentrations(network_CoHid, [],abs(result.A/RT),1,struct('colormap',rb_colors,'arrowstyle','none','actprintnames',0,'metprintnames',0)); 
 
-figure(21); netgraph_concentrations(network_CoHid, result.mu,[],1,struct('colormap',rb_colors)); 
+figure(21); netgraph_concentrations(network_CoHid, result.mu,[],1, struct('colormap',rb_colors,'actprintnames',0,'metprintnames',0)); 
 
-figure(22); netgraph_concentrations(network_CoHid, [] , 1/max(noise_production) * noise_production,1,struct('colormap',rb_colors)); 
+figure(22); netgraph_concentrations(network_CoHid, [] , 1/max(noise_production) * noise_production, 1, struct('colormap',rb_colors,'actprintnames',0,'metprintnames',0)); 
 
 % -------------------------------------------------
 % variance quantities measured on different time scales
@@ -217,7 +217,7 @@ Var_j = spectral_density_to_smooth_variance(omega_list,Sigma_j,tau_list);
 
 figure(1011); clf; 
 h = plot(tau_list,sqrt(Var_c)); 
-set(gca,'XScale','log','YScale','log','Fontsize',26);
+set(gca,'XScale','log','YScale','log','Fontsize',20);
 xlabel('Observation time scale \tau [s]'); ylabel('Concentration Std Dev [mM]'); 
 line_colors(h,'copper')
 axis tight
@@ -225,7 +225,7 @@ axis tight
 
 figure(1012); clf; 
 h = plot(tau_list,sqrt(Var_j)); 
-set(gca,'XScale','log','YScale','log','Fontsize',26)
+set(gca,'XScale','log','YScale','log','Fontsize',20)
 xlabel('Observation time scale \tau [s]'); ylabel('Flux Std Dev [mol/s]');
 line_colors(h,'copper')
 axis tight
@@ -243,29 +243,28 @@ xlabel('Observation time scale \tau [s]'); ylabel('Flux CV [unitless]');
 line_colors(h,'copper')
 %legend(escape_underscores(network.actions),'Fontsize',6);
 
-
 if length(psfile_dir),
-cd(psfile_dir);
-display(sprintf('Saving graphics to directory %s', psfile_dir));
-print([ psfile_dir '/' basename '_flux_control_coeff.eps'], '-f1001', '-depsc');
-print([ psfile_dir '/' basename '_conc_control_coeff.eps'], '-f1002', '-depsc');
-print([ psfile_dir '/' basename '_flux_chem_varation.eps'], '-f2001', '-depsc');
-print([ psfile_dir '/' basename '_conc_chem_varation.eps'], '-f2002', '-depsc');
-print([ psfile_dir '/' basename '_spectral_conc_freq.eps'], '-f2', '-depsc');
-print([ psfile_dir '/' basename '_spectral_flux_freq.eps'], '-f3', '-depsc');
-%print([ psfile_dir '/' basename '_spectral_conc_slow_network.eps'], '-f10', '-depsc');
-%print([ psfile_dir '/' basename '_spectral_conc_fast_network.eps'], '-f11', '-depsc');
-%print([ psfile_dir '/' basename '_spectral_flux_slow_network.eps'], '-f12', '-depsc');
-%print([ psfile_dir '/' basename '_spectral_flux_fast_network.eps'], '-f13', '-depsc');
-print([ psfile_dir '/' basename '_spectral_corr_conc_slow_network.eps'], '-f110', '-depsc');
-print([ psfile_dir '/' basename '_spectral_corr_conc_fast_network.eps'], '-f111', '-depsc');
-print([ psfile_dir '/' basename '_spectral_corr_flux_slow_network.eps'], '-f112', '-depsc');
-print([ psfile_dir '/' basename '_spectral_corr_flux_fast_network.eps'], '-f113', '-depsc');
-print([ psfile_dir '/' basename '_spectral_affinities_network.eps'], '-f20', '-depsc');
-print([ psfile_dir '/' basename '_spectral_chem_pot_network.eps'], '-f21', '-depsc');
-print([ psfile_dir '/' basename '_spectral_noise_production_network.eps'], '-f22', '-depsc');
-print([ psfile_dir '/' basename '_spectral_conc_smoothed_variance.eps'], '-f1011', '-depsc');
-print([ psfile_dir '/' basename '_spectral_flux_smoothed_variance.eps'], '-f1012', '-depsc');
+  cd(psfile_dir);
+  display(sprintf('Saving graphics to directory %s', psfile_dir));
+  print([ psfile_dir '/' basename '_flux_control_coeff.eps'], '-f1001', '-depsc');
+  print([ psfile_dir '/' basename '_conc_control_coeff.eps'], '-f1002', '-depsc');
+  print([ psfile_dir '/' basename '_flux_chem_varation.eps'], '-f2001', '-depsc');
+  print([ psfile_dir '/' basename '_conc_chem_varation.eps'], '-f2002', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_conc_freq.eps'], '-f2', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_flux_freq.eps'], '-f3', '-depsc');
+  %print([ psfile_dir '/' basename '_spectral_conc_slow_network.eps'], '-f10', '-depsc');
+  %print([ psfile_dir '/' basename '_spectral_conc_fast_network.eps'], '-f11', '-depsc');
+  %print([ psfile_dir '/' basename '_spectral_flux_slow_network.eps'], '-f12', '-depsc');
+  %print([ psfile_dir '/' basename '_spectral_flux_fast_network.eps'], '-f13', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_corr_conc_slow_network.eps'], '-f110', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_corr_conc_fast_network.eps'], '-f111', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_corr_flux_slow_network.eps'], '-f112', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_corr_flux_fast_network.eps'], '-f113', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_forces_network.eps'], '-f20', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_chem_pot_network.eps'], '-f21', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_noise_production_network.eps'], '-f22', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_conc_smoothed_variance.eps'], '-f1011', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_flux_smoothed_variance.eps'], '-f1012', '-depsc');
 end
 
 figure(1001); title('Scaled flux control coefficients');          
@@ -278,6 +277,6 @@ figure(110);  title('Concentrations, slow fluctuations');
 figure(111);  title('Concentrations, fast fluctuations');
 figure(112);  title('Fluxes, slow fluctuations');
 figure(113);  title('Fluxes, fast fluctuations');
-figure(20);   title('Absolute reaction affinities');
+figure(20);   title('Absolute thermodynamic forces');
 figure(21);   title('Chemical potentials');
 figure(22);   title('Noise production');

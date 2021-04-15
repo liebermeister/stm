@@ -66,12 +66,12 @@ function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_optio
 %
 % See also: es_sample_model
 
-
 %% Set global variables to speed up function modular_velocities
 global global_structure_matrices 
 global_structure_matrices = 1;
 global Mplus Mminus Wplus Wminus nm nr ind_M ind_Wp ind_Wm
 h = ones(nr,1);
+
 [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h);
 %% END Set global variables
  

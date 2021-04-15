@@ -34,4 +34,4 @@ filenames.reference_state_file = graphics_file;
 
 sampling_reference_state_graphics;
 
-interaction_analysis_graphics(network, network_CoHid, result, filenames, filenames.reference_state_file, target_reaction, es_options.print_graphics,filenames.psfile_dir);
+es_synergy_graphics(network, network_CoHid, result, filenames, filenames.reference_state_file, target_reaction, es_options.print_graphics,filenames.psfile_dir);

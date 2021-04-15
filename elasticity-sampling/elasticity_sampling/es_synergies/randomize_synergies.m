@@ -1,6 +1,6 @@
-function E_rnd = randomize_interaction(E)
+function E_rnd = randomize_synergies(E)
 
-% E_rnd = randomize_interaction(E)
+% E_rnd = randomize_synergies(E)
 % randomisation of interaction values with the upper triangle
 
 n   = size(E,1);

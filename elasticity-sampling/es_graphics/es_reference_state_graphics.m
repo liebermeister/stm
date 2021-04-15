@@ -1,9 +1,13 @@
-function es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, psfile_dir)
+function es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
 
 % -------------------------------------------------------------
 % graphics for elasticity sampling reference states
 
-eval(default('network_CoHid','network'));
+eval(default('network_CoHid','network','network_CoSplit','[]'));
+if isempty(network_CoSplit),
+  network_CoSplit = network_CoHid;
+end
+
 eval(default('target_reaction','''Biomass production''','target_product','''Biomass''')); % 'Maintenance'
 if exist('es_filenames','var'),
   eval(default('psfile_dir','es_filenames.psfile_dir'));
@@ -18,29 +22,30 @@ ind_ext = find(network.external);
 p.print = es_options.print_graphics;  % use layout for printing
 
 % network
-% figure(1000); es_graphics(network,network_CoHid,'names',p);
+figure(1); es_graphics(network,network_CoSplit,'names',struct('actprintnames',0,'FontSize',24));
 
-% figure(1); clf; 
-% es_graphics(network,network_CoHid,'fluxes',struct('v',fluxes.v_mean),p);
+% figure(1000); clf; 
+%es_graphics(network,network_CoHid,'fluxes',struct('v',fluxes.v_mean),p);
 
-figure(2); clf; es_graphics(network,network_CoHid,'fluxes',struct('v',result.v,'production_rates',N*result.v),join_struct(p,struct('show_regulation',0)));
-figure(2); title(sprintf('Fluxes and net production rates')); 
+%figure(2); clf; es_graphics(network,network_CoHid,'fluxes',struct('v',result.v,'production_rates',N*result.v),join_struct(p,struct('show_regulation',0)));
+figure(2); clf; es_graphics(network,network_CoHid,'fluxes',struct('v',result.v),join_struct(p,struct('show_regulation',0,'arrowsize',0.05)));
+%figure(2); title(sprintf('Fluxes and net production rates')); 
 
 % flux movies
 % figure(102); clf; M = es_graphics(network,network_CoHid,'flux_movie',struct('v',fluxes.best_v,'n_frames',6),p);
 % movie(M,1,4);
 
-figure(3); clf; es_graphics(network,network_CoHid,'chemical_potentials',struct('mu',result.mu),p);
+figure(3); clf; es_graphics(network,network_CoSplit,'chemical_potentials',struct('mu',result.mu),p);
 
-figure(6); clf; es_graphics(network,network_CoHid,'reaction_affinities',struct('A',result.A,'v',result.v),p);
+figure(6); clf; es_graphics(network,network_CoHid,'thermodynamic_forces',struct('theta',result.A/RT,'v',result.v),p);
 
-figure(7); clf; es_graphics(network,network_CoHid,'elasticities',struct('elasticities',result.saturation.beta_M + result.saturation.beta_I + result.saturation.beta_A,'v',result.v),p);
+figure(7); clf; es_graphics(network,network_CoSplit,'elasticities',struct('elasticities',result.saturation.beta_M + result.saturation.beta_I + result.saturation.beta_A,'v',result.v),p);
 
-figure(8); clf; es_graphics(network,network_CoHid,'elasticities',struct('elasticities',result.elasticities.sc_E_c,'v',result.v),p);
+figure(8); clf; es_graphics(network,network_CoSplit,'elasticities',struct('elasticities',result.elasticities.sc_E_c,'v',result.v),p);
 
-figure(9); clf; es_graphics(network,network_CoHid,'dissipation',struct('A',result.A,'v',result.v),p);
+figure(9); clf; es_graphics(network,network_CoHid,'dissipation',struct('theta',result.A/RT,'v',result.v),p);
 
-figure(10); clf; es_graphics(network,network_CoHid,'metabolites',struct('c',result.c),p);
+figure(10); clf; es_graphics(network,network_CoSplit,'metabolites',struct('c',result.c),p);
 
 figure(11); clf; es_graphics(network,network_CoHid,'enzymes',struct('u',result.u .* result.KV),p);
 
@@ -68,7 +73,7 @@ figure(4); clf;
 es_graphics(network,network_CoHid,'response_coefficients',struct('R',rs_enz,'v',result.J),p);
 
 figure(5); clf; 
-es_graphics(network,network_CoHid,'response_coefficients_Sext',struct('R',rs_ext,'v',result.J),p);
+es_graphics(network,network_CoSplit,'response_coefficients_Sext',struct('R',rs_ext,'v',result.J),p);
 
 
 % -------------------------------------------------------------
@@ -77,12 +82,12 @@ es_graphics(network,network_CoHid,'response_coefficients_Sext',struct('R',rs_ext
 if es_options.print_graphics,
   cd(psfile_dir);
   display(sprintf('Saving graphics to directory %s',psfile_dir));
-%  print( [ es_filenames.psfile_base '_fluxdata.eps'],  '-f1', '-depsc');
+  print( [ es_filenames.psfile_base '_network.eps'],   '-f1', '-depsc');
   print( [ es_filenames.psfile_base '_fluxes.eps'],    '-f2', '-depsc');
   print( [ es_filenames.psfile_base '_chempot.eps'],   '-f3', '-depsc');
   print( [ es_filenames.psfile_base '_resp_enz.eps'],  '-f4', '-depsc');
   print( [ es_filenames.psfile_base '_resp_ext.eps'],  '-f5', '-depsc');
-  print( [ es_filenames.psfile_base '_affinities.eps'], '-f6', '-depsc');
+  print( [ es_filenames.psfile_base '_forces.eps'], '-f6', '-depsc');
   print( [ es_filenames.psfile_base '_saturation.eps'], '-f7', '-depsc');
   print( [ es_filenames.psfile_base '_elasticities.eps'],'-f8', '-depsc');
   print( [ es_filenames.psfile_base '_dissipation.eps'],'-f9', '-depsc');

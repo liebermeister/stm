@@ -1,5 +1,9 @@
-function interaction_statistics_graphics(network_CoHid, res, condition1, condition2, print_flag, filenames, result_file)
+function es_synergy_ensemble_comparison_graphics(network_CoHid, res, condition1, condition2, print_flag, filenames, result_file)
 
+% es_synergy_ensemble_comparison_graphics(network_CoHid, res, condition1, condition2, print_flag, filenames, result_file)
+%
+% Graphics: Compare synergy values between two model ensembles - show statistically significant differences
+  
 % --------------------------------------------------------------
 % graphics 
 

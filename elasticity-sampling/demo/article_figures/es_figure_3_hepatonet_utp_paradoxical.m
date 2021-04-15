@@ -6,8 +6,11 @@
 % Load model 
 % ----------------------------------------------------------------------------------
 
+% ist hier irgendwie noetig um fehler zu vermeiden:
+clearvars -global global_structure_matrices Mplus Mminus Wplus Wminus nm nr ind_M ind_Wp ind_Wm LP_info
+
 model_dir  = [es_BASEDIR '/../resources/models-article/Hepatonet_CCM_Fluxes'];
-model_name = 'Hepatonet_Anaerobic_UTP_Regeneration'; 
+model_name = 'Hepatonet_Anaerobic_UTP_Regeneration_model'; 
 ref_state  = 'Hepatonet_Anaerobic_UTP_Regeneration_reference_state'; 
 
 cd(model_dir); load(model_name); load(ref_state);

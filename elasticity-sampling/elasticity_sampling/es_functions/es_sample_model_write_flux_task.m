@@ -9,7 +9,7 @@ function r = es_sample_model_write_flux_task(network,es_constraints,es_options,f
 if 0,
   addpath ~/projekte/elasticity_sampling/matlab/models/ 
   model_name = 'eccm'; condition_name = 'ishii_growth_07';  
-  filenames       = elasticity_sampling_filenames(model_name,condition_name); 
+  filenames       = stm_model_filenames(model_name,condition_name); 
   cd([filenames.es_dir]); load(filenames.model_data_file);   
   filename = '~/projekte/elasticity_sampling/matlab/models_for_naama/eccm_for_naama';
   r = es_sample_model_write_flux_task(network,es_constraints,es_options);

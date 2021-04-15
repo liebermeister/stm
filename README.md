@@ -11,6 +11,8 @@ For demo scripts, see the subdirectory elasticity-sampling/demo. To see the comm
 
 The functions in this toolbox depend on the
 
+  * Matlab utility functions (https://github.com/liebermeister/matlab-utils)
+
   * Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox).
 
 Some functions depend on the following Matlab toolboxes:

@@ -7,7 +7,7 @@
 % load model and choose reference state
 
 model_dir  = [es_BASEDIR '/../resources/models-article/Example_Loop_Pathway'];
-model_name = 'Example_Loop_Pathway'; 
+model_name = 'Example_Loop_Pathway_model'; 
 ref_state  = 'Example_Loop_Pathway_reference_state'; 
 
 kinetic_law = 'cs';

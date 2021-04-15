@@ -14,19 +14,19 @@ eval(default('how','''intersection''')); %% alternative: 'union'
 if 0,
   model_name      = 'eccm'; 
   condition_name  = 'ishii_growth_07';
-  filenames       = elasticity_sampling_filenames(model_name,condition_name); 
+  filenames       = stm_model_filenames(model_name,condition_name); 
   cd([filenames.es_dir]); load(filenames.model_data_file);
   model2 = network;
   
   model_name      = 'bscm'; 
   condition_name  = 'glucose';
-  filenames       = elasticity_sampling_filenames(model_name,condition_name); 
+  filenames       = stm_model_filenames(model_name,condition_name); 
   cd([filenames.es_dir]); load(filenames.model_data_file);
   model1 = network;
   
   model_name      = 'ycm'; 
   condition_name  = 'diauxic_glucose';
-  filenames       = elasticity_sampling_filenames(model_name,condition_name); 
+  filenames       = stm_model_filenames(model_name,condition_name); 
   cd([filenames.es_dir]); load(filenames.model_data_file);
   model3 = network;
   

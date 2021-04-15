@@ -1,4 +1,4 @@
-function[n_cycles,frac_pos,mean_n_cycles,std_n_cycles,pvalue_n_cycles,pvalue_frac_cycles] = interaction_count_cycles(E,n_rand)
+function [n_cycles,frac_pos,mean_n_cycles,std_n_cycles,pvalue_n_cycles,pvalue_frac_cycles] = synergy_count_cycles(E,n_rand)
 
 % E: epistasis matrix;
 
@@ -30,8 +30,8 @@ frac_pos(n_cycles==0) = nan;
 if exist('n_rand','var'),
   
   for it = 1:n_rand,
-    E_rnd = randomize_interaction(E);
-    [n_cycles_rnd(it,:),frac_pos_rnd(it,:)] = interaction_count_cycles(E_rnd);
+    E_rnd = randomize_synergies(E);
+    [n_cycles_rnd(it,:),frac_pos_rnd(it,:)] = synergy_count_cycles(E_rnd);
   end
   mean_n_cycles      = nanmean(n_cycles_rnd);
   std_n_cycles       = nanstd(n_cycles_rnd);

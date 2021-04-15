@@ -3,7 +3,7 @@
 % Demo script for thermodynamically feasible elasticity sampling 
 %---------------------------------------------------------
 
-clear
+clear; clearvars -global
 
 % check correct installation of elasticity sampling code
 es_dependencies; 

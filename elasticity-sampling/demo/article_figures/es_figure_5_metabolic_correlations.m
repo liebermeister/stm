@@ -8,7 +8,7 @@
 % ------------------------------------------------------------
 
 model_dir  = [es_BASEDIR '/../resources/models-article/Hepatonet_CCM_Fluxes'];
-model_name = 'Hepatonet_Aerobic_ATP_Regeneration'; 
+model_name = 'Hepatonet_Aerobic_ATP_Regeneration_model'; 
 ref_state  = 'Hepatonet_Aerobic_ATP_Regeneration_reference_state'; 
 
 cd(model_dir); load(model_name); load(ref_state);

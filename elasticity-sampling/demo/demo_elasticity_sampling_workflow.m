@@ -10,7 +10,7 @@
 % STEP 0: Preparations
 %-------------------------------------------------------------------------------
 
-clear
+clear; clearvars -global
 
 % Check whether all necessary m-files have been installed:
 
@@ -296,7 +296,7 @@ es_reference_state_graphics(network, es_options, result, target_reaction, es_fil
 % Show graphics for interaction effects (second order control analysis)
 % Note that this is not possible after es_sample_model has been run with the option es_options.flag_second_order = 0; 
 
-interaction_analysis_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir);
+es_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir);
 
 
 %-------------------------------------------------------------------------------

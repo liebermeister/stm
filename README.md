@@ -1,5 +1,5 @@
-Structural thermokinetic modelling functions for Matlab
-=======================================================
+Structural thermokinetic modelling for Matlab
+=============================================
 
 [Structural thermokinetic modelling](https://www.metabolic-economics.de/stm/index.html) is a computational method to determine consistent states of kinetic metabolic models. It follows the paradigm of Structural Kinetic Modelling, but accounts for thermodynamic laws to yield a consistent description of reversible biochemical reaction kinetics.
 

@@ -5,7 +5,7 @@ Elasticity Sampling functions for Matlab
 
 This repository contains Matlab functions for Elasticity Sampling that extend the [Metabolic Network Toolbox](https://github.com/liebermeister/metabolic-network-toolbox).
 
-For demo scripts, see the subdirectory elasticity-sampling/demo. To see the commands used, please have a look at the scripts.
+For demo scripts, see the subdirectory matlab/demo. To see the commands used, please have a look at the scripts.
 
 ## Dependencies
 
@@ -25,9 +25,7 @@ Some functions depend on the following Matlab toolboxes:
 
   * efmtool                    (http://www.csb.ethz.ch/tools/efmtool)
 
-Please make sure that these matlab packages are installed in your system and that all these directories and subdirectories are included in your matlab path.
-
-If CPLEX for matlab is installed in your system, this will speed up some calculations,
+Please make sure that these matlab packages are installed in your system and that all these directories and subdirectories are included in your matlab path. If CPLEX for matlab is installed in your system, this will speed up some calculations.
 
 For getting started, please see the instructions at
 

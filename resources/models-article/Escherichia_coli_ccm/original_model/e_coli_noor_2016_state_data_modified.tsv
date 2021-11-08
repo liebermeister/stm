@@ -1,0 +1,76 @@
+!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='Concentration' TableType='Quantity' Unit='mM' SBtabVersion='1.0'
+% like file e_coli_noor_2016_data_modified.tsv, but without the Parameter table
+!QuantityType	!Reaction	!Compound	!Value	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound
+concentration		_S__Malate	1.6853424			C00149
+concentration		Acetyl_CoA	0.606			C00024
+concentration		Fumarate	0.54824225			C00122
+concentration		cis_Aconitate	0.0161			C00417
+concentration		_6_Phospho_D_gluconate	0.27853881			C00345
+concentration		Orthophosphate	NaN			C00009
+concentration		Pyruvate	1.4051541			C00022
+concentration		NADPplus	0.011288198			C00006
+concentration		NADPH	0.11389157			C00005
+concentration		NADH	0.02741513			C00004
+concentration		NADplus	2.1128133			C00003
+concentration		ATP	3.4491395			C00002
+concentration		H2O	NaN			C00001
+concentration		_2_Oxoglutarate	0.6369486			C00026
+concentration		Oxaloacetate	NaN			C00036
+concentration		Ubiquinone	NaN			C00399
+concentration		D_Erythrose_4_phosphate	0.026636791			C00279
+concentration		Ubiquinol	NaN			C00390
+concentration		ADP	0.60461237			C00008
+concentration		Isocitrate	0.008160872			C00311
+concentration		D_Ribulose_5_phosphate	0.65875602			C00199
+concentration		D_Xylulose_5_phosphate	0.59461428			C00231
+concentration		D_Glucose_6_phosphate	0.94916067			C00092
+concentration		_3_Phospho_D_glyceroyl_phosphate	0.050794221			C00236
+concentration		CoA	1.37			C00010
+concentration		CO2	NaN			C00011
+concentration		D_Ribose_5_phosphate	0.23022876			C00117
+concentration		Glycerone_phosphate	1.3202889			C00111
+concentration		D_Glucose	17.363			C00031
+concentration		D_Fructose_1_6_bisphosphate	1.1609581			C00354
+concentration		D_Glyceraldehyde_3_phosphate	NaN			C00118
+concentration		Phosphoenolpyruvate	0.35315771			C00074
+concentration		Citrate	0.7028625			C00158
+concentration		Succinyl_CoA	0.233			C00091
+concentration		_3_Phospho_D_glycerate	0.79582005			C00197
+concentration		D_Glucono_1_5_lactone_6_phosphate	NaN			C01236
+concentration		D_Fructose_6_phosphate	0.33596722			C00085
+concentration		_2_Phospho_D_glycerate	NaN			C00631
+concentration		Succinate	1.1853254			C00042
+concentration		Sedoheptulose_7_phosphate	NaN			C05382
+						
+!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='EnzymeConcentration' TableType='Quantity' Unit='mM' SBtabVersion='1.0'						
+!QuantityType	!Reaction	!Compound	!Value	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound
+concentration of enzyme	PTS_RPTSsy		0.022041994		RPTSsy	
+concentration of enzyme	PGI_R02740		0.0076401396		R02740	
+concentration of enzyme	PFK_R04779		0.0039637064		R04779	
+concentration of enzyme	ALD_R01070		0.036878909		R01070	
+concentration of enzyme	TIM_R01015		0.012351088		R01015	
+concentration of enzyme	GAP_R01061		0.078183154		R01061	
+concentration of enzyme	PGK_R01512		0.066486318		R01512	
+concentration of enzyme	PGM_R01518		0.025035945		R01518	
+concentration of enzyme	PGH_R00658		0.060028482		R00658	
+concentration of enzyme	PYK_R00200		0.017940462		R00200	
+concentration of enzyme	PDH_R00209		0.0096560338		R00209	
+concentration of enzyme	ZWF_R00835		0.002049105		R00835	
+concentration of enzyme	GLH_R02035		0.0029922911		R02035	
+concentration of enzyme	PGD_R01528		0.023413599		R01528	
+concentration of enzyme	RPI_R01056		0.0045797663		R01056	
+concentration of enzyme	RPE_R01529		0.00087012239		R01529	
+concentration of enzyme	TXT_R01641		0.007699919		R01641	
+concentration of enzyme	TAL_R08575		0.020051007		R08575	
+concentration of enzyme	TXT_R01067		0.007699919		R01067	
+concentration of enzyme	FBP_R00762		NaN		R00762	
+concentration of enzyme	CSN_R00351		0.016059072		R00351	
+concentration of enzyme	ACN_R01325		0.0136		R01325	
+concentration of enzyme	ACN_R01900		0.013601474		R01900	
+concentration of enzyme	ICD_R00709		0.055910345		R00709	
+concentration of enzyme	KGD_R08549		0.0028328794		R08549	
+concentration of enzyme	SCS_R00405		0.010316928		R00405	
+concentration of enzyme	SDH_R02164		0.0014280635		R02164	
+concentration of enzyme	FUM_R01082		0.0030969051		R01082	
+concentration of enzyme	MDH_R00342		0.088237717		R00342	
+concentration of enzyme	PPC_R00345		0.0060327379		R00345	

@@ -1,9 +1,9 @@
-Elasticity Sampling functions for Matlab
-========================================
+Structural thermokinetic modelling functions for Matlab
+=======================================================
 
-[Elasticity sampling](https://www.metabolic-economics.de/elasticity-sampling/index.html) is a computational method to determine consistent states of kinetic metabolic models. It follows the paradigm of Structural Kinetic Modelling, but accounts for thermodynamic laws to yield a consistent description of reversible biochemical reaction kinetics.
+[Structural thermokinetic modelling](https://www.metabolic-economics.de/stm/index.html) is a computational method to determine consistent states of kinetic metabolic models. It follows the paradigm of Structural Kinetic Modelling, but accounts for thermodynamic laws to yield a consistent description of reversible biochemical reaction kinetics.
 
-This repository contains Matlab functions for Elasticity Sampling that extend the [Metabolic Network Toolbox](https://github.com/liebermeister/metabolic-network-toolbox).
+This repository contains Matlab functions for Structural thermokinetic modelling that extend the [Metabolic Network Toolbox](https://github.com/liebermeister/metabolic-network-toolbox).
 
 For demo scripts, see the subdirectory matlab/demo. To see the commands used, please have a look at the scripts.
 

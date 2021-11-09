@@ -29,7 +29,7 @@ Please make sure that these matlab packages are installed in your system and tha
 
 For getting started, please see the instructions at
 
-http://www.metabolic-economics.de/elasticity-sampling/workflow-matlab.html
+http://www.metabolic-economics.de/stm/workflow-matlab.html
 
 ## License
 This package is released under the [GNU General Public License](LICENSE).

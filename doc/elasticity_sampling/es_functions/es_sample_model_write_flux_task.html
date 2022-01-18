@@ -50,11 +50,11 @@ This function is called by:
 0005 <span class="comment">% analogous to es_sample_model; write task file for naama to compute feasible flux distribution</span>
 0006 
 0007 <span class="keyword">if</span> 0,
-0008   addpath ~/projekte/elasticity_sampling/matlab_elasticity_sampling/models/ 
+0008   addpath ~/projekte/stm/matlab_elasticity_sampling/models/ 
 0009   model_name = <span class="string">'eccm'</span>; condition_name = <span class="string">'ishii_growth_07'</span>;  
 0010   filenames       = elasticity_sampling_filenames(model_name,condition_name); 
 0011   cd([filenames.es_dir]); load(filenames.model_data_file);   
-0012   filename = <span class="string">'~/projekte/elasticity_sampling/matlab_elasticity_sampling/models_for_naama/eccm_for_naama'</span>;
+0012   filename = <span class="string">'~/projekte/stm/matlab_elasticity_sampling/models_for_naama/eccm_for_naama'</span>;
 0013   r = es_sample_model_naama_write(network,es_constraints,es_options);
 0014 <span class="keyword">end</span>
 0015 

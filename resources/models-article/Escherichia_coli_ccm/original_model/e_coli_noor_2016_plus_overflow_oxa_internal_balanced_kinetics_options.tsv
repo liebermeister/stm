@@ -1,7 +1,7 @@
 !!SBtab TableName='Options for parameter balancing' TableID='OptionsPB' TableType='Config' Method='parameter-balancing'	
 !Option	!Value
 verbose	0
-parameter_prior_file	/home/wolfram/projekte/elasticity_sampling/roberto/gitlab/stm-models-and-code/matlab/wolf/resources/cmb_prior.tsv
+parameter_prior_file	/home/wolfram/projekte/stm/roberto/gitlab/stm-models-and-code/matlab/wolf/resources/cmb_prior.tsv
 kinetics	cs
 parametrisation	all
 reaction_units	concentration per time

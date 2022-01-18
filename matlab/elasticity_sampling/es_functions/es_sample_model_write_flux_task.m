@@ -7,11 +7,11 @@ function r = es_sample_model_write_flux_task(network,es_constraints,es_options,f
 % analogous to es_sample_model; write task file for naama to compute feasible flux distribution
 
 if 0,
-  addpath ~/projekte/elasticity_sampling/matlab/models/ 
+  addpath ~/projekte/stm/matlab/models/ 
   model_name = 'eccm'; condition_name = 'ishii_growth_07';  
   filenames       = stm_model_filenames(model_name,condition_name); 
   cd([filenames.es_dir]); load(filenames.model_data_file);   
-  filename = '~/projekte/elasticity_sampling/matlab/models_for_naama/eccm_for_naama';
+  filename = '~/projekte/stm/matlab/models_for_naama/eccm_for_naama';
   r = es_sample_model_write_flux_task(network,es_constraints,es_options);
 end
 

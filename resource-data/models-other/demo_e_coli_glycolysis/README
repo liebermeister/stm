@@ -1,0 +1,10 @@
+Escherichia coli glycolysis model for demo script 'demo_e_coli_glycolysis'
+
+Model files
+-----------
+
+1. e_coli_glycolysis_network.xml        SBML file
+2. e_coli_glycolysis_Positions.csv      Element positions for graphics (SBtab format)
+3. e_coli_glycolysis_Compound.csv       Information about compounds (SBtab format)  
+4. e_coli_glycolysis_Reaction.csv       Information about reactions (SBtab format)
+5. e_coli_glycolysis_QuantityData.csv   Information about model parameters (SBtab format)

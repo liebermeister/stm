@@ -1,0 +1,3547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version2" level="2" version="2">
+  <model id="Hepatocyte_glycolysis_glycogenic" name="Hepatocyte_glycolysis_glycogenic">
+    <listOfCompartments>
+      <compartment id="compartment" name="compartment" spatialDimensions="3" constant="false"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="atp" name="atp" compartment="compartment" initialConcentration="2.8" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="adp" name="adp" compartment="compartment" initialConcentration="0.8" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="amp" name="amp" compartment="compartment" initialConcentration="0.16" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="utp" name="utp" compartment="compartment" initialConcentration="0.526434386622013" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="udp" name="udp" compartment="compartment" initialConcentration="0.150916256880274" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="gtp" name="gtp" compartment="compartment" initialConcentration="0.29" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="gdp" name="gdp" compartment="compartment" initialConcentration="0.1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="nad" name="nad" compartment="compartment" initialConcentration="1.22" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="nadh" name="nadh" compartment="compartment" initialConcentration="0.00056" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="p" name="p" compartment="compartment" initialConcentration="5" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="pp" name="pp" compartment="compartment" initialConcentration="0.00186743186795584" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="h2o" name="h2o" compartment="compartment" initialConcentration="1" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="co2" name="co2" compartment="compartment" initialConcentration="5" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="h" name="h" compartment="compartment" initialConcentration="1" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="glc1p" name="glc1p" compartment="compartment" initialConcentration="0.0056682505177836" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="udpglc" name="udpglc" compartment="compartment" initialConcentration="0.0626493564977093" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="glyglc" name="glyglc" compartment="compartment" initialConcentration="250" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="glc" name="glc" compartment="compartment" initialConcentration="7.96321923987829" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="glc6p" name="glc6p" compartment="compartment" initialConcentration="0.0939890317877208" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="fru6p" name="fru6p" compartment="compartment" initialConcentration="0.0484882719264078" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="fru16bp" name="fru16bp" compartment="compartment" initialConcentration="1.40847014274444" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="fru26bp" name="fru26bp" compartment="compartment" initialConcentration="0.00181768562959034" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="grap" name="grap" compartment="compartment" initialConcentration="0.00272694771072156" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="dhap" name="dhap" compartment="compartment" initialConcentration="0.0503985643858203" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="bpg13" name="bpg13" compartment="compartment" initialConcentration="2.44390244862929" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="pg3" name="pg3" compartment="compartment" initialConcentration="4.851450832695" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="pg2" name="pg2" compartment="compartment" initialConcentration="0.877194497697402" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="pep" name="pep" compartment="compartment" initialConcentration="0.0464897755718335" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="pyr" name="pyr" compartment="compartment" initialConcentration="0.0171437727292678" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="oaa" name="oaa" compartment="compartment" initialConcentration="0.01" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="lac" name="lac" compartment="compartment" initialConcentration="1.80825203928684e-06" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species name="glc_{ext}" compartment="compartment" initialConcentration="8" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="lac_{ext}" compartment="compartment" initialConcentration="1.2" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="co2_{mito}" compartment="compartment" initialConcentration="5" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="p_{mito}" compartment="compartment" initialConcentration="5" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="oaa_{mito}" compartment="compartment" initialConcentration="0.000246212724877462" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species name="pep_{mito}" compartment="compartment" initialConcentration="0.0530582305927903" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species name="acoa_{mito}" compartment="compartment" initialConcentration="0.04" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="pyr_{mito}" compartment="compartment" initialConcentration="0.00336473313057948" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species name="cit_{mito}" compartment="compartment" initialConcentration="0.32" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="atp_{mito}" compartment="compartment" initialConcentration="2.8" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="adp_{mito}" compartment="compartment" initialConcentration="0.8" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="gtp_{mito}" compartment="compartment" initialConcentration="0.301182907374216" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species name="gdp_{mito}" compartment="compartment" initialConcentration="0.0888170926257842" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species name="coa_{mito}" compartment="compartment" initialConcentration="0.055" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="nadh_{mito}" compartment="compartment" initialConcentration="0.24" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="nad_{mito}" compartment="compartment" initialConcentration="0.98" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="h_{mito}" compartment="compartment" initialConcentration="1" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species name="h2o_{mito}" compartment="compartment" initialConcentration="1" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="GLUT2" name="GLUT2" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="glc" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R1" name="u_R1" value="1" constant="true"/>
+            <parameter id="kC_R1" name="kC_R1" value="4.15431761965596" constant="true"/>
+            <parameter id="kEQ_R1" name="kEQ_R1" value="1.03612191898881" constant="true"/>
+            <parameter id="kM_R1_glc" name="kM_R1_glc" value="7.96321923987829" constant="true"/>
+            <parameter name="kM_R1_glc_{ext}" value="8" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="Glucokinase" name="Glucokinase" reversible="true">
+        <listOfReactants>
+          <speciesReference species="atp" stoichiometry="1"/>
+          <speciesReference species="glc" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="adp" stoichiometry="1"/>
+          <speciesReference species="glc6p" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R2 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R2 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R2 </ci>
+                            <ci> kM_R2_atp </ci>
+                            <ci> kM_R2_glc </ci>
+                          </apply>
+                          <ci> kM_R2_adp </ci>
+                        </apply>
+                        <ci> kM_R2_glc6p </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> atp </ci>
+                      <ci> kM_R2_atp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glc </ci>
+                      <ci> kM_R2_glc </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R2 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R2 </ci>
+                              <ci> kM_R2_atp </ci>
+                              <ci> kM_R2_glc </ci>
+                            </apply>
+                            <ci> kM_R2_adp </ci>
+                          </apply>
+                          <ci> kM_R2_glc6p </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> adp </ci>
+                      <ci> kM_R2_adp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glc6p </ci>
+                      <ci> kM_R2_glc6p </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> atp </ci>
+                    <ci> kM_R2_atp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glc </ci>
+                    <ci> kM_R2_glc </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> adp </ci>
+                    <ci> kM_R2_adp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glc6p </ci>
+                    <ci> kM_R2_glc6p </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R2" name="u_R2" value="1" constant="true"/>
+            <parameter id="kC_R2" name="kC_R2" value="16.2136049504956" constant="true"/>
+            <parameter id="kEQ_R2" name="kEQ_R2" value="0.00372778535671985" constant="true"/>
+            <parameter id="kM_R2_atp" name="kM_R2_atp" value="2.8" constant="true"/>
+            <parameter id="kM_R2_adp" name="kM_R2_adp" value="0.8" constant="true"/>
+            <parameter id="kM_R2_glc" name="kM_R2_glc" value="7.96321923987829" constant="true"/>
+            <parameter id="kM_R2_glc6p" name="kM_R2_glc6p" value="0.0939890317877208" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="G6Pase" name="G6Pase" reversible="true">
+        <listOfReactants>
+          <speciesReference species="h2o" stoichiometry="1"/>
+          <speciesReference species="glc6p" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="p" stoichiometry="1"/>
+          <speciesReference species="glc" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R3 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R3 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R3 </ci>
+                            <ci> kM_R3_h2o </ci>
+                            <ci> kM_R3_glc6p </ci>
+                          </apply>
+                          <ci> kM_R3_p </ci>
+                        </apply>
+                        <ci> kM_R3_glc </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> h2o </ci>
+                      <ci> kM_R3_h2o </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glc6p </ci>
+                      <ci> kM_R3_glc6p </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R3 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R3 </ci>
+                              <ci> kM_R3_h2o </ci>
+                              <ci> kM_R3_glc6p </ci>
+                            </apply>
+                            <ci> kM_R3_p </ci>
+                          </apply>
+                          <ci> kM_R3_glc </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> p </ci>
+                      <ci> kM_R3_p </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glc </ci>
+                      <ci> kM_R3_glc </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> h2o </ci>
+                    <ci> kM_R3_h2o </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glc6p </ci>
+                    <ci> kM_R3_glc6p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> p </ci>
+                    <ci> kM_R3_p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glc </ci>
+                    <ci> kM_R3_glc </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R3" name="u_R3" value="1" constant="true"/>
+            <parameter id="kC_R3" name="kC_R3" value="12.3376049025144" constant="true"/>
+            <parameter id="kEQ_R3" name="kEQ_R3" value="468.2868262683" constant="true"/>
+            <parameter id="kM_R3_p" name="kM_R3_p" value="5" constant="true"/>
+            <parameter id="kM_R3_h2o" name="kM_R3_h2o" value="1" constant="true"/>
+            <parameter id="kM_R3_glc" name="kM_R3_glc" value="7.96321923987829" constant="true"/>
+            <parameter id="kM_R3_glc6p" name="kM_R3_glc6p" value="0.0939890317877208" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="GPI" name="GPI" reversible="true">
+        <listOfReactants>
+          <speciesReference species="glc6p" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="fru6p" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R4 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R4 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <times/>
+                          <ci> kEQ_R4 </ci>
+                          <ci> kM_R4_glc6p </ci>
+                        </apply>
+                        <ci> kM_R4_fru6p </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glc6p </ci>
+                      <ci> kM_R4_glc6p </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R4 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R4 </ci>
+                            <ci> kM_R4_glc6p </ci>
+                          </apply>
+                          <ci> kM_R4_fru6p </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru6p </ci>
+                      <ci> kM_R4_fru6p </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glc6p </ci>
+                    <ci> kM_R4_glc6p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru6p </ci>
+                    <ci> kM_R4_fru6p </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R4" name="u_R4" value="1" constant="true"/>
+            <parameter id="kC_R4" name="kC_R4" value="3.47233053988344" constant="true"/>
+            <parameter id="kEQ_R4" name="kEQ_R4" value="0.536996810588277" constant="true"/>
+            <parameter id="kM_R4_glc6p" name="kM_R4_glc6p" value="0.0939890317877208" constant="true"/>
+            <parameter id="kM_R4_fru6p" name="kM_R4_fru6p" value="0.0484882719264078" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="G16PI" name="G16PI" reversible="true">
+        <listOfReactants>
+          <speciesReference species="glc1p" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="glc6p" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R5 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R5 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <times/>
+                          <ci> kEQ_R5 </ci>
+                          <ci> kM_R5_glc1p </ci>
+                        </apply>
+                        <ci> kM_R5_glc6p </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glc1p </ci>
+                      <ci> kM_R5_glc1p </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R5 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R5 </ci>
+                            <ci> kM_R5_glc1p </ci>
+                          </apply>
+                          <ci> kM_R5_glc6p </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glc6p </ci>
+                      <ci> kM_R5_glc6p </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glc1p </ci>
+                    <ci> kM_R5_glc1p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glc6p </ci>
+                    <ci> kM_R5_glc6p </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R5" name="u_R5" value="1" constant="true"/>
+            <parameter id="kC_R5" name="kC_R5" value="5.38004938243225e-11" constant="true"/>
+            <parameter id="kEQ_R5" name="kEQ_R5" value="6.41878374832047e-17" constant="true"/>
+            <parameter id="kM_R5_glc1p" name="kM_R5_glc1p" value="0.0056682505177836" constant="true"/>
+            <parameter id="kM_R5_glc6p" name="kM_R5_glc6p" value="0.0939890317877208" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="UPGase" name="UPGase" reversible="true">
+        <listOfReactants>
+          <speciesReference species="utp" stoichiometry="1"/>
+          <speciesReference species="glc1p" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="pp" stoichiometry="1"/>
+          <speciesReference species="udpglc" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R6 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R6 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R6 </ci>
+                            <ci> kM_R6_utp </ci>
+                            <ci> kM_R6_glc1p </ci>
+                          </apply>
+                          <ci> kM_R6_pp </ci>
+                        </apply>
+                        <ci> kM_R6_udpglc </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> utp </ci>
+                      <ci> kM_R6_utp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glc1p </ci>
+                      <ci> kM_R6_glc1p </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R6 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R6 </ci>
+                              <ci> kM_R6_utp </ci>
+                              <ci> kM_R6_glc1p </ci>
+                            </apply>
+                            <ci> kM_R6_pp </ci>
+                          </apply>
+                          <ci> kM_R6_udpglc </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pp </ci>
+                      <ci> kM_R6_pp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> udpglc </ci>
+                      <ci> kM_R6_udpglc </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> utp </ci>
+                    <ci> kM_R6_utp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glc1p </ci>
+                    <ci> kM_R6_glc1p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pp </ci>
+                    <ci> kM_R6_pp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> udpglc </ci>
+                    <ci> kM_R6_udpglc </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R6" name="u_R6" value="1" constant="true"/>
+            <parameter id="kC_R6" name="kC_R6" value="1.89893727679551" constant="true"/>
+            <parameter id="kEQ_R6" name="kEQ_R6" value="0.0408112850703673" constant="true"/>
+            <parameter id="kM_R6_utp" name="kM_R6_utp" value="0.526434386622013" constant="true"/>
+            <parameter id="kM_R6_pp" name="kM_R6_pp" value="0.00186743186795584" constant="true"/>
+            <parameter id="kM_R6_glc1p" name="kM_R6_glc1p" value="0.0056682505177836" constant="true"/>
+            <parameter id="kM_R6_udpglc" name="kM_R6_udpglc" value="0.0626493564977093" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PPase" name="PPase" reversible="true">
+        <listOfReactants>
+          <speciesReference species="pp" stoichiometry="1"/>
+          <speciesReference species="h2o" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="p" stoichiometry="2"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R7 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R7 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <times/>
+                          <ci> kEQ_R7 </ci>
+                          <ci> kM_R7_pp </ci>
+                          <ci> kM_R7_h2o </ci>
+                        </apply>
+                        <apply>
+                          <power/>
+                          <ci> kM_R7_p </ci>
+                          <cn type="integer"> 2 </cn>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pp </ci>
+                      <ci> kM_R7_pp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> h2o </ci>
+                      <ci> kM_R7_h2o </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R7 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R7 </ci>
+                            <ci> kM_R7_pp </ci>
+                            <ci> kM_R7_h2o </ci>
+                          </apply>
+                          <apply>
+                            <power/>
+                            <ci> kM_R7_p </ci>
+                            <cn type="integer"> 2 </cn>
+                          </apply>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <power/>
+                      <apply>
+                        <divide/>
+                        <ci> p </ci>
+                        <ci> kM_R7_p </ci>
+                      </apply>
+                      <cn type="integer"> 2 </cn>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pp </ci>
+                    <ci> kM_R7_pp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> h2o </ci>
+                    <ci> kM_R7_h2o </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <power/>
+                  <apply>
+                    <plus/>
+                    <cn type="integer"> 1 </cn>
+                    <apply>
+                      <divide/>
+                      <ci> p </ci>
+                      <ci> kM_R7_p </ci>
+                    </apply>
+                  </apply>
+                  <cn type="integer"> 2 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R7" name="u_R7" value="1" constant="true"/>
+            <parameter id="kC_R7" name="kC_R7" value="1.8989372767953" constant="true"/>
+            <parameter id="kEQ_R7" name="kEQ_R7" value="13935.0142956606" constant="true"/>
+            <parameter id="kM_R7_p" name="kM_R7_p" value="5" constant="true"/>
+            <parameter id="kM_R7_pp" name="kM_R7_pp" value="0.00186743186795584" constant="true"/>
+            <parameter id="kM_R7_h2o" name="kM_R7_h2o" value="1" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="GS" name="GS" reversible="true">
+        <listOfReactants>
+          <speciesReference species="udpglc" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="udp" stoichiometry="1"/>
+          <speciesReference species="glyglc" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R8 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R8 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R8 </ci>
+                            <ci> kM_R8_udpglc </ci>
+                          </apply>
+                          <ci> kM_R8_udp </ci>
+                        </apply>
+                        <ci> kM_R8_glyglc </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> udpglc </ci>
+                      <ci> kM_R8_udpglc </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R8 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R8 </ci>
+                              <ci> kM_R8_udpglc </ci>
+                            </apply>
+                            <ci> kM_R8_udp </ci>
+                          </apply>
+                          <ci> kM_R8_glyglc </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> udp </ci>
+                      <ci> kM_R8_udp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glyglc </ci>
+                      <ci> kM_R8_glyglc </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> udpglc </ci>
+                    <ci> kM_R8_udpglc </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> udp </ci>
+                    <ci> kM_R8_udp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glyglc </ci>
+                    <ci> kM_R8_glyglc </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R8" name="u_R8" value="1" constant="true"/>
+            <parameter id="kC_R8" name="kC_R8" value="1.35638376913946" constant="true"/>
+            <parameter id="kEQ_R8" name="kEQ_R8" value="626.861496193454" constant="true"/>
+            <parameter id="kM_R8_udp" name="kM_R8_udp" value="0.150916256880274" constant="true"/>
+            <parameter id="kM_R8_udpglc" name="kM_R8_udpglc" value="0.0626493564977093" constant="true"/>
+            <parameter id="kM_R8_glyglc" name="kM_R8_glyglc" value="250" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="GP" name="GP" reversible="true">
+        <listOfReactants>
+          <speciesReference species="p" stoichiometry="1"/>
+          <speciesReference species="glyglc" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="glc1p" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R9 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R9 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <times/>
+                          <ci> kEQ_R9 </ci>
+                          <ci> kM_R9_p </ci>
+                          <ci> kM_R9_glyglc </ci>
+                        </apply>
+                        <ci> kM_R9_glc1p </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> p </ci>
+                      <ci> kM_R9_p </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glyglc </ci>
+                      <ci> kM_R9_glyglc </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R9 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R9 </ci>
+                            <ci> kM_R9_p </ci>
+                            <ci> kM_R9_glyglc </ci>
+                          </apply>
+                          <ci> kM_R9_glc1p </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> glc1p </ci>
+                      <ci> kM_R9_glc1p </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> p </ci>
+                    <ci> kM_R9_p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glyglc </ci>
+                    <ci> kM_R9_glyglc </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> glc1p </ci>
+                    <ci> kM_R9_glc1p </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R9" name="u_R9" value="1" constant="true"/>
+            <parameter id="kC_R9" name="kC_R9" value="0.219738649998428" constant="true"/>
+            <parameter id="kEQ_R9" name="kEQ_R9" value="4.72009999352668e-06" constant="true"/>
+            <parameter id="kM_R9_p" name="kM_R9_p" value="5" constant="true"/>
+            <parameter id="kM_R9_glc1p" name="kM_R9_glc1p" value="0.0056682505177836" constant="true"/>
+            <parameter id="kM_R9_glyglc" name="kM_R9_glyglc" value="250" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="NTK__GTP_" name="NTK__GTP_" reversible="true">
+        <listOfReactants>
+          <speciesReference species="atp" stoichiometry="1"/>
+          <speciesReference species="gdp" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="adp" stoichiometry="1"/>
+          <speciesReference species="gtp" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R10 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R10 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R10 </ci>
+                            <ci> kM_R10_atp </ci>
+                            <ci> kM_R10_gdp </ci>
+                          </apply>
+                          <ci> kM_R10_adp </ci>
+                        </apply>
+                        <ci> kM_R10_gtp </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> atp </ci>
+                      <ci> kM_R10_atp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> gdp </ci>
+                      <ci> kM_R10_gdp </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R10 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R10 </ci>
+                              <ci> kM_R10_atp </ci>
+                              <ci> kM_R10_gdp </ci>
+                            </apply>
+                            <ci> kM_R10_adp </ci>
+                          </apply>
+                          <ci> kM_R10_gtp </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> adp </ci>
+                      <ci> kM_R10_adp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> gtp </ci>
+                      <ci> kM_R10_gtp </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> atp </ci>
+                    <ci> kM_R10_atp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> gdp </ci>
+                    <ci> kM_R10_gdp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> adp </ci>
+                    <ci> kM_R10_adp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> gtp </ci>
+                    <ci> kM_R10_gtp </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R10" name="u_R10" value="1" constant="true"/>
+            <parameter id="kC_R10" name="kC_R10" value="-0" constant="true"/>
+            <parameter id="kEQ_R10" name="kEQ_R10" value="3.20741058062339e-18" constant="true"/>
+            <parameter id="kM_R10_atp" name="kM_R10_atp" value="2.8" constant="true"/>
+            <parameter id="kM_R10_adp" name="kM_R10_adp" value="0.8" constant="true"/>
+            <parameter id="kM_R10_gtp" name="kM_R10_gtp" value="0.29" constant="true"/>
+            <parameter id="kM_R10_gdp" name="kM_R10_gdp" value="0.1" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="NTK__UTP_" name="NTK__UTP_" reversible="true">
+        <listOfReactants>
+          <speciesReference species="atp" stoichiometry="1"/>
+          <speciesReference species="udp" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="adp" stoichiometry="1"/>
+          <speciesReference species="utp" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R11 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R11 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R11 </ci>
+                            <ci> kM_R11_atp </ci>
+                            <ci> kM_R11_udp </ci>
+                          </apply>
+                          <ci> kM_R11_adp </ci>
+                        </apply>
+                        <ci> kM_R11_utp </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> atp </ci>
+                      <ci> kM_R11_atp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> udp </ci>
+                      <ci> kM_R11_udp </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R11 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R11 </ci>
+                              <ci> kM_R11_atp </ci>
+                              <ci> kM_R11_udp </ci>
+                            </apply>
+                            <ci> kM_R11_adp </ci>
+                          </apply>
+                          <ci> kM_R11_utp </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> adp </ci>
+                      <ci> kM_R11_adp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> utp </ci>
+                      <ci> kM_R11_utp </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> atp </ci>
+                    <ci> kM_R11_atp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> udp </ci>
+                    <ci> kM_R11_udp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> adp </ci>
+                    <ci> kM_R11_adp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> utp </ci>
+                    <ci> kM_R11_utp </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R11" name="u_R11" value="1" constant="true"/>
+            <parameter id="kC_R11" name="kC_R11" value="1.89893727679521" constant="true"/>
+            <parameter id="kEQ_R11" name="kEQ_R11" value="1.03741460055831" constant="true"/>
+            <parameter id="kM_R11_atp" name="kM_R11_atp" value="2.8" constant="true"/>
+            <parameter id="kM_R11_adp" name="kM_R11_adp" value="0.8" constant="true"/>
+            <parameter id="kM_R11_utp" name="kM_R11_utp" value="0.526434386622013" constant="true"/>
+            <parameter id="kM_R11_udp" name="kM_R11_udp" value="0.150916256880274" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="AK" name="AK" reversible="true">
+        <listOfReactants>
+          <speciesReference species="atp" stoichiometry="1"/>
+          <speciesReference species="amp" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="adp" stoichiometry="2"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R12 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R12 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <times/>
+                          <ci> kEQ_R12 </ci>
+                          <ci> kM_R12_atp </ci>
+                          <ci> kM_R12_amp </ci>
+                        </apply>
+                        <apply>
+                          <power/>
+                          <ci> kM_R12_adp </ci>
+                          <cn type="integer"> 2 </cn>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> atp </ci>
+                      <ci> kM_R12_atp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> amp </ci>
+                      <ci> kM_R12_amp </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R12 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R12 </ci>
+                            <ci> kM_R12_atp </ci>
+                            <ci> kM_R12_amp </ci>
+                          </apply>
+                          <apply>
+                            <power/>
+                            <ci> kM_R12_adp </ci>
+                            <cn type="integer"> 2 </cn>
+                          </apply>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <power/>
+                      <apply>
+                        <divide/>
+                        <ci> adp </ci>
+                        <ci> kM_R12_adp </ci>
+                      </apply>
+                      <cn type="integer"> 2 </cn>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> atp </ci>
+                    <ci> kM_R12_atp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> amp </ci>
+                    <ci> kM_R12_amp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <power/>
+                  <apply>
+                    <plus/>
+                    <cn type="integer"> 1 </cn>
+                    <apply>
+                      <divide/>
+                      <ci> adp </ci>
+                      <ci> kM_R12_adp </ci>
+                    </apply>
+                  </apply>
+                  <cn type="integer"> 2 </cn>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R12" name="u_R12" value="1" constant="true"/>
+            <parameter id="kC_R12" name="kC_R12" value="0" constant="true"/>
+            <parameter id="kEQ_R12" name="kEQ_R12" value="5.53001824245412e-18" constant="true"/>
+            <parameter id="kM_R12_atp" name="kM_R12_atp" value="2.8" constant="true"/>
+            <parameter id="kM_R12_adp" name="kM_R12_adp" value="0.8" constant="true"/>
+            <parameter id="kM_R12_amp" name="kM_R12_amp" value="0.16" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PFK2" name="PFK2" reversible="true">
+        <listOfReactants>
+          <speciesReference species="atp" stoichiometry="1"/>
+          <speciesReference species="fru6p" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="adp" stoichiometry="1"/>
+          <speciesReference species="fru26bp" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R13 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R13 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R13 </ci>
+                            <ci> kM_R13_atp </ci>
+                            <ci> kM_R13_fru6p </ci>
+                          </apply>
+                          <ci> kM_R13_adp </ci>
+                        </apply>
+                        <ci> kM_R13_fru26bp </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> atp </ci>
+                      <ci> kM_R13_atp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru6p </ci>
+                      <ci> kM_R13_fru6p </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R13 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R13 </ci>
+                              <ci> kM_R13_atp </ci>
+                              <ci> kM_R13_fru6p </ci>
+                            </apply>
+                            <ci> kM_R13_adp </ci>
+                          </apply>
+                          <ci> kM_R13_fru26bp </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> adp </ci>
+                      <ci> kM_R13_adp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru26bp </ci>
+                      <ci> kM_R13_fru26bp </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> atp </ci>
+                    <ci> kM_R13_atp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru6p </ci>
+                    <ci> kM_R13_fru6p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> adp </ci>
+                    <ci> kM_R13_adp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru26bp </ci>
+                    <ci> kM_R13_fru26bp </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R13" name="u_R13" value="1" constant="true"/>
+            <parameter id="kC_R13" name="kC_R13" value="0.0427146973143637" constant="true"/>
+            <parameter id="kEQ_R13" name="kEQ_R13" value="0.0118398026122311" constant="true"/>
+            <parameter id="kM_R13_atp" name="kM_R13_atp" value="2.8" constant="true"/>
+            <parameter id="kM_R13_adp" name="kM_R13_adp" value="0.8" constant="true"/>
+            <parameter id="kM_R13_fru6p" name="kM_R13_fru6p" value="0.0484882719264078" constant="true"/>
+            <parameter id="kM_R13_fru26bp" name="kM_R13_fru26bp" value="0.00181768562959034" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="FBP2" name="FBP2" reversible="true">
+        <listOfReactants>
+          <speciesReference species="h2o" stoichiometry="1"/>
+          <speciesReference species="fru26bp" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="p" stoichiometry="1"/>
+          <speciesReference species="fru6p" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R14 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R14 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R14 </ci>
+                            <ci> kM_R14_h2o </ci>
+                            <ci> kM_R14_fru26bp </ci>
+                          </apply>
+                          <ci> kM_R14_p </ci>
+                        </apply>
+                        <ci> kM_R14_fru6p </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> h2o </ci>
+                      <ci> kM_R14_h2o </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru26bp </ci>
+                      <ci> kM_R14_fru26bp </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R14 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R14 </ci>
+                              <ci> kM_R14_h2o </ci>
+                              <ci> kM_R14_fru26bp </ci>
+                            </apply>
+                            <ci> kM_R14_p </ci>
+                          </apply>
+                          <ci> kM_R14_fru6p </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> p </ci>
+                      <ci> kM_R14_p </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru6p </ci>
+                      <ci> kM_R14_fru6p </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> h2o </ci>
+                    <ci> kM_R14_h2o </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru26bp </ci>
+                    <ci> kM_R14_fru26bp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> p </ci>
+                    <ci> kM_R14_p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru6p </ci>
+                    <ci> kM_R14_fru6p </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R14" name="u_R14" value="1" constant="true"/>
+            <parameter id="kC_R14" name="kC_R14" value="0.0427146973143638" constant="true"/>
+            <parameter id="kEQ_R14" name="kEQ_R14" value="147.441036885701" constant="true"/>
+            <parameter id="kM_R14_p" name="kM_R14_p" value="5" constant="true"/>
+            <parameter id="kM_R14_h2o" name="kM_R14_h2o" value="1" constant="true"/>
+            <parameter id="kM_R14_fru6p" name="kM_R14_fru6p" value="0.0484882719264078" constant="true"/>
+            <parameter id="kM_R14_fru26bp" name="kM_R14_fru26bp" value="0.00181768562959034" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PFK1" name="PFK1" reversible="true">
+        <listOfReactants>
+          <speciesReference species="atp" stoichiometry="1"/>
+          <speciesReference species="fru6p" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="adp" stoichiometry="1"/>
+          <speciesReference species="fru16bp" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R15 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R15 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R15 </ci>
+                            <ci> kM_R15_atp </ci>
+                            <ci> kM_R15_fru6p </ci>
+                          </apply>
+                          <ci> kM_R15_adp </ci>
+                        </apply>
+                        <ci> kM_R15_fru16bp </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> atp </ci>
+                      <ci> kM_R15_atp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru6p </ci>
+                      <ci> kM_R15_fru6p </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R15 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R15 </ci>
+                              <ci> kM_R15_atp </ci>
+                              <ci> kM_R15_fru6p </ci>
+                            </apply>
+                            <ci> kM_R15_adp </ci>
+                          </apply>
+                          <ci> kM_R15_fru16bp </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> adp </ci>
+                      <ci> kM_R15_adp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru16bp </ci>
+                      <ci> kM_R15_fru16bp </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> atp </ci>
+                    <ci> kM_R15_atp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru6p </ci>
+                    <ci> kM_R15_fru6p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> adp </ci>
+                    <ci> kM_R15_adp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru16bp </ci>
+                    <ci> kM_R15_fru16bp </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R15" name="u_R15" value="1" constant="true"/>
+            <parameter id="kC_R15" name="kC_R15" value="25.5476491087819" constant="true"/>
+            <parameter id="kEQ_R15" name="kEQ_R15" value="9.17430836429889" constant="true"/>
+            <parameter id="kM_R15_atp" name="kM_R15_atp" value="2.8" constant="true"/>
+            <parameter id="kM_R15_adp" name="kM_R15_adp" value="0.8" constant="true"/>
+            <parameter id="kM_R15_fru6p" name="kM_R15_fru6p" value="0.0484882719264078" constant="true"/>
+            <parameter id="kM_R15_fru16bp" name="kM_R15_fru16bp" value="1.40847014274444" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="FBP1" name="FBP1" reversible="true">
+        <listOfReactants>
+          <speciesReference species="h2o" stoichiometry="1"/>
+          <speciesReference species="fru16bp" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="p" stoichiometry="1"/>
+          <speciesReference species="fru6p" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R16 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R16 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R16 </ci>
+                            <ci> kM_R16_h2o </ci>
+                            <ci> kM_R16_fru16bp </ci>
+                          </apply>
+                          <ci> kM_R16_p </ci>
+                        </apply>
+                        <ci> kM_R16_fru6p </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> h2o </ci>
+                      <ci> kM_R16_h2o </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru16bp </ci>
+                      <ci> kM_R16_fru16bp </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R16 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R16 </ci>
+                              <ci> kM_R16_h2o </ci>
+                              <ci> kM_R16_fru16bp </ci>
+                            </apply>
+                            <ci> kM_R16_p </ci>
+                          </apply>
+                          <ci> kM_R16_fru6p </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> p </ci>
+                      <ci> kM_R16_p </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru6p </ci>
+                      <ci> kM_R16_fru6p </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> h2o </ci>
+                    <ci> kM_R16_h2o </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru16bp </ci>
+                    <ci> kM_R16_fru16bp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> p </ci>
+                    <ci> kM_R16_p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru6p </ci>
+                    <ci> kM_R16_fru6p </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R16" name="u_R16" value="1" constant="true"/>
+            <parameter id="kC_R16" name="kC_R16" value="22.3079465702001" constant="true"/>
+            <parameter id="kEQ_R16" name="kEQ_R16" value="0.190278406211187" constant="true"/>
+            <parameter id="kM_R16_p" name="kM_R16_p" value="5" constant="true"/>
+            <parameter id="kM_R16_h2o" name="kM_R16_h2o" value="1" constant="true"/>
+            <parameter id="kM_R16_fru6p" name="kM_R16_fru6p" value="0.0484882719264078" constant="true"/>
+            <parameter id="kM_R16_fru16bp" name="kM_R16_fru16bp" value="1.40847014274444" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="ALD" name="ALD" reversible="true">
+        <listOfReactants>
+          <speciesReference species="fru16bp" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="grap" stoichiometry="1"/>
+          <speciesReference species="dhap" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R17 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R17 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R17 </ci>
+                            <ci> kM_R17_fru16bp </ci>
+                          </apply>
+                          <ci> kM_R17_grap </ci>
+                        </apply>
+                        <ci> kM_R17_dhap </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> fru16bp </ci>
+                      <ci> kM_R17_fru16bp </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R17 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R17 </ci>
+                              <ci> kM_R17_fru16bp </ci>
+                            </apply>
+                            <ci> kM_R17_grap </ci>
+                          </apply>
+                          <ci> kM_R17_dhap </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> grap </ci>
+                      <ci> kM_R17_grap </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> dhap </ci>
+                      <ci> kM_R17_dhap </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> fru16bp </ci>
+                    <ci> kM_R17_fru16bp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> grap </ci>
+                    <ci> kM_R17_grap </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> dhap </ci>
+                    <ci> kM_R17_dhap </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R17" name="u_R17" value="1" constant="true"/>
+            <parameter id="kC_R17" name="kC_R17" value="5.78721756647162" constant="true"/>
+            <parameter id="kEQ_R17" name="kEQ_R17" value="0.000101568609408066" constant="true"/>
+            <parameter id="kM_R17_fru16bp" name="kM_R17_fru16bp" value="1.40847014274444" constant="true"/>
+            <parameter id="kM_R17_grap" name="kM_R17_grap" value="0.00272694771072156" constant="true"/>
+            <parameter id="kM_R17_dhap" name="kM_R17_dhap" value="0.0503985643858203" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="TPI" name="TPI" reversible="true">
+        <listOfReactants>
+          <speciesReference species="dhap" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="grap" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R18 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R18 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <times/>
+                          <ci> kEQ_R18 </ci>
+                          <ci> kM_R18_dhap </ci>
+                        </apply>
+                        <ci> kM_R18_grap </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> dhap </ci>
+                      <ci> kM_R18_dhap </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R18 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R18 </ci>
+                            <ci> kM_R18_dhap </ci>
+                          </apply>
+                          <ci> kM_R18_grap </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> grap </ci>
+                      <ci> kM_R18_grap </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> dhap </ci>
+                    <ci> kM_R18_dhap </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> grap </ci>
+                    <ci> kM_R18_grap </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R18" name="u_R18" value="1" constant="true"/>
+            <parameter id="kC_R18" name="kC_R18" value="3.47233053988356" constant="true"/>
+            <parameter id="kEQ_R18" name="kEQ_R18" value="0.0563210600476927" constant="true"/>
+            <parameter id="kM_R18_grap" name="kM_R18_grap" value="0.00272694771072156" constant="true"/>
+            <parameter id="kM_R18_dhap" name="kM_R18_dhap" value="0.0503985643858203" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="GAPDH" name="GAPDH" reversible="true">
+        <listOfReactants>
+          <speciesReference species="nad" stoichiometry="1"/>
+          <speciesReference species="p" stoichiometry="1"/>
+          <speciesReference species="grap" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="nadh" stoichiometry="1"/>
+          <speciesReference species="h" stoichiometry="1"/>
+          <speciesReference species="bpg13" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R19 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R19 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R19 </ci>
+                              <ci> kM_R19_nad </ci>
+                              <ci> kM_R19_p </ci>
+                              <ci> kM_R19_grap </ci>
+                            </apply>
+                            <ci> kM_R19_nadh </ci>
+                          </apply>
+                          <ci> kM_R19_h </ci>
+                        </apply>
+                        <ci> kM_R19_bpg13 </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> nad </ci>
+                      <ci> kM_R19_nad </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> p </ci>
+                      <ci> kM_R19_p </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> grap </ci>
+                      <ci> kM_R19_grap </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R19 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <divide/>
+                              <apply>
+                                <times/>
+                                <ci> kEQ_R19 </ci>
+                                <ci> kM_R19_nad </ci>
+                                <ci> kM_R19_p </ci>
+                                <ci> kM_R19_grap </ci>
+                              </apply>
+                              <ci> kM_R19_nadh </ci>
+                            </apply>
+                            <ci> kM_R19_h </ci>
+                          </apply>
+                          <ci> kM_R19_bpg13 </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> nadh </ci>
+                      <ci> kM_R19_nadh </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> h </ci>
+                      <ci> kM_R19_h </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> bpg13 </ci>
+                      <ci> kM_R19_bpg13 </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> nad </ci>
+                    <ci> kM_R19_nad </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> p </ci>
+                    <ci> kM_R19_p </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> grap </ci>
+                    <ci> kM_R19_grap </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> nadh </ci>
+                    <ci> kM_R19_nadh </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> h </ci>
+                    <ci> kM_R19_h </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> bpg13 </ci>
+                    <ci> kM_R19_bpg13 </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R19" name="u_R19" value="1" constant="true"/>
+            <parameter id="kC_R19" name="kC_R19" value="34.7233053988521" constant="true"/>
+            <parameter id="kEQ_R19" name="kEQ_R19" value="0.0856401508528501" constant="true"/>
+            <parameter id="kM_R19_nad" name="kM_R19_nad" value="1.22" constant="true"/>
+            <parameter id="kM_R19_nadh" name="kM_R19_nadh" value="0.00056" constant="true"/>
+            <parameter id="kM_R19_p" name="kM_R19_p" value="5" constant="true"/>
+            <parameter id="kM_R19_h" name="kM_R19_h" value="1" constant="true"/>
+            <parameter id="kM_R19_grap" name="kM_R19_grap" value="0.00272694771072156" constant="true"/>
+            <parameter id="kM_R19_bpg13" name="kM_R19_bpg13" value="2.44390244862929" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PGK" name="PGK" reversible="true">
+        <listOfReactants>
+          <speciesReference species="adp" stoichiometry="1"/>
+          <speciesReference species="bpg13" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="atp" stoichiometry="1"/>
+          <speciesReference species="pg3" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R20 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R20 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R20 </ci>
+                            <ci> kM_R20_adp </ci>
+                            <ci> kM_R20_bpg13 </ci>
+                          </apply>
+                          <ci> kM_R20_atp </ci>
+                        </apply>
+                        <ci> kM_R20_pg3 </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> adp </ci>
+                      <ci> kM_R20_adp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> bpg13 </ci>
+                      <ci> kM_R20_bpg13 </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R20 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R20 </ci>
+                              <ci> kM_R20_adp </ci>
+                              <ci> kM_R20_bpg13 </ci>
+                            </apply>
+                            <ci> kM_R20_atp </ci>
+                          </apply>
+                          <ci> kM_R20_pg3 </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> atp </ci>
+                      <ci> kM_R20_atp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pg3 </ci>
+                      <ci> kM_R20_pg3 </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> adp </ci>
+                    <ci> kM_R20_adp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> bpg13 </ci>
+                    <ci> kM_R20_bpg13 </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> atp </ci>
+                    <ci> kM_R20_atp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pg3 </ci>
+                    <ci> kM_R20_pg3 </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R20" name="u_R20" value="1" constant="true"/>
+            <parameter id="kC_R20" name="kC_R20" value="16.2042091861206" constant="true"/>
+            <parameter id="kEQ_R20" name="kEQ_R20" value="7.23215936829999" constant="true"/>
+            <parameter id="kM_R20_atp" name="kM_R20_atp" value="2.8" constant="true"/>
+            <parameter id="kM_R20_adp" name="kM_R20_adp" value="0.8" constant="true"/>
+            <parameter id="kM_R20_bpg13" name="kM_R20_bpg13" value="2.44390244862929" constant="true"/>
+            <parameter id="kM_R20_pg3" name="kM_R20_pg3" value="4.851450832695" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PGM" name="PGM" reversible="true">
+        <listOfReactants>
+          <speciesReference species="pg3" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="pg2" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R21 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R21 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <times/>
+                          <ci> kEQ_R21 </ci>
+                          <ci> kM_R21_pg3 </ci>
+                        </apply>
+                        <ci> kM_R21_pg2 </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pg3 </ci>
+                      <ci> kM_R21_pg3 </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R21 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R21 </ci>
+                            <ci> kM_R21_pg3 </ci>
+                          </apply>
+                          <ci> kM_R21_pg2 </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pg2 </ci>
+                      <ci> kM_R21_pg2 </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pg3 </ci>
+                    <ci> kM_R21_pg3 </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pg2 </ci>
+                    <ci> kM_R21_pg2 </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R21" name="u_R21" value="1" constant="true"/>
+            <parameter id="kC_R21" name="kC_R21" value="6.9446610797667" constant="true"/>
+            <parameter id="kEQ_R21" name="kEQ_R21" value="0.188207289431499" constant="true"/>
+            <parameter id="kM_R21_pg3" name="kM_R21_pg3" value="4.851450832695" constant="true"/>
+            <parameter id="kM_R21_pg2" name="kM_R21_pg2" value="0.877194497697402" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="EN" name="EN" reversible="true">
+        <listOfReactants>
+          <speciesReference species="pg2" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="h2o" stoichiometry="1"/>
+          <speciesReference species="pep" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R22 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R22 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R22 </ci>
+                            <ci> kM_R22_pg2 </ci>
+                          </apply>
+                          <ci> kM_R22_h2o </ci>
+                        </apply>
+                        <ci> kM_R22_pep </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pg2 </ci>
+                      <ci> kM_R22_pg2 </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R22 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R22 </ci>
+                              <ci> kM_R22_pg2 </ci>
+                            </apply>
+                            <ci> kM_R22_h2o </ci>
+                          </apply>
+                          <ci> kM_R22_pep </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> h2o </ci>
+                      <ci> kM_R22_h2o </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pep </ci>
+                      <ci> kM_R22_pep </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pg2 </ci>
+                    <ci> kM_R22_pg2 </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> h2o </ci>
+                    <ci> kM_R22_h2o </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pep </ci>
+                    <ci> kM_R22_pep </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R22" name="u_R22" value="1" constant="true"/>
+            <parameter id="kC_R22" name="kC_R22" value="11.5744351329446" constant="true"/>
+            <parameter id="kEQ_R22" name="kEQ_R22" value="0.0551662834208061" constant="true"/>
+            <parameter id="kM_R22_h2o" name="kM_R22_h2o" value="1" constant="true"/>
+            <parameter id="kM_R22_pg2" name="kM_R22_pg2" value="0.877194497697402" constant="true"/>
+            <parameter id="kM_R22_pep" name="kM_R22_pep" value="0.0464897755718335" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PK" name="PK" reversible="true">
+        <listOfReactants>
+          <speciesReference species="adp" stoichiometry="1"/>
+          <speciesReference species="pep" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="atp" stoichiometry="1"/>
+          <speciesReference species="pyr" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R23 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R23 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R23 </ci>
+                            <ci> kM_R23_adp </ci>
+                            <ci> kM_R23_pep </ci>
+                          </apply>
+                          <ci> kM_R23_atp </ci>
+                        </apply>
+                        <ci> kM_R23_pyr </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> adp </ci>
+                      <ci> kM_R23_adp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pep </ci>
+                      <ci> kM_R23_pep </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R23 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R23 </ci>
+                              <ci> kM_R23_adp </ci>
+                              <ci> kM_R23_pep </ci>
+                            </apply>
+                            <ci> kM_R23_atp </ci>
+                          </apply>
+                          <ci> kM_R23_pyr </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> atp </ci>
+                      <ci> kM_R23_atp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pyr </ci>
+                      <ci> kM_R23_pyr </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> adp </ci>
+                    <ci> kM_R23_adp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pep </ci>
+                    <ci> kM_R23_pep </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> atp </ci>
+                    <ci> kM_R23_atp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pyr </ci>
+                    <ci> kM_R23_pyr </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R23" name="u_R23" value="1" constant="true"/>
+            <parameter id="kC_R23" name="kC_R23" value="56.4308812525109" constant="true"/>
+            <parameter id="kEQ_R23" name="kEQ_R23" value="1.34347370592813" constant="true"/>
+            <parameter id="kM_R23_atp" name="kM_R23_atp" value="2.8" constant="true"/>
+            <parameter id="kM_R23_adp" name="kM_R23_adp" value="0.8" constant="true"/>
+            <parameter id="kM_R23_pep" name="kM_R23_pep" value="0.0464897755718335" constant="true"/>
+            <parameter id="kM_R23_pyr" name="kM_R23_pyr" value="0.0171437727292678" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PEPCK" name="PEPCK" reversible="true">
+        <listOfReactants>
+          <speciesReference species="gtp" stoichiometry="1"/>
+          <speciesReference species="oaa" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="gdp" stoichiometry="1"/>
+          <speciesReference species="co2" stoichiometry="1"/>
+          <speciesReference species="pep" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R24 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R24 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R24 </ci>
+                              <ci> kM_R24_gtp </ci>
+                              <ci> kM_R24_oaa </ci>
+                            </apply>
+                            <ci> kM_R24_gdp </ci>
+                          </apply>
+                          <ci> kM_R24_co2 </ci>
+                        </apply>
+                        <ci> kM_R24_pep </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> gtp </ci>
+                      <ci> kM_R24_gtp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> oaa </ci>
+                      <ci> kM_R24_oaa </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R24 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <divide/>
+                              <apply>
+                                <times/>
+                                <ci> kEQ_R24 </ci>
+                                <ci> kM_R24_gtp </ci>
+                                <ci> kM_R24_oaa </ci>
+                              </apply>
+                              <ci> kM_R24_gdp </ci>
+                            </apply>
+                            <ci> kM_R24_co2 </ci>
+                          </apply>
+                          <ci> kM_R24_pep </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> gdp </ci>
+                      <ci> kM_R24_gdp </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> co2 </ci>
+                      <ci> kM_R24_co2 </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pep </ci>
+                      <ci> kM_R24_pep </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> gtp </ci>
+                    <ci> kM_R24_gtp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> oaa </ci>
+                    <ci> kM_R24_oaa </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> gdp </ci>
+                    <ci> kM_R24_gdp </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> co2 </ci>
+                    <ci> kM_R24_co2 </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pep </ci>
+                    <ci> kM_R24_pep </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R24" name="u_R24" value="1" constant="true"/>
+            <parameter id="kC_R24" name="kC_R24" value="-0" constant="true"/>
+            <parameter id="kEQ_R24" name="kEQ_R24" value="3.10280198103252e-17" constant="true"/>
+            <parameter id="kM_R24_gtp" name="kM_R24_gtp" value="0.29" constant="true"/>
+            <parameter id="kM_R24_gdp" name="kM_R24_gdp" value="0.1" constant="true"/>
+            <parameter id="kM_R24_co2" name="kM_R24_co2" value="5" constant="true"/>
+            <parameter id="kM_R24_pep" name="kM_R24_pep" value="0.0464897755718335" constant="true"/>
+            <parameter id="kM_R24_oaa" name="kM_R24_oaa" value="0.01" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction name="PEPCK_{mito}" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R25" name="u_R25" value="1" constant="true"/>
+            <parameter id="kC_R25" name="kC_R25" value="23624.5498308242" constant="true"/>
+            <parameter id="kEQ_R25" name="kEQ_R25" value="2426561387.47878" constant="true"/>
+            <parameter name="kM_R25_co2_{mito}" value="5" constant="true"/>
+            <parameter name="kM_R25_oaa_{mito}" value="0.000246212724877462" constant="true"/>
+            <parameter name="kM_R25_pep_{mito}" value="0.0530582305927903" constant="true"/>
+            <parameter name="kM_R25_gtp_{mito}" value="0.301182907374216" constant="true"/>
+            <parameter name="kM_R25_gdp_{mito}" value="0.0888170926257842" constant="true"/>
+            <parameter name="kM_R25_nadh_{mito}" value="0.24" constant="true"/>
+            <parameter name="kM_R25_nad_{mito}" value="0.98" constant="true"/>
+            <parameter name="kM_R25_h_{mito}" value="1" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PC" name="PC" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R26" name="u_R26" value="1" constant="true"/>
+            <parameter id="kC_R26" name="kC_R26" value="869.243501818041" constant="true"/>
+            <parameter id="kEQ_R26" name="kEQ_R26" value="4.15787381028443e-09" constant="true"/>
+            <parameter name="kM_R26_co2_{mito}" value="5" constant="true"/>
+            <parameter name="kM_R26_p_{mito}" value="5" constant="true"/>
+            <parameter name="kM_R26_oaa_{mito}" value="0.000246212724877462" constant="true"/>
+            <parameter name="kM_R26_pyr_{mito}" value="0.00336473313057948" constant="true"/>
+            <parameter name="kM_R26_atp_{mito}" value="2.8" constant="true"/>
+            <parameter name="kM_R26_adp_{mito}" value="0.8" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="LDH" name="LDH" reversible="true">
+        <listOfReactants>
+          <speciesReference species="nadh" stoichiometry="1"/>
+          <speciesReference species="h" stoichiometry="1"/>
+          <speciesReference species="pyr" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="nad" stoichiometry="1"/>
+          <speciesReference species="lac" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+              <divide/>
+              <apply>
+                <times/>
+                <ci> u_R27 </ci>
+                <apply>
+                  <minus/>
+                  <apply>
+                    <times/>
+                    <ci> kC_R27 </ci>
+                    <apply>
+                      <root/>
+                      <degree>
+                        <cn type="integer"> 2 </cn>
+                      </degree>
+                      <apply>
+                        <divide/>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <times/>
+                            <ci> kEQ_R27 </ci>
+                            <ci> kM_R27_nadh </ci>
+                            <ci> kM_R27_h </ci>
+                            <ci> kM_R27_pyr </ci>
+                          </apply>
+                          <ci> kM_R27_nad </ci>
+                        </apply>
+                        <ci> kM_R27_lac </ci>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> nadh </ci>
+                      <ci> kM_R27_nadh </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> h </ci>
+                      <ci> kM_R27_h </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> pyr </ci>
+                      <ci> kM_R27_pyr </ci>
+                    </apply>
+                  </apply>
+                  <apply>
+                    <times/>
+                    <apply>
+                      <divide/>
+                      <ci> kC_R27 </ci>
+                      <apply>
+                        <root/>
+                        <degree>
+                          <cn type="integer"> 2 </cn>
+                        </degree>
+                        <apply>
+                          <divide/>
+                          <apply>
+                            <divide/>
+                            <apply>
+                              <times/>
+                              <ci> kEQ_R27 </ci>
+                              <ci> kM_R27_nadh </ci>
+                              <ci> kM_R27_h </ci>
+                              <ci> kM_R27_pyr </ci>
+                            </apply>
+                            <ci> kM_R27_nad </ci>
+                          </apply>
+                          <ci> kM_R27_lac </ci>
+                        </apply>
+                      </apply>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> nad </ci>
+                      <ci> kM_R27_nad </ci>
+                    </apply>
+                    <apply>
+                      <divide/>
+                      <ci> lac </ci>
+                      <ci> kM_R27_lac </ci>
+                    </apply>
+                  </apply>
+                </apply>
+              </apply>
+              <apply>
+                <times/>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> nadh </ci>
+                    <ci> kM_R27_nadh </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> h </ci>
+                    <ci> kM_R27_h </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> pyr </ci>
+                    <ci> kM_R27_pyr </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> nad </ci>
+                    <ci> kM_R27_nad </ci>
+                  </apply>
+                </apply>
+                <apply>
+                  <plus/>
+                  <cn type="integer"> 1 </cn>
+                  <apply>
+                    <divide/>
+                    <ci> lac </ci>
+                    <ci> kM_R27_lac </ci>
+                  </apply>
+                </apply>
+              </apply>
+            </apply>
+          </math>
+          <listOfParameters>
+            <parameter id="u_R27" name="u_R27" value="1" constant="true"/>
+            <parameter id="kC_R27" name="kC_R27" value="1.46572654874633e-08" constant="true"/>
+            <parameter id="kEQ_R27" name="kEQ_R27" value="8.89506183334293e-19" constant="true"/>
+            <parameter id="kM_R27_nad" name="kM_R27_nad" value="1.22" constant="true"/>
+            <parameter id="kM_R27_nadh" name="kM_R27_nadh" value="0.00056" constant="true"/>
+            <parameter id="kM_R27_h" name="kM_R27_h" value="1" constant="true"/>
+            <parameter id="kM_R27_pyr" name="kM_R27_pyr" value="0.0171437727292678" constant="true"/>
+            <parameter id="kM_R27_lac" name="kM_R27_lac" value="1.80825203928684e-06" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="LacT" name="LacT" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="lac" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R28" name="u_R28" value="1" constant="true"/>
+            <parameter id="kC_R28" name="kC_R28" value="50.6723923679667" constant="true"/>
+            <parameter id="kEQ_R28" name="kEQ_R28" value="1.56851939441679e-06" constant="true"/>
+            <parameter id="kM_R28_lac" name="kM_R28_lac" value="1.80825203928684e-06" constant="true"/>
+            <parameter name="kM_R28_lac_{ext}" value="1.2" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PyrT" name="PyrT" reversible="true">
+        <listOfReactants>
+          <speciesReference species="pyr" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference stoichiometry="5"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R29" name="u_R29" value="1" constant="true"/>
+            <parameter id="kC_R29" name="kC_R29" value="2.80160156001488" constant="true"/>
+            <parameter id="kEQ_R29" name="kEQ_R29" value="1.04090759053836e-10" constant="true"/>
+            <parameter id="kM_R29_pyr" name="kM_R29_pyr" value="0.0171437727292678" constant="true"/>
+            <parameter name="kM_R29_pyr_{mito}" value="0.00336473313057948" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PepT" name="PepT" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="5"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="pep" stoichiometry="1"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R30" name="u_R30" value="1" constant="true"/>
+            <parameter id="kC_R30" name="kC_R30" value="24.8227754592356" constant="true"/>
+            <parameter id="kEQ_R30" name="kEQ_R30" value="115081.578676269" constant="true"/>
+            <parameter id="kM_R30_pep" name="kM_R30_pep" value="0.0464897755718335" constant="true"/>
+            <parameter name="kM_R30_pep_{mito}" value="0.0530582305927903" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="PDH" name="PDH" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R31" name="u_R31" value="1" constant="true"/>
+            <parameter id="kC_R31" name="kC_R31" value="5776.42485260313" constant="true"/>
+            <parameter id="kEQ_R31" name="kEQ_R31" value="1351827927570.66" constant="true"/>
+            <parameter name="kM_R31_co2_{mito}" value="5" constant="true"/>
+            <parameter name="kM_R31_acoa_{mito}" value="0.04" constant="true"/>
+            <parameter name="kM_R31_pyr_{mito}" value="0.00336473313057948" constant="true"/>
+            <parameter name="kM_R31_coa_{mito}" value="0.055" constant="true"/>
+            <parameter name="kM_R31_nadh_{mito}" value="0.24" constant="true"/>
+            <parameter name="kM_R31_nad_{mito}" value="0.98" constant="true"/>
+            <parameter name="kM_R31_h_{mito}" value="1" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction id="CS" name="CS" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R32" name="u_R32" value="1" constant="true"/>
+            <parameter id="kC_R32" name="kC_R32" value="86.7237969668787" constant="true"/>
+            <parameter id="kEQ_R32" name="kEQ_R32" value="1.89724355006292e+16" constant="true"/>
+            <parameter name="kM_R32_oaa_{mito}" value="0.000246212724877462" constant="true"/>
+            <parameter name="kM_R32_acoa_{mito}" value="0.04" constant="true"/>
+            <parameter name="kM_R32_cit_{mito}" value="0.32" constant="true"/>
+            <parameter name="kM_R32_coa_{mito}" value="0.055" constant="true"/>
+            <parameter name="kM_R32_h2o_{mito}" value="1" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction name="NDK_{mito}" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference stoichiometry="5"/>
+          <speciesReference stoichiometry="5"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R33" name="u_R33" value="1" constant="true"/>
+            <parameter id="kC_R33" name="kC_R33" value="178.146690579628" constant="true"/>
+            <parameter id="kEQ_R33" name="kEQ_R33" value="0.888670567638567" constant="true"/>
+            <parameter name="kM_R33_atp_{mito}" value="2.8" constant="true"/>
+            <parameter name="kM_R33_adp_{mito}" value="0.8" constant="true"/>
+            <parameter name="kM_R33_gtp_{mito}" value="0.301182907374216" constant="true"/>
+            <parameter name="kM_R33_gdp_{mito}" value="0.0888170926257842" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction name="oaa_{flx}" reversible="true">
+        <listOfProducts>
+          <speciesReference stoichiometry="5"/>
+        </listOfProducts>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R34" name="u_R34" value="1" constant="true"/>
+            <parameter id="kC_R34" name="kC_R34" value="-0" constant="true"/>
+            <parameter id="kEQ_R34" name="kEQ_R34" value="3.87101276971788e-28" constant="true"/>
+            <parameter name="kM_R34_oaa_{mito}" value="0.000246212724877462" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction name="acoa_{flx}" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="5"/>
+        </listOfReactants>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R35" name="u_R35" value="1" constant="true"/>
+            <parameter id="kC_R35" name="kC_R35" value="-0" constant="true"/>
+            <parameter id="kEQ_R35" name="kEQ_R35" value="3.78028590792762e-11" constant="true"/>
+            <parameter name="kM_R35_acoa_{mito}" value="0.04" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+      <reaction name="vcit_{flx}" reversible="true">
+        <listOfReactants>
+          <speciesReference stoichiometry="5"/>
+        </listOfReactants>
+        <kineticLaw>
+          <listOfParameters>
+            <parameter id="u_R36" name="u_R36" value="1" constant="true"/>
+            <parameter id="kC_R36" name="kC_R36" value="-0" constant="true"/>
+            <parameter id="kEQ_R36" name="kEQ_R36" value="1.15365170530018e-15" constant="true"/>
+            <parameter name="kM_R36_cit_{mito}" value="0.32" constant="true"/>
+          </listOfParameters>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

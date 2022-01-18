@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version2" level="2" version="2">
+  <model id="Hepatonet_Aerobic_ATP_Regeneration" name="Hepatonet_Aerobic_ATP_Regeneration">
+    <listOfCompartments>
+      <compartment id="compartment" name="compartment" spatialDimensions="3" constant="false"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="H2O__c_" name="H2O__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="H2O__m_" name="H2O__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="H2O__s_" name="H2O__s_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="ATP__c_" name="ATP__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="ATP__m_" name="ATP__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="NADplus__c_" name="NADplus__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="NADplus__m_" name="NADplus__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="NADH__c_" name="NADH__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="NADH__m_" name="NADH__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="O2__c_" name="O2__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="O2__m_" name="O2__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="O2__s_" name="O2__s_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="ADP__c_" name="ADP__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="ADP__m_" name="ADP__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Pi__c_" name="Pi__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="Pi__m_" name="Pi__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="CoA__m_" name="CoA__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="CO2__c_" name="CO2__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="CO2__m_" name="CO2__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="CO2__s_" name="CO2__s_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="Pyruvate__c_" name="Pyruvate__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Pyruvate__m_" name="Pyruvate__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Acetyl_CoA__m_" name="Acetyl_CoA__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="AKG__m_" name="AKG__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Glucose__c_" name="Glucose__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Glucose__s_" name="Glucose__s_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="true" constant="false"/>
+      <species id="GDP__c_" name="GDP__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="GDP__m_" name="GDP__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="OAA__m_" name="OAA__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Succinate__m_" name="Succinate__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="GTP__c_" name="GTP__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="GTP__m_" name="GTP__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="PEP__c_" name="PEP__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Hplus_PG___c_" name="Hplus_PG___c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Hplus_PG___m_" name="Hplus_PG___m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Fructose_6P__c_" name="Fructose_6P__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Succinyl_CoA__m_" name="Succinyl_CoA__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Glucose_6P__c_" name="Glucose_6P__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="DHAP__c_" name="DHAP__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="GAP__c_" name="GAP__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Fumarate__m_" name="Fumarate__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Ferricytochrome_C__m_" name="Ferricytochrome_C__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Ferrocytochrome_C__m_" name="Ferrocytochrome_C__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Malate__m_" name="Malate__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Citrate__m_" name="Citrate__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="L_Lactate__c_" name="L_Lactate__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="L_Lactate__m_" name="L_Lactate__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="_3PG__c_" name="_3PG__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="_1_3DPG__c_" name="_1_3DPG__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Isocitrate__m_" name="Isocitrate__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Fructose_1_6PP__c_" name="Fructose_1_6PP__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Ubiquinol__m_" name="Ubiquinol__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Ubiquinone__m_" name="Ubiquinone__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="_2PG__c_" name="_2PG__c_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Oxalosuccinate__m_" name="Oxalosuccinate__m_" compartment="compartment" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="r0017" name="r0017" reversible="true">
+        <listOfReactants>
+          <speciesReference species="O2__m_" stoichiometry="1"/>
+          <speciesReference species="Hplus_PG___m_" stoichiometry="4"/>
+          <speciesReference species="Ferrocytochrome_C__m_" stoichiometry="4"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="H2O__m_" stoichiometry="2"/>
+          <speciesReference species="Hplus_PG___c_" stoichiometry="4"/>
+          <speciesReference species="Ferricytochrome_C__m_" stoichiometry="4"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0019" name="r0019" reversible="true">
+        <listOfReactants>
+          <speciesReference species="H2O__m_" stoichiometry="1"/>
+          <speciesReference species="ATP__m_" stoichiometry="1"/>
+          <speciesReference species="Hplus_PG___m_" stoichiometry="3"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ADP__m_" stoichiometry="1"/>
+          <speciesReference species="Pi__m_" stoichiometry="1"/>
+          <speciesReference species="Hplus_PG___c_" stoichiometry="3"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0054" name="r0054" reversible="true">
+        <listOfReactants>
+          <speciesReference species="ATP__c_" stoichiometry="1"/>
+          <speciesReference species="Pyruvate__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ADP__c_" stoichiometry="1"/>
+          <speciesReference species="PEP__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0056" name="r0056" reversible="true">
+        <listOfReactants>
+          <speciesReference species="NADplus__m_" stoichiometry="1"/>
+          <speciesReference species="CoA__m_" stoichiometry="1"/>
+          <speciesReference species="Pyruvate__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NADH__m_" stoichiometry="1"/>
+          <speciesReference species="CO2__m_" stoichiometry="1"/>
+          <speciesReference species="Acetyl_CoA__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0083" name="r0083" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Oxalosuccinate__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="CO2__m_" stoichiometry="1"/>
+          <speciesReference species="AKG__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0099" name="r0099" reversible="true">
+        <listOfReactants>
+          <speciesReference species="ATP__c_" stoichiometry="1"/>
+          <speciesReference species="GDP__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ADP__c_" stoichiometry="1"/>
+          <speciesReference species="GTP__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0105" name="r0105" reversible="true">
+        <listOfReactants>
+          <speciesReference species="NADplus__m_" stoichiometry="1"/>
+          <speciesReference species="Malate__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NADH__m_" stoichiometry="1"/>
+          <speciesReference species="OAA__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0107" name="r0107" reversible="true">
+        <listOfReactants>
+          <speciesReference species="CoA__m_" stoichiometry="1"/>
+          <speciesReference species="Citrate__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="H2O__m_" stoichiometry="1"/>
+          <speciesReference species="Acetyl_CoA__m_" stoichiometry="1"/>
+          <speciesReference species="OAA__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0125" name="r0125" reversible="true">
+        <listOfReactants>
+          <speciesReference species="CoA__m_" stoichiometry="1"/>
+          <speciesReference species="Succinate__m_" stoichiometry="1"/>
+          <speciesReference species="GTP__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Pi__m_" stoichiometry="1"/>
+          <speciesReference species="GDP__m_" stoichiometry="1"/>
+          <speciesReference species="Succinyl_CoA__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0164" name="r0164" reversible="true">
+        <listOfReactants>
+          <speciesReference species="_2PG__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="H2O__c_" stoichiometry="1"/>
+          <speciesReference species="PEP__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0171" name="r0171" reversible="true">
+        <listOfReactants>
+          <speciesReference species="NADplus__c_" stoichiometry="1"/>
+          <speciesReference species="L_Lactate__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NADH__c_" stoichiometry="1"/>
+          <speciesReference species="Pyruvate__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0172" name="r0172" reversible="true">
+        <listOfReactants>
+          <speciesReference species="NADplus__m_" stoichiometry="1"/>
+          <speciesReference species="L_Lactate__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NADH__m_" stoichiometry="1"/>
+          <speciesReference species="Pyruvate__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0192" name="r0192" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Glucose_6P__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Fructose_6P__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0243" name="r0243" reversible="true">
+        <listOfReactants>
+          <speciesReference species="GAP__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="DHAP__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0253" name="r0253" reversible="true">
+        <listOfReactants>
+          <speciesReference species="NADplus__c_" stoichiometry="1"/>
+          <speciesReference species="Pi__c_" stoichiometry="1"/>
+          <speciesReference species="GAP__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NADH__c_" stoichiometry="1"/>
+          <speciesReference species="_1_3DPG__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0256" name="r0256" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Fructose_1_6PP__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="DHAP__c_" stoichiometry="1"/>
+          <speciesReference species="GAP__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0259" name="r0259" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Malate__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="H2O__m_" stoichiometry="1"/>
+          <speciesReference species="Fumarate__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0316" name="r0316" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Citrate__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Isocitrate__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0337" name="r0337" reversible="true">
+        <listOfReactants>
+          <speciesReference species="ATP__c_" stoichiometry="1"/>
+          <speciesReference species="_3PG__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ADP__c_" stoichiometry="1"/>
+          <speciesReference species="_1_3DPG__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0341" name="r0341" reversible="true">
+        <listOfReactants>
+          <speciesReference species="_2PG__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="_3PG__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0353" name="r0353" reversible="true">
+        <listOfReactants>
+          <speciesReference species="ATP__c_" stoichiometry="1"/>
+          <speciesReference species="Glucose__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ADP__c_" stoichiometry="1"/>
+          <speciesReference species="Glucose_6P__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0425" name="r0425" reversible="true">
+        <listOfReactants>
+          <speciesReference species="NADplus__m_" stoichiometry="1"/>
+          <speciesReference species="Isocitrate__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NADH__m_" stoichiometry="1"/>
+          <speciesReference species="Oxalosuccinate__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0507" name="r0507" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Hplus_PG___m_" stoichiometry="4"/>
+          <speciesReference species="Ferricytochrome_C__m_" stoichiometry="2"/>
+          <speciesReference species="Ubiquinol__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Hplus_PG___c_" stoichiometry="4"/>
+          <speciesReference species="Ferrocytochrome_C__m_" stoichiometry="2"/>
+          <speciesReference species="Ubiquinone__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0508" name="r0508" reversible="true">
+        <listOfReactants>
+          <speciesReference species="NADplus__m_" stoichiometry="1"/>
+          <speciesReference species="Hplus_PG___c_" stoichiometry="4"/>
+          <speciesReference species="Ubiquinol__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NADH__m_" stoichiometry="1"/>
+          <speciesReference species="Hplus_PG___m_" stoichiometry="4"/>
+          <speciesReference species="Ubiquinone__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0509" name="r0509" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Succinate__m_" stoichiometry="1"/>
+          <speciesReference species="Ubiquinone__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Fumarate__m_" stoichiometry="1"/>
+          <speciesReference species="Ubiquinol__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0736" name="r0736" reversible="true">
+        <listOfReactants>
+          <speciesReference species="ATP__c_" stoichiometry="1"/>
+          <speciesReference species="Fructose_6P__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ADP__c_" stoichiometry="1"/>
+          <speciesReference species="Fructose_1_6PP__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0801" name="r0801" reversible="true">
+        <listOfReactants>
+          <speciesReference species="GDP__m_" stoichiometry="1"/>
+          <speciesReference species="GTP__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="GDP__c_" stoichiometry="1"/>
+          <speciesReference species="GTP__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0849" name="r0849" reversible="true">
+        <listOfReactants>
+          <speciesReference species="H2O__s_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="H2O__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0851" name="r0851" reversible="true">
+        <listOfReactants>
+          <speciesReference species="H2O__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="H2O__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0855" name="r0855" reversible="true">
+        <listOfReactants>
+          <speciesReference species="O2__s_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="O2__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0856" name="r0856" reversible="true">
+        <listOfReactants>
+          <speciesReference species="O2__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="O2__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0867" name="r0867" reversible="true">
+        <listOfReactants>
+          <speciesReference species="CO2__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="CO2__s_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r0868" name="r0868" reversible="true">
+        <listOfReactants>
+          <speciesReference species="CO2__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="CO2__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r1032" name="r1032" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Glucose__s_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Glucose__c_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r1047" name="r1047" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Pi__c_" stoichiometry="1"/>
+          <speciesReference species="Hplus_PG___c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Pi__m_" stoichiometry="1"/>
+          <speciesReference species="Hplus_PG___m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r1114" name="r1114" reversible="true">
+        <listOfReactants>
+          <speciesReference species="NADplus__m_" stoichiometry="1"/>
+          <speciesReference species="CoA__m_" stoichiometry="1"/>
+          <speciesReference species="AKG__m_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NADH__m_" stoichiometry="1"/>
+          <speciesReference species="CO2__m_" stoichiometry="1"/>
+          <speciesReference species="Succinyl_CoA__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r1422" name="r1422" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Hplus_PG___c_" stoichiometry="1"/>
+          <speciesReference species="L_Lactate__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Hplus_PG___m_" stoichiometry="1"/>
+          <speciesReference species="L_Lactate__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="r2418" name="r2418" reversible="true">
+        <listOfReactants>
+          <speciesReference species="ATP__m_" stoichiometry="1"/>
+          <speciesReference species="ADP__c_" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ATP__c_" stoichiometry="1"/>
+          <speciesReference species="ADP__m_" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

@@ -1,0 +1,1 @@
+% Matlab functions for structural thermokinetic modelling

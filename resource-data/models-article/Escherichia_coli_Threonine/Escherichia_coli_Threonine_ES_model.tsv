@@ -1,0 +1,110 @@
+!!!SBtab Document='Model'							
+							
+!!SBtab TableID='Reaction' TableType='Reaction' TableName='Reaction'							
+!ID	!ReactionFormula	!Name	!Identifiers:kegg.reaction	!IsReversible	!MetabolicRegulation	!KineticLaw:Name	!KineticLaw:Formula
+vak	asp + atp <=> aspp + adp	Aspartate Kinase	R00480	True	+ thr	Common saturable (CM)	u_R1 * (thr / kA_R1_thr ) / ( 1 + thr / kA_R1_thr ) * ( kC_R1 * sqrt( kEQ_R1  * kM_R1_asp * kM_R1_atp / kM_R1_aspp / kM_R1_adp ) * ( asp / kM_R1_asp ) * ( atp / kM_R1_atp ) - kC_R1 / sqrt( kEQ_R1  * kM_R1_asp * kM_R1_atp / kM_R1_aspp / kM_R1_adp ) * ( aspp / kM_R1_aspp ) * ( adp / kM_R1_adp ) ) / ( ( 1 + asp / kM_R1_asp ) * ( 1 + atp / kM_R1_atp ) + ( 1 + aspp / kM_R1_aspp ) * ( 1 + adp / kM_R1_adp ) - 1 )
+vasd	aspp + nadph <=> asa + phos + nadp	Aspartate semialdehyde dehydrogenase	R02291	True		Common saturable (CM)	u_R2 * ( kC_R2 * sqrt( kEQ_R2  * kM_R2_aspp * kM_R2_nadph / kM_R2_asa / kM_R2_phos / kM_R2_nadp ) * ( aspp / kM_R2_aspp ) * ( nadph / kM_R2_nadph ) - kC_R2 / sqrt( kEQ_R2  * kM_R2_aspp * kM_R2_nadph / kM_R2_asa / kM_R2_phos / kM_R2_nadp ) * ( asa / kM_R2_asa ) * ( phos / kM_R2_phos ) * ( nadp / kM_R2_nadp ) ) / ( ( 1 + aspp / kM_R2_aspp ) * ( 1 + nadph / kM_R2_nadph ) + ( 1 + asa / kM_R2_asa ) * ( 1 + phos / kM_R2_phos ) * ( 1 + nadp / kM_R2_nadp ) - 1 )
+vhdh	asa + nadph <=> hs + nadp	Homoserine dehydrogenase	R01775	True	+ thr + asp	Common saturable (CM)	u_R3 * (thr / kA_R3_thr ) / ( 1 + thr / kA_R3_thr ) * (asp / kA_R3_asp ) / ( 1 + asp / kA_R3_asp ) * ( kC_R3 * sqrt( kEQ_R3  * kM_R3_asa * kM_R3_nadph / kM_R3_hs / kM_R3_nadp ) * ( asa / kM_R3_asa ) * ( nadph / kM_R3_nadph ) - kC_R3 / sqrt( kEQ_R3  * kM_R3_asa * kM_R3_nadph / kM_R3_hs / kM_R3_nadp ) * ( hs / kM_R3_hs ) * ( nadp / kM_R3_nadp ) ) / ( ( 1 + asa / kM_R3_asa ) * ( 1 + nadph / kM_R3_nadph ) + ( 1 + hs / kM_R3_hs ) * ( 1 + nadp / kM_R3_nadp ) - 1 )
+vtsy	hsp <=> phos + thr	Threonine synthase	R01466	True		Common saturable (CM)	u_R4 * ( kC_R4 * sqrt( kEQ_R4  * kM_R4_hsp / kM_R4_phos / kM_R4_thr ) * ( hsp / kM_R4_hsp ) - kC_R4 / sqrt( kEQ_R4  * kM_R4_hsp / kM_R4_phos / kM_R4_thr ) * ( phos / kM_R4_phos ) * ( thr / kM_R4_thr ) ) / ( ( 1 + hsp / kM_R4_hsp ) + ( 1 + phos / kM_R4_phos ) * ( 1 + thr / kM_R4_thr ) - 1 )
+vhk	hs + atp <=> hsp + adp	Homoserine kinase	R01771	True	+ thr	Common saturable (CM)	u_R5 * (thr / kA_R5_thr ) / ( 1 + thr / kA_R5_thr ) * ( kC_R5 * sqrt( kEQ_R5  * kM_R5_hs * kM_R5_atp / kM_R5_hsp / kM_R5_adp ) * ( hs / kM_R5_hs ) * ( atp / kM_R5_atp ) - kC_R5 / sqrt( kEQ_R5  * kM_R5_hs * kM_R5_atp / kM_R5_hsp / kM_R5_adp ) * ( hsp / kM_R5_hsp ) * ( adp / kM_R5_adp ) ) / ( ( 1 + hs / kM_R5_hs ) * ( 1 + atp / kM_R5_atp ) + ( 1 + hsp / kM_R5_hsp ) * ( 1 + adp / kM_R5_adp ) - 1 )
+vnadph_endo	nadph <=> nadp	Endogenous consumption of NADPH		True		Common saturable (CM)	u_R6 * ( kC_R6 * sqrt( kEQ_R6  * kM_R6_nadph / kM_R6_nadp ) * ( nadph / kM_R6_nadph ) - kC_R6 / sqrt( kEQ_R6  * kM_R6_nadph / kM_R6_nadp ) * ( nadp / kM_R6_nadp ) ) / ( ( 1 + nadph / kM_R6_nadph ) + ( 1 + nadp / kM_R6_nadp ) - 1 )
+vatpase	atp <=> phos + adp	ATPase		True		Common saturable (CM)	u_R7 * ( kC_R7 * sqrt( kEQ_R7  * kM_R7_atp / kM_R7_phos / kM_R7_adp ) * ( atp / kM_R7_atp ) - kC_R7 / sqrt( kEQ_R7  * kM_R7_atp / kM_R7_phos / kM_R7_adp ) * ( phos / kM_R7_phos ) * ( adp / kM_R7_adp ) ) / ( ( 1 + atp / kM_R7_atp ) + ( 1 + phos / kM_R7_phos ) * ( 1 + adp / kM_R7_adp ) - 1 )
+							
+!!SBtab TableID='Compound' TableType='Compound' TableName='Compound'							
+!ID	!Name	!Identifiers:kegg.compound	!IsConstant				
+aspp	Aspartyl phosphate	C03082	False				
+asa	Aspartate beta-semialdehyde	C00441	False				
+hs	Homoserine	C00263	False				
+hsp	O-Phospho-homoserine	C01102	False				
+phos	Phos	C00009	True				
+thr	Threonine	C00188	True				
+asp	Aspartate	C00049	True				
+nadp	NADP	C00006	True				
+nadph	NADPH	C00005	True				
+adp	ADP	C00008	True				
+atp	ATP	C00002	True				
+							
+!!SBtab TableID='Position' TableType='Position' TableName='Network layout'							
+!Element	!PositionX	!PositionY					
+aspp	-1.109561	-0.581242					
+asa	-0.217409	-0.581242					
+hs	0.702054	-0.581242					
+hsp	1.494066	-0.581242					
+phos	0.962099	-0.111548					
+thr	2.149524	-0.581242					
+asp	-1.924332	-0.581384					
+nadp	-0.858934	-1.017477					
+nadph	0.445826	-1.017477					
+adp	-0.323888	-0.294076					
+atp	-0.320253	0.258715					
+vak	-1.546533	-0.581242					
+vasd	-0.62707	-0.581242					
+vhdh	0.237771	-0.581242					
+vtsy	1.803588	-0.581242					
+vhk	1.157233	-0.581242					
+vnadph_endo	-0.20186	-1.110724					
+vatpase	-0.014125	-0.059406					
+							
+!!SBtab TableID='Parameter' TableType='Quantity' TableName='Parameter' StandardConcentration='mM'							
+!QuantityType	!Reaction	!Compound	!Mode	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound	
+equilibrium constant	vak		0.99999807	dimensionless	R00480		
+equilibrium constant	vasd		0.99999793	dimensionless	R02291		
+equilibrium constant	vhdh		0.99999868	dimensionless	R01775		
+equilibrium constant	vtsy		0.99999944	dimensionless	R01466		
+equilibrium constant	vhk		0.99999929	dimensionless	R01771		
+equilibrium constant	vnadph_endo		0.99999868	dimensionless			
+equilibrium constant	vatpase		0.99999854	dimensionless			
+catalytic rate constant geometric mean	vak		0.00034961681	1/s	R00480		
+catalytic rate constant geometric mean	vasd		0.00022129423	1/s	R02291		
+catalytic rate constant geometric mean	vhdh		0.0018056036	1/s	R01775		
+catalytic rate constant geometric mean	vtsy		0.0012446261	1/s	R01466		
+catalytic rate constant geometric mean	vhk		0.0025542524	1/s	R01771		
+catalytic rate constant geometric mean	vnadph_endo		1.4551744e-05	1/s			
+catalytic rate constant geometric mean	vatpase		7.4091944e-05	1/s			
+Michaelis constant	vak	aspp	0.099988779	mM	R00480	C03082	
+Michaelis constant	vasd	aspp	0.099988779	mM	R02291	C03082	
+Michaelis constant	vasd	asa	0.10005993	mM	R02291	C00441	
+Michaelis constant	vhdh	asa	0.10005993	mM	R01775	C00441	
+Michaelis constant	vhdh	hs	0.10004892	mM	R01775	C00263	
+Michaelis constant	vhk	hs	0.10004892	mM	R01771	C00263	
+Michaelis constant	vtsy	hsp	0.10001224	mM	R01466	C01102	
+Michaelis constant	vhk	hsp	0.10001224	mM	R01771	C01102	
+Michaelis constant	vasd	phos	0.10032805	mM	R02291	C00009	
+Michaelis constant	vtsy	phos	0.10032805	mM	R01466	C00009	
+Michaelis constant	vatpase	phos	0.10032805	mM		C00009	
+Michaelis constant	vtsy	thr	0.17899998	mM	R01466	C00188	
+Michaelis constant	vak	asp	4.229997	mM	R00480	C00049	
+Michaelis constant	vasd	nadp	0.0020800015	mM	R02291	C00006	
+Michaelis constant	vhdh	nadp	0.0020800015	mM	R01775	C00006	
+Michaelis constant	vnadph_endo	nadp	0.0020800015	mM		C00006	
+Michaelis constant	vasd	nadph	0.121	mM	R02291	C00005	
+Michaelis constant	vhdh	nadph	0.121	mM	R01775	C00005	
+Michaelis constant	vnadph_endo	nadph	0.121	mM		C00005	
+Michaelis constant	vak	adp	0.68899975	mM	R00480	C00008	
+Michaelis constant	vhk	adp	0.68899975	mM	R01771	C00008	
+Michaelis constant	vatpase	adp	0.68899975	mM		C00008	
+Michaelis constant	vak	atp	6.1354952	mM	R00480	C00002	
+Michaelis constant	vhk	atp	6.1354952	mM	R01771	C00002	
+Michaelis constant	vatpase	atp	6.1354952	mM		C00002	
+activation constant	vak	thr	0.17899998	mM	R00480	C00188	
+activation constant	vhdh	thr	0.17899998	mM	R01775	C00188	
+activation constant	vhk	thr	0.17899998	mM	R01771	C00188	
+activation constant	vhdh	asp	4.229997	mM	R01775	C00049	
+concentration		aspp	0.099988779	mM		C03082	
+concentration		asa	0.10005993	mM		C00441	
+concentration		hs	0.10004892	mM		C00263	
+concentration		hsp	0.10001224	mM		C01102	
+concentration		phos	0.10032805	mM		C00009	
+concentration		thr	0.17899998	mM		C00188	
+concentration		asp	4.229997	mM		C00049	
+concentration		nadp	0.0020800015	mM		C00006	
+concentration		nadph	0.121	mM		C00005	
+concentration		adp	0.68899975	mM		C00008	
+concentration		atp	6.1354952	mM		C00002	
+concentration of enzyme	vak		1	mM	R00480		
+concentration of enzyme	vasd		1	mM	R02291		
+concentration of enzyme	vhdh		1	mM	R01775		
+concentration of enzyme	vtsy		1	mM	R01466		
+concentration of enzyme	vhk		1	mM	R01771		
+concentration of enzyme	vnadph_endo		1	mM			
+concentration of enzyme	vatpase		1	mM			

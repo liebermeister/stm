@@ -35,7 +35,7 @@ http://www.metabolic-economics.de/stm/workflow-matlab.html
 
 ## E. coli model
 
-The E. coli central metabolism model, the running example in the article, can be found in the folder ``resource-data/models-article/Escherichia_coli_ccm/``.
+The E. coli central metabolism model, the running example in the article, can be found in the folder ``resource-data/models-article/Escherichia_coli_ccm/``. Details about the model and model construction are given there.
 
 ## License
 This package is released under the [GNU General Public License](LICENSE).

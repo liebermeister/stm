@@ -9,8 +9,8 @@ In the model, exchange reactions were
   projecting flux data onto the space of stationary fluxes while
   constraining the flux directions. Metabolite concentrations and
   thermodynamic forces for the reference state were determined by
-  balancing \cite{lskl:10} of metabolite and reaction Gibbs free
-  energy data. Data as in \cite{nfbd:16} were used in all cases.
+  balancing of metabolite and reaction Gibbs free
+  energy data. Data as in Noor et al. (2016) were used in all cases.
 
 Modifications:
 * some kcat values were modified

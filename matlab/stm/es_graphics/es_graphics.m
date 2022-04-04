@@ -41,6 +41,7 @@ switch graphics_type,
     gp.arrowvalues   = [];% ones(size(network.actions)); 
     gp.arrowstyle    = 'directions';
     gp.colorbar      = 0;
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,ones(size(network.metabolites)),[],1,gp);
 
   case 'metabolites',
@@ -48,12 +49,14 @@ switch graphics_type,
     gp.metvaluesmax     = log10(100);
     %gp.colorbar         = 0;
     gp.colorbar_numbers = log10([0.01,0.1,1,10,100]);
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,log10(data.c),[],1,gp);
 
   case 'metabolite_ratios',
     gp.metprintnames    = p.metprintnames; 
     gp.metvaluesmax     = log10(100);
     gp.colorbar_numbers = [0.01,0.1,1,10,100];
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,log10(data.c),[],1,gp);
   
   case 'enzymes',
@@ -64,6 +67,7 @@ switch graphics_type,
     gp.colorbar_numbers = [0.000001 0.001 1];
     gp.arrowstyle       = 'none';
     gp.actstyle         = 'fixed';
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],log10(data.u),1, gp);
   
   case 'enzyme_ratios',
@@ -74,6 +78,7 @@ switch graphics_type,
     gp.arrowstyle = 'none';
     gp.actstyle = 'fixed';
     gp.colorbar         = 1;
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],log10(data.u),1, gp);
   
   case 'fluxes',
@@ -90,9 +95,11 @@ switch graphics_type,
       data.production_rates = sign(data.production_rates) .* double(abs(data.production_rates)>10^-8);
       max_prod_rate   = max(abs(data.production_rates(ind_metabolites_show)));
       gp.metvaluesmax = max(max_prod_rate, 10^-10);
+      gp         = join_struct(gp, p);
       netgraph_concentrations(network_CoHid,data.production_rates,[],1,gp);%data.v
     else,
       gp.colorbar = 0;
+      gp         = join_struct(gp, p);
       netgraph_concentrations(network_CoHid,[],[],1,gp);%abs(data.v); %% -zero_to_nan(network.external)
     end
 
@@ -110,6 +117,7 @@ switch graphics_type,
     gp.show_regulationvalues = 0;
     gp.regulationvalues = data.elasticities;
     gp.regulationstyle = 'fixed';
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],[],1,gp);    
 
   case 'flux_movie',
@@ -125,6 +133,7 @@ switch graphics_type,
     gp.arrowstyle       = 'none';
     gp.actstyle         = 'box';
     %gp.colorbar        = 0;
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],theta_directed,1,gp);
 
   case 'dissipation',
@@ -133,6 +142,7 @@ switch graphics_type,
     gp.colorbar_numbers = [min(sigma) max(sigma)];
     gp.arrowstyle       = 'none';
     %gp.colorbar         = 0;
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],sigma,1,gp);
 
   case 'chemical_potentials',
@@ -142,6 +152,7 @@ switch graphics_type,
     gp.colorbar_numbers = [min(data.mu) max(data.mu)];
     %gp.colorbar         = 0;
     gp.showsign         = 0;
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,data.mu,[],1,gp);    
     
   case 'response_coefficients',
@@ -156,6 +167,7 @@ switch graphics_type,
     %%    dum = sort(data.R); gp.actvaluesmax = dum(end);
     gp.actvaluesmax     = max(abs(data.R(ind_reactions_show)));
     gp.colorbar_numbers = [-1 0 1];
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],data.R,1,gp);
   
   case 'response_coefficients_Sext',
@@ -168,6 +180,7 @@ switch graphics_type,
     %% gp.arrowvalues = data.v;
     %% gp.arrowvaluesmax   = max(abs(data.v(ind_reactions_show)));
     gp.metvaluesmax = max(abs(data.R(ind_metabolites_show)));
+    gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,zero_to_nan(data.R),[],1,gp);
     
   case 'individual_metabolites',

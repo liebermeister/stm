@@ -93,6 +93,7 @@ function [es_options, es_constraints] = es_default_options(N)
 % es_options.verbose              (boolean)  Verbose output?
 % es_options.graphics_flag        (boolean)  Show graphics?
 % es_options.print_graphics       (boolean)  Save graphics to file?
+% es_options.flag_test            (boolean)  Run tests? (default 0)
 
 % TO BE IMPLEMENTED (matrices should rather be in 'constraints')
 % es_options.sample_K     Sample KM, KA, KI values instead if saturation values
@@ -180,3 +181,4 @@ es_options.no_equilibrium       = 1;
 es_options.ind_ignore           = [];
 es_options.graphics_flag        = 1;   
 es_options.print_graphics       = 0;
+es_options.flag_test            = 0;   

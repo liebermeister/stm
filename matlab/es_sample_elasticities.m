@@ -83,7 +83,6 @@ h = ones(nr,1);
 
 [alpha_A, alpha_I, alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options,es_constraints);
 
-
 [beta_A,gamma_A] = alpha_to_betagamma(alpha_A);
 [beta_I,gamma_I] = alpha_to_betagamma(alpha_I);
 [beta_M,gamma_M] = alpha_to_betagamma(alpha_M);

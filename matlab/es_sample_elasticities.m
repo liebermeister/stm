@@ -83,12 +83,17 @@ h = ones(nr,1);
 
 [alpha_A, alpha_I, alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options,es_constraints);
 
+
 [beta_A,gamma_A] = alpha_to_betagamma(alpha_A);
 [beta_I,gamma_I] = alpha_to_betagamma(alpha_I);
 [beta_M,gamma_M] = alpha_to_betagamma(alpha_M);
 KA               = alpha_to_k(alpha_A,c);
 KI               = alpha_to_k(alpha_I,c);
 KM               = alpha_to_k(alpha_M,c);
+
+KM(N'==0) = 0;
+KA(W<=0)  = 0;
+KI(W>=0)  = 0;
 
 % ----------------------------------------------------------------
 % compute remaining model parameters (KV, Kplus, Kminus)
@@ -105,7 +110,6 @@ ind_off_A   = find([v_pre==0].*[A==0]);
 % FIX, TO BE REMOVED LATER:
 es_options = join_struct(struct('no_equilibrium',1),es_options);
 %-----------------------------
-
 
 if es_options.no_equilibrium,
   if length(ind_off),  display('Vanishing rates: setting enzyme values = 0'); end
@@ -130,6 +134,10 @@ if sum(KV<0), error('Problem with flux directions'); end
 
 % compute reaction velocities
 [v, v_plus, v_minus] = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,es_options.h);
+if sum(isnan(v)),
+  error('infeasible reaction rates');
+end
+
 [Kplus,Kminus]       = ms_compute_Kcat(N,KM,KV,Keq);
 
 % ----------------------------------------------------------------
@@ -160,7 +168,7 @@ v_minus_fallback = ones(size(v));
 
 E = compute_modular_elasticities(es_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback, es_options.flag_second_order);
 
-if find(~isfinite(E.un_E_c)), 
+if find(~isfinite(E.un_E_c)),
   warning('Elasticity matrix contains non-finite values; I replace them by zeros'); 
   E.un_E_c(isfinite(E.un_E_c)==0) = 0;
   E.un_E_u(isfinite(E.un_E_u)==0) = 0;

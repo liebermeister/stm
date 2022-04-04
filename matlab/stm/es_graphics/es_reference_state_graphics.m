@@ -27,7 +27,6 @@ figure(1); es_graphics(network,network_CoSplit,'names',struct('actprintnames',0,
 % figure(1000); clf; 
 %es_graphics(network,network_CoHid,'fluxes',struct('v',fluxes.v_mean),p);
 
-%figure(2); clf; es_graphics(network,network_CoHid,'fluxes',struct('v',result.v,'production_rates',N*result.v),join_struct(p,struct('show_regulation',0)));
 figure(2); clf; es_graphics(network,network_CoHid,'fluxes',struct('v',result.v),join_struct(p,struct('show_regulation',0,'arrowsize',0.05)));
 %figure(2); title(sprintf('Fluxes and net production rates')); 
 

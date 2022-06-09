@@ -3,14 +3,13 @@ E. coli CCM model
 
 Modified version of the original model from Noor et al. (2016), PLoS Comp. Biol.
 
-In the model, exchange reactions were
-  added to some of the biomass precursors and a stationary flux
-  distribution was obtained from measured metabolic fluxes by
-  projecting flux data onto the space of stationary fluxes while
-  constraining the flux directions. Metabolite concentrations and
-  thermodynamic forces for the reference state were determined by
-  balancing of metabolite and reaction Gibbs free
-  energy data. Data as in Noor et al. (2016) were used in all cases.
+In the model, exchange reactions were added to some of the biomass
+precursors and a stationary flux distribution was obtained from
+measured metabolic fluxes by projecting flux data onto the space of
+stationary fluxes while constraining the flux directions. Metabolite
+concentrations and thermodynamic forces for the reference state were
+determined by balancing of metabolite and reaction Gibbs free energy
+data. Data as in Noor et al. (2016) were used in all cases.
 
 Modifications:
 * some kcat values were modified

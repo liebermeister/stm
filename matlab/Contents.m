@@ -11,9 +11,6 @@
 %   es_sample_ensemble     - Create model ensemble and collect values for an output variable
 %   es_compare_ensembles   - Compare the output variables for two model ensembles
 %
-% Extra convenience function 
-%   sample_elasticities    -  Wrapper function around 'es_sample_elasticities' with different function arguments
-%
 %   Options for all functions are stored in matlab structs 'es_options' and 'es_constraints'.
 %
 % Other STM functions

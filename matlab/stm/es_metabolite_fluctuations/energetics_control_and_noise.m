@@ -251,7 +251,8 @@ line_colors(h,'copper')
 if length(psfile_dir),
   cd(psfile_dir);
   display(sprintf('Saving graphics to directory %s', psfile_dir));
-  print([ psfile_dir '/' basename '_spectral_conc_freq.eps'], '-f2', '-depsc');
+  figure(2); export_fig([ psfile_dir '/' basename '_spectral_conc_freq.eps'], gcf, '-depsc');
+  %exportfig(2, [ psfile_dir '/' basename '_spectral_conc_freq.eps'], '-f2', '-depsc');
   print([ psfile_dir '/' basename '_spectral_flux_freq.eps'], '-f3', '-depsc');
   %print([ psfile_dir '/' basename '_spectral_conc_slow_network.eps'], '-f10', '-depsc');
   %print([ psfile_dir '/' basename '_spectral_conc_fast_network.eps'], '-f11', '-depsc');

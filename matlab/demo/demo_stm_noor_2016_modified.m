@@ -8,7 +8,7 @@ clear; clearvars -global
 % check correct installation of elasticity sampling code
 es_dependencies; 
 
-model_dir = [es_BASEDIR '/../resource-data/models/model_noor_2016_modified'];
+model_dir = [es_BASEDIR '/../resource-data/models-other/model_noor_2016_modified'];
 
 cd(model_dir);
 

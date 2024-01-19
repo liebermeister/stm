@@ -18,13 +18,17 @@ if es_options.set_alpha_to_half,
   alpha_M(ind_Mm) = 0.5;  
   alpha_A(ind_Wp) = 0.5;
   alpha_I(ind_Wm) = 0.5;
-  display(' Setting all alpha values = 0.5');
+  if es_options.verbose,
+    display(' Setting all alpha values = 0.5');
+  end
 else,
-  alpha_M(ind_Mp)  = rand(size(ind_Mp));
-  alpha_M(ind_Mm)  = rand(size(ind_Mm));
-  alpha_A(ind_Wp)  = rand(size(ind_Wp));
-  alpha_I(ind_Wm)  = rand(size(ind_Wm));
-  display(' Drawing alpha values uniformly from [0,1]');
+  alpha_M(ind_Mp)  = es_options.alpha_min + [es_options.alpha_max-es_options.alpha_min] * rand(size(ind_Mp));
+  alpha_M(ind_Mm)  = es_options.alpha_min + [es_options.alpha_max-es_options.alpha_min] * rand(size(ind_Mm));
+  alpha_A(ind_Wp)  = es_options.alpha_min + [es_options.alpha_max-es_options.alpha_min] * rand(size(ind_Wp));
+  alpha_I(ind_Wm)  = es_options.alpha_min + [es_options.alpha_max-es_options.alpha_min] * rand(size(ind_Wm));
+  if es_options.verbose,
+    display(' Drawing alpha values uniformly from [0,1]');
+  end
 
   if es_options.set_alpha_nonuniform,
     %% THIS STILL HAS TO BE TESTED!!!!

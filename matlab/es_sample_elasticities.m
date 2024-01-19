@@ -62,7 +62,7 @@ function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_optio
 %   result.elasticities - Elasticities (scaled and unscaled)
 %   result.control      - Control and response coefficients (scaled and unscaled)
 %   result.K            - Kernel matrix 
-%   result.kinetics     - kinetic rate laws (to be inserted into 'network')
+%   result.kinetics     - all information about the kinetic rate laws (to be inserted into 'network')
 %
 % See also: es_sample_model
 
@@ -281,10 +281,12 @@ eigmax = max(real(eig(M)));
 
 control.stable = [eigmax <= 0];
 
-if control.stable,
-  display('The metabolic state is stable.');
-else
-  display('WARNING: The metabolic state is unstable.');
+if es_options.verbose,
+  if control.stable,
+    display('The metabolic state is stable.');
+  else
+    display('WARNING: The metabolic state is unstable.');
+  end
 end
 
 % -------------------------------------------------------------

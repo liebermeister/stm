@@ -45,6 +45,8 @@ function [es_options, es_constraints] = es_default_options(N)
 % es_constraints.beta_M_fix         nr x nm saturation values beta_M predefined values
 % es_constraints.beta_A_fix         nr x nm saturation values beta_A predefined values
 % es_constraints.beta_I_fix         nr x nm saturation values beta_I predefined values
+% es_constraints.alpha_min          (default 0.05) minimum value for uniform sampling of alpha values
+% es_constraints.alpha_max          (default 0.95) maximum value for uniform sampling of alpha values
 % es_constraints.alpha_A_mean       nr x nm mean values for alpha_A    (only for beta distribution)
 % es_constraints.alpha_A_std        nr x nm std dev values for alpha_A (only for beta distribution)
 % es_constraints.alpha_I_mean       nr x nm mean values for alpha_I    (only for beta distribution)
@@ -147,6 +149,8 @@ es_constraints.beta_M_fix  = nan*ones(nr,nm);
 es_constraints.beta_A_fix  = nan*ones(nr,nm);
 es_constraints.beta_I_fix  = nan*ones(nr,nm);
 
+es_constraints.alpha_min            = 0.05;
+es_constraints.alpha_max            = 0.95;
 es_constraints.alpha_A_mean         = [];
 es_constraints.alpha_A_std          = [];   
 es_constraints.alpha_I_mean         = [];

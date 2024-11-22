@@ -167,6 +167,18 @@ v_minus_fallback = ones(size(v));
 
 E = compute_modular_elasticities(es_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback, es_options.flag_second_order);
 
+if es_options.limit_elasticities_in_multireactions,
+  % normalise the elasticities in each multi-reaction (eg biomass reaction) to a sum of absolute values of 1
+  ind_multi_reactions = find(sum(N'~=0)>6);
+  Ec_scaled_multi = E.sc_E_c(ind_multi_reactions,:);
+  E.sc_E_c(ind_multi_reactions,:) = diag(1./sum(abs(Ec_scaled_multi)')) * Ec_scaled_multi;
+  E.un_E_c = diag(v) * E.sc_E_c * diag(1./c);
+  E.sc_E_cc(ind_multi_reactions,:,:) = 0;
+  E.un_E_cc(ind_multi_reactions,:,:) = 0;
+end
+
+E.un_E_c(isfinite(E.un_E_c)==0) = 0;
+
 if find(~isfinite(E.un_E_c)),
   warning('Elasticity matrix contains non-finite values; I replace them by zeros'); 
   E.un_E_c(isfinite(E.un_E_c)==0) = 0;

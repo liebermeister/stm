@@ -92,6 +92,7 @@ function [es_options, es_constraints] = es_default_options(N)
 %                                              loops (only in for flux correction by loop substraction)
 % es_options.zc                   []         Metabolite derivative of objective function
 % es_options.zv                   []         Flux derivative of objective function
+% es_options_in_silico.limit_elasticities_in_multireactions = 1; normalise scaled elasticities in multireactions (eg biomass reaction) to an sum of absolute values = 1
 % es_options.verbose              (boolean)  Verbose output?
 % es_options.graphics_flag        (boolean)  Show graphics?
 % es_options.print_graphics       (boolean)  Save graphics to file?
@@ -180,6 +181,7 @@ es_options.h                    = ones(nr,1); % reaction cooperativity
 es_options.limit_cooperativity  = 2;
 es_options.zc                   = []; % metabolite derivative of target function
 es_options.zv                   = []; % flux derivative of target function
+es_options_in_silico.limit_elasticities_in_multireactions = 1; 
 es_options.flag_second_order    = 1;
 es_options.no_equilibrium       = 1;  
 es_options.ind_ignore           = [];

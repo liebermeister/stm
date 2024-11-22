@@ -44,7 +44,7 @@ This package is released under the [GNU General Public License](LICENSE).
 Please contact [Wolfram Liebermeister](mailto:wolfram.liebermeister@gmail.com) with any questions or comments.
 
 ## References
-Liebermeister W. (2013), *Elasticity sampling links thermodynamics to metabolic control*
+Liebermeister W. (2013), *Elasticity sampling links thermodynamics to metabolic control*,
 [arXiv:1309.0267](https://arxiv.org/abs/1309.0267)
 
 Liebermeister W. (2022), *Structural thermokinetic modelling*, 

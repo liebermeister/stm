@@ -1,8 +1,8 @@
-function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)
+function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state(N, W, ind_ext, es_constraints, es_options)
 
 % ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network
 %
-% [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(N, W, ind_ext, es_constraints, es_options)
+% [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state(N, W, ind_ext, es_constraints, es_options)
 %
 % Sample thermodynamically consistent steady states, including concentrations,
 %   fluxes, and thermodynamic quantities. Enzyme levels are freely sampled.
@@ -37,9 +37,6 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(
 %     'sample_and_discard':  sample flux values from the distribution defined by
 %                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.v_sign
 %                            and omit unfeasible cycles
-%     'convex_optimisation': sample fluxes based on convex FBA from the distribution defined by 
-%                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.dmu_fix
-%                            and omit unfeasible cycles
 %     'v and mu',            sample flux values using sample_feasible_v.m
 %     'v from data':         sample flux values from the distribution defined by
 %                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.v_sign
@@ -61,7 +58,7 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(
 %                                    'v and mu'
 %                                    'c0 and c'
 %                                    'sample_and_discard'
-%                                    'convex_optimisation'  
+%                                    'accept_flux'
 %    es_constraints.v_fix          - Predefined fluxes (vector, NaNs are ignored)
 %    es_constraints.v_min          - Lower flux bounds (vector, NaNs are ignored)
 %    es_constraints.v_max          - Upper flux bounds (vector, NaNs are ignored)
@@ -80,23 +77,18 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state_state(
 %     'c0 and c'             es_constraints.log_c0
 %                            es_constraints.log_c0_std
 %   
-%     'sample_and_discard'   es_options.cycle_correction
+%     'sample_and_discard'   es_options.ind_ignore
 %
-%     'convex_optimisation'  es_constraints.dmu_fix
-%                            es_options.cycle_correction
-%  
 %   For some methods, additionally required:
 %      es_options.ind_ignore  reactions to be ignored in thermodynamic loops 
 %                             (only needed for flux correction by loop substraction)
-%                             (only needed for flux correction by convex FBA)
 %
 
 % ---------------------------------------------------------------------------------
 % initialise
 
-if ~isnan(es_options.seed), 
-  randn('state',es_options.seed); 
-  rand('state',es_options.seed); 
+if ~isnan(es_options.seed),
+  rng(es_options.seed);
 end
 
 [nm,nr] = size(N);
@@ -122,7 +114,7 @@ if all_mu_given,
 end
 
 if all_keq_given * all_c_given,
-  es_constraints.dmu_fix = -RT * [es_constraints.Keq_fix - N' * es_constraints.log_c_fix];
+  es_constraints.dmu_fix = -RT * [log(es_constraints.Keq_fix) - N' * es_constraints.log_c_fix];
 end
 
 all_dmu_given = sum(isnan(es_constraints.dmu_fix)) == 0;
@@ -162,12 +154,6 @@ else
       es_options.sampling_cycle_correction = 1;    
       [sample_v, best_v] = sample_fluxes_given_data(N, ind_ext, es_constraints.v_mean, es_constraints.v_std, 1, 1, 1, es_options.ind_ignore, es_constraints.v_sign);
       v = best_v.v;
-    
-    case 'convex_optimisation',
-      es_options.sampling_cycle_correction = 1;
-      [sample_v, best_v, res] = sample_fluxes_by_convex_fba(N,ind_ext,es_constraints.v_mean,es_constraints.v_std,struct,-es_constraints.dmu_fix);
-      v                   = best_v.v;
-      es_constraints.dmu_fix = -res.A;    % 
     
     case 'v and mu',
       v = sample_feasible_v(N,ind_ext,es_constraints,es_options);  
@@ -271,9 +257,11 @@ else,
 end
 
 if isempty(mu),
-  mu   = pinv(full(N')) * es_constraints.dmu_fix;
-  c0   = exp(mu/RT) ./ c;
+  mu   = -pinv(full(N')) * A;
 end
+
+% equilibrium concentrations (with mu = RT * log(c./c0))
+c0 = c .* exp(-mu/RT);
 
 if find([v~=0] .* [abs(A) < es_constraints.dmu_limit_min]),
   ind = find([v~=0] .* [abs(A) < es_constraints.dmu_limit_min]);

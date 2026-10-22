@@ -38,6 +38,8 @@ function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_optio
 %   es_options.flag_second_order  - Compute second-order elasticities? (Boolean)
 %   es_options.zv                 - Flux weights for 2nd order resp. coeff output function
 %   es_options.zc                 - Conc. weights for 2nd order resp. coeff output function
+%   es_options.limit_elasticities_in_multireactions - normalise elasticities in reactions with
+%                                   more than 6 reactants (e.g. biomass reaction)?
 %
 % All output data are stored in a structure 'result' with fields:
 %   result.c            - Metabolite levels      
@@ -66,16 +68,6 @@ function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_optio
 %
 % See also: es_sample_model
 
-%% Set global variables to speed up function modular_velocities
-global global_structure_matrices 
-global_structure_matrices = 1;
-global Mplus Mminus Wplus Wminus nm nr ind_M ind_Wp ind_Wm
-h = ones(nr,1);
-
-[Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h);
-%% END Set global variables
- 
-  
 % ----------------------------------------------------------------
 % sample alpha, values and compute beta and gamma values
 
@@ -105,10 +97,8 @@ v_pre       = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM
 ind_off     = find([v_pre==0].*[A~=0]);
 ind_off_A   = find([v_pre==0].*[A==0]);
 
-%-----------------------------
-% FIX, TO BE REMOVED LATER:
-es_options = join_struct(struct('no_equilibrium',1),es_options);
-%-----------------------------
+% default values for options that may be missing in older option structs
+es_options = join_struct(struct('no_equilibrium',1,'limit_elasticities_in_multireactions',1),es_options);
 
 if es_options.no_equilibrium,
   if length(ind_off),  display('Vanishing rates: setting enzyme values = 0'); end
@@ -125,9 +115,9 @@ end
 
 % arbitrary choice (since nothing is known...)
 
-u(ind_off_A)  = nanmedian(u);
-KV(ind_off_A) = nanmedian(KV);
-KV(isnan(KV)) = nanmedian(KV);
+u(ind_off_A)  = median(u,'omitnan');
+KV(ind_off_A) = median(KV,'omitnan');
+KV(isnan(KV)) = median(KV,'omitnan');
 
 if sum(KV<0), error('Problem with flux directions'); end
 
@@ -177,10 +167,8 @@ if es_options.limit_elasticities_in_multireactions,
   E.un_E_cc(ind_multi_reactions,:,:) = 0;
 end
 
-E.un_E_c(isfinite(E.un_E_c)==0) = 0;
-
-if find(~isfinite(E.un_E_c)),
-  warning('Elasticity matrix contains non-finite values; I replace them by zeros'); 
+if any(~isfinite(E.un_E_c(:))) || any(~isfinite(E.un_E_u(:))),
+  warning('Elasticity matrix contains non-finite values; I replace them by zeros');
   E.un_E_c(isfinite(E.un_E_c)==0) = 0;
   E.un_E_u(isfinite(E.un_E_u)==0) = 0;
 end
@@ -252,6 +240,8 @@ else
   control.CJ  = CJ;
   control.RSp = RSp_un;
   control.RJp = RJp_un;
+  control.RSp_un = RSp_un;
+  control.RJp_un = RJp_un;
   control.RSp_sc = RSp_sc;
   control.RJp_sc = RJp_sc;
   control.CS_sc  = diag(1./(c)) * control.CS  * diag(v);
@@ -280,10 +270,6 @@ end
 %% fix response coefficient of external concentration w.r.t. itself
 for ittt = 1:length(ind_ext),
   control.RSs_sc(ind_ext(ittt),ittt) = 1; 
-end
-
-if length(es_options.zc),
-  [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(es_options.zc,es_options.zv,es_options.kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback,CS,CJ);
 end
 
 control.M     = M;
@@ -351,20 +337,3 @@ result.kinetics.KV   = result.KV;
 result.kinetics.Keq  = result.Keq;
 result.kinetics.h    = es_options.h;
 
-
-% ----------------------------------------------------------------
-% test: do the first elasticities coincide with numerically computed elasticities?
-
-if 0,
-  network          = network_construct(N,ones(size(v)),ind_ext);
-  network.kinetics = result.kinetics;
-  Ec               = elasticities(network,result.c);
-  
-  if [norm(full(Ec)) - norm(full(E.un_E_c))] / norm(full(Ec)) > 10^-3,
-    warning('Error in elasticities');
-    [norm(full(Ec)) - norm(full(E.un_E_c))]
-  end
-end
-
-%% Clear global variables
-clearvars -global global_structure_matrices Mplus Mminus Wplus Wminus nm nr ind_M ind_Wp ind_Wm

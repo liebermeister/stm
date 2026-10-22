@@ -5,7 +5,7 @@ function [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,es
 % [alpha_A,alpha_I,alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options)
 
 if ~isfield(es_options,'seed'), es_options.seed = nan;     end
-if ~isnan(es_options.seed), rand('state',es_options.seed); end
+if ~isnan(es_options.seed), rng(es_options.seed); end
 
 [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int, ind_M, ind_Wp, ind_Wm, ind_Mp, ind_Mm] = make_structure_matrices(N,W,ind_ext,es_options.h);
 

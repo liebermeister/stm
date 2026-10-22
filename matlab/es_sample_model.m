@@ -31,7 +31,7 @@ function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, e
 
 es_options.flag_test = 0;
 
-if ~isnan(es_options.seed), randn('state',es_options.seed); end
+if ~isnan(es_options.seed), rng(es_options.seed); end
 
 
 % ----------------------------------------------------------------

@@ -4,7 +4,7 @@ clear; clearvars -global
 
 es_dependencies;
 
-model_dir = [es_BASEDIR '/../resource-data/models/demo_e_coli_glycolysis'];
+model_dir = [es_BASEDIR '/../resource-data/models-other/demo_e_coli_glycolysis'];
 
 cd(model_dir);
 
@@ -129,7 +129,7 @@ es_options.set_alpha_to_half = 0;
 % We will sample the interactive effects of enzyme pairs on a specific output function.
 % As an output function, we choose the sum of squares of all flux control coefficients.
  
-output_function  = inline('sum(result.control.CJ .^2)','result','other');
+output_function  = @(result, other) sum(result.control.CJ .^2);
  
 % Now we will create two ensembles, one with cs kinetics and one with ms kinetics
  
@@ -162,13 +162,14 @@ pause
 clc
 %-------------------------------------------------------------------------------
 % Now we try to determine significant differences between both ensembles
-% We choose a false discovery rate of 5 percent.
+% We use 100 permutations in the permutation test and a false discovery rate of 5 percent.
  
+n_permutations       = 100;
 false_discovery_rate = 0.05;
  
 % The result of the comparison are stored in a data structure res
  
-res = es_compare_ensembles(output1, output2, false_discovery_rate);
+res = es_compare_ensembles(output1, output2, n_permutations, false_discovery_rate);
  
 % All variables are still in your workspace
  
@@ -176,4 +177,3 @@ res = es_compare_ensembles(output1, output2, false_discovery_rate);
  
 % Press key to finish
 pause
-return

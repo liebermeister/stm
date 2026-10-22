@@ -25,7 +25,7 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 % STEP 1: Define the model's network structure
 %-------------------------------------------------------------------------------
 
-model_dir = [resource_dir '/models/demo_e_coli_glycolysis/'];
+model_dir = [resource_dir '/models-other/demo_e_coli_glycolysis/'];
 
 %-------------------------------------------------------------------------------
 % Define data structure 'network' for network structure
@@ -117,9 +117,10 @@ end
 % OR: load a stationary flux distribution from a data file
 
 if 0,
-  flux_data_file = [resource_dir 'data-flux/fluxes_demo_example.tsv'];
-  my_v   = sbtab_table_get_column(v_sbtab.tables.Flux,'Value',1);
-  my_rea = sbtab_table_get_column(v_sbtab.tables.Flux,'Reaction');
+  flux_data_file = [resource_dir 'data/data-flux/fluxes_demo_example.tsv'];
+  v_sbtab = sbtab_table_load(flux_data_file);
+  my_v   = sbtab_table_get_column(v_sbtab,'Value',1);
+  my_rea = sbtab_table_get_column(v_sbtab,'Reaction');
   v = nan*ones(size(network.actions));
   ll = label_names(network.actions,my_rea);
   v(find(ll)) = my_v(ll(find(ll)));
@@ -278,7 +279,7 @@ end
 
 % Show graphics with saving .eps files
 if 0,
-  es_options.print_graphics = 0;
+  es_options.print_graphics = 1;
   psfile_dir = MY_PSFILE_DIRECTORY; % Please insert your directory path
 end
 
@@ -291,7 +292,7 @@ es_filenames  = struct('psfile_dir',[]);
 
 % Show graphics for reference state
 
-es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, psfile_dir);
+es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, [], psfile_dir);
 
 % Show graphics for interaction effects (second order control analysis)
 % Note that this is not possible after es_sample_model has been run with the option es_options.flag_second_order = 0; 
@@ -332,7 +333,7 @@ end
 % OR: Export the model (including rate laws) to a .mat file
 
 if 0,
-  save(MY_MAT_EXPORT_FILE_NAME,'network','result','fluxes','es_options','es_constraints', 'target_reaction');
+  save(MY_MAT_EXPORT_FILE_NAME,'network','result','v','c','es_options','es_constraints', 'target_reaction');
 end
 
 %-------------------------------------------------------------------------------
@@ -349,7 +350,7 @@ es_options.set_alpha_to_half = 0;
 % We will sample the interactive effects of enzyme pairs on a specific output function.
 % As an output function, we choose the sum of squares of all flux control coefficients.
  
-output_function  = inline('sum(result.control.CJ .^2)','result','other');
+output_function  = @(result, other) sum(result.control.CJ .^2);
  
 % Now we will create two ensembles, one with cs kinetics and one with ms kinetics
  
@@ -373,10 +374,11 @@ output2 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_f
  
 %-------------------------------------------------------------------------------
 % Now we try to determine significant differences between both ensembles
-% We choose a false discovery rate of 5 percent.
+% We use 100 permutations in the permutation test and a false discovery rate of 5 percent.
  
+n_permutations       = 100;
 false_discovery_rate = 0.05;
  
-% The result of the comparison are stored in a data structure result
+% The result of the comparison are stored in a data structure res
  
-result = es_compare_ensembles(output1, output2, false_discovery_rate);
+res = es_compare_ensembles(output1, output2, n_permutations, false_discovery_rate);

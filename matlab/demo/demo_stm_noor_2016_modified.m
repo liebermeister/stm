@@ -68,7 +68,6 @@ es_constraints.Keq_fix       = network.kinetics.Keq;
 es_constraints.dmu_limit_min = 0.05;
 
 es_options.ind_ignore        = [];
-es_options.flag_second_order = 0;
 es_options.sampling_method   = 'v from data';
 es_options.kinetic_law       = 'cs';
 es_options.flag_second_order = 1;

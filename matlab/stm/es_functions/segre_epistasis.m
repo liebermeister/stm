@@ -1,8 +1,8 @@
-function epistasis = es_segre_epistasis(f_ref,f_single,f_double)
+function epistasis = segre_epistasis(f_ref,f_single,f_double)
 
-% ES_SEGRE_EPISTASIS Segre's epistasis measure
+% SEGRE_EPISTASIS Segre's epistasis measure
 %
-% epistasis = es_segre_epistasis(f_ref,f_single,f_double)
+% epistasis = segre_epistasis(f_ref,f_single,f_double)
 %
 % Input 
 % f_ref    wildtype fitness (number)

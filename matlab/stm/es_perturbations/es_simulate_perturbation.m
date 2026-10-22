@@ -12,7 +12,7 @@ function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expa
 % N, W, ind_ext: structural information about the network
 % s_ratio:       external concentration ratio vector
 % u_ratio:       expression ratio vector
-% es_result:     output from a previous elasticity sampling (function 'sample_model')
+% es_result:     output from a previous elasticity sampling (function 'es_sample_model')
 % expansion:     {'logarithmic','non-logarithmic'}
 %                -> depending on the expansion type, the output refers to logarithmic 
 %                   or non-logarithmic values; 
@@ -75,20 +75,20 @@ switch expansion,
     p = [u; s];
     delta_p = p_ratio .* p - p;
     
-    RSp   = es_result.control.RSp;
-    RJp   = es_result.control.RJp;
+    RSp   = es_result.control.RSp_un;
+    RJp   = es_result.control.RJp_un;
     
     switch expansion_order
       
       case 1
         
-        d_c = squeeze(RSp(:,:)) * log(p_ratio);
-        d_v = squeeze(RJp(:,:)) * log(p_ratio);
+        d_c = squeeze(RSp(:,:)) * delta_p;
+        d_v = squeeze(RJp(:,:)) * delta_p;
         
       case 2
         
-        RSpp  = es_result.control.RSpp;
-        RJpp  = es_result.control.RJpp;
+        RSpp  = es_result.control.RSpp_un;
+        RJpp  = es_result.control.RJpp_un;
         
         for i2 = 1:nsample
           delta_S2(:,i2) =  tensor_product(tensor_product(...
@@ -99,12 +99,12 @@ switch expansion,
               delta_p(:,i2),2,1),delta_p(:,i2),2,1);
         end
         
-        d_c = squeeze(RSp(:,:)) * log(p_ratio) + 0.5 * delta_S2;
-        d_v = squeeze(RJp(:,:)) * log(p_ratio) + 0.5 * delta_J2;
+        d_c = squeeze(RSp(:,:)) * delta_p + 0.5 * delta_S2;
+        d_v = squeeze(RJp(:,:)) * delta_p + 0.5 * delta_J2;
         
     end
     
-    d_c(ind_ext) = s_ratio .* s - s;
+    d_c(ind_ext,:) = s_ratio .* s - s;
     
 end
 
@@ -131,7 +131,7 @@ switch expansion,
     r.c_ratio  = exp(d_c);
     r.c_new    = r.c_ratio .* r.c_init;
     % ensure stationarity: 
-    K = null(full(N(find(ind_ext==0),:))); % kernel matrix
+    K = null(full(N(setdiff(1:nm,ind_ext),:))); % kernel matrix
     dum = exp(d_v); dum(isnan(dum))=0; 
     d_v_nonlog = K * pinv(K) * [r.v_init .* dum] - r.v_init;
     r.v_ratio  = 1 + d_v_nonlog./r.v_init;

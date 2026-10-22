@@ -1,18 +1,19 @@
 function [sample, likeli, acceptance_rate] =  es_mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)
 
-%MCMC_PRIOR_LIKELIHOOD_SAMPLING - MCMC posterior sampling
+%ES_MCMC_PRIOR_LIKELIHOOD_SAMPLING - MCMC posterior sampling
 %
-% [sample, likeli, acceptance_rate] =  mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)
+% [sample, likeli, acceptance_rate] =  es_mcmc_prior_likelihood_sampling(prior_function, prior_par, likelihood_function, likelihood_par,n_samples,n_relax,keep_fields)
 %
 % mcmc posterior sampling using sampling from the prior 
 % and acceptance/rejection according to the likelihood
 %
 % prior_function:      m-file that samples (once) from the prior
 % prior_par            parameters for the prior sampling
-% likelihood_function: m-file that computed the likelihood
-% prior_par            parameters for the likelihood calculation
+% likelihood_function: m-file that computes the likelihood
+% likelihood_par       parameters for the likelihood calculation
 % n_samples:           # of samples
 % n_relax:             # of samples before the actual sampling starts
+% keep_fields:         names of the fields (of the sampled structs) to be stored in 'sample'
 
 sample = repmat({struct},n_relax+n_samples,1);
 
@@ -25,7 +26,7 @@ accept_list = [];
 for it = 1:n_relax+n_samples,
   display(sprintf('\nSample %d/%d',it-n_relax,n_samples));
   new_sample = feval(prior_function, prior_par);
-  new_likeli = feval(likelihood_function, old_sample, likelihood_par);
+  new_likeli = feval(likelihood_function, new_sample, likelihood_par);
   accept = 0;
   if new_likeli > old_likeli, 
     accept = 1;

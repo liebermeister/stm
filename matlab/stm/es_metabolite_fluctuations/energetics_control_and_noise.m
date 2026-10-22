@@ -2,7 +2,12 @@ function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz,
 
 %ENERGETICS_CONTROL_AND_NOISE - Analyse control coefficients and noise levels (assuming uniform white noise in each reaction!)
 %
-%[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, v, mu, omega_list, tau_list, psfile_dir, basename, es_options, es_constraints, volume)
+%[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network, network_CoHid, c, v, mu, omega_list, tau_list, omega_fast, omega_slow, psfile_dir, basename, es_options, es_constraints, volume)
+%
+% omega_list:             list of circular frequencies (increasing)
+% tau_list:               list of time scales for smoothed variances (default 10.^[-2:0.1:4])
+% omega_fast, omega_slow: frequencies (from omega_list) for the network graphics (default: last and first element)
+% psfile_dir, basename:   if psfile_dir is non-empty, graphics are saved to this directory
 %
 % Recommended units: 
 %  Enzyme levels in  mol
@@ -20,6 +25,7 @@ function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz,
 
 eval(default('es_options','[]', 'es_constraints','[]','volume','1'));
 
+if isempty(tau_list),   tau_list   = 10.^[-2:0.1:4];  end
 if isempty(omega_slow), omega_slow = omega_list(1);   end
 if isempty(omega_fast), omega_fast = omega_list(end); end
 
@@ -58,7 +64,7 @@ v_molnumbers_plus  = result.v_plus  * N_avogadro;
 v_molnumbers_minus = result.v_minus * N_avogadro;
 %% conc: values assuming that fluxes are expressed in mM/s
 Ec  = result.elasticities.un_E_c;
-Ep  = 1/N_avogadro * [diag(sqrt(v_molnumbers_plus)), diag(sqrt(v_molnumbers_plus))];
+Ep  = 1/N_avogadro * [diag(sqrt(v_molnumbers_plus)), diag(sqrt(v_molnumbers_minus))];
 noise_production   = [v_molnumbers_plus + v_molnumbers_minus] / N_avogadro;
 
 % static contol coefficients
@@ -119,7 +125,7 @@ blob_im_energetics(CS_sc, 'Reaction perturbed', 'Metabolite')
 % fluctuations caused by chemical noise at omega = 2 pi / s 
 % (oscillations of 1 Hertz)
 
-[RS, RJ] = spectral_response_coefficients(N0, L, [], struct('omega',2*pi),Ec(:,ind_int),Ep); 
+[RS, RJ] = spectral_response_coefficients(1/volume*N0, L, [], struct('omega',2*pi),Ec(:,ind_int),Ep); 
 % here: count flux changes relative to flux direction
 RJ = diag(sign(v)) * RJ;
 
@@ -216,7 +222,6 @@ figure(22); netgraph_concentrations(network_CoHid, [] , 1/max(noise_production) 
 % -------------------------------------------------
 % variance quantities measured on different time scales
 
-tau_list = 10.^[-2:0.1:4];
 Var_c = spectral_density_to_smooth_variance(omega_list,Sigma_c,tau_list);
 Var_j = spectral_density_to_smooth_variance(omega_list,Sigma_j,tau_list);
 
@@ -251,8 +256,7 @@ line_colors(h,'copper')
 if length(psfile_dir),
   cd(psfile_dir);
   display(sprintf('Saving graphics to directory %s', psfile_dir));
-  figure(2); export_fig([ psfile_dir '/' basename '_spectral_conc_freq.eps'], gcf, '-depsc');
-  %exportfig(2, [ psfile_dir '/' basename '_spectral_conc_freq.eps'], '-f2', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_conc_freq.eps'], '-f2', '-depsc');
   print([ psfile_dir '/' basename '_spectral_flux_freq.eps'], '-f3', '-depsc');
   %print([ psfile_dir '/' basename '_spectral_conc_slow_network.eps'], '-f10', '-depsc');
   %print([ psfile_dir '/' basename '_spectral_conc_fast_network.eps'], '-f11', '-depsc');

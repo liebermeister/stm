@@ -11,11 +11,13 @@ function [u_ratio_pred, s_ratio_pred, pred_effect] = es_discover_perturbation(N,
 %
 % N, W, ind_ext: structural information about the network
 % c_ratio,v_ratio vectors containing perturbations (no matrices for several samples allowed!)
-% es_result:     output from a previous elasticity sampling (function 'sample_model')
+% es_result:     output from a previous elasticity sampling (function 'es_sample_model')
 % expansion:     {'logarithmic','non-logarithmic'}
 %                -> depending on the expansion type, the output refers to logarithmic 
 %                   or non-logarithmic values; 
 % expansion_order:       1 or 2 for first- or second-expansion_order expansion
+% u_sigma_prior, s_known_sigma_prior, s_unknown_sigma_prior: prior widths for enzyme changes,
+%                and for changes of external metabolites with known or unknown levels (default 1)
 %
 % output:
 %
@@ -30,14 +32,12 @@ c       = es_result.c;
 v       = es_result.v;
 np      = nr+length(ind_ext);
 
-if exist('u_sigma_prior','var'),
-  dum = isfinite(c_ratio);
-  dum = dum(ind_ext);
-  s_sigma_prior = s_known_sigma_prior * dum + s_unknown_sigma_prior * (1-dum);
-  C_prior_inv = diag( 1./[u_sigma_prior.^2 * ones(nr,1); s_sigma_prior.^2]);
-else
-  C_prior_inv = eye(np);
-end
+eval(default('u_sigma_prior','1','s_known_sigma_prior','1','s_unknown_sigma_prior','1'));
+
+dum = isfinite(c_ratio);
+dum = dum(ind_ext);
+s_sigma_prior = s_known_sigma_prior * dum + s_unknown_sigma_prior * (1-dum);
+C_prior_inv = diag( 1./[u_sigma_prior.^2 * ones(nr,1); s_sigma_prior.^2]);
 
 switch expansion 
   
@@ -55,6 +55,7 @@ switch expansion
     RYpsc   = [RSpsc; RJpsc]; 
     ind_known = find(isfinite(d_log_y));
     d_log_y = d_log_y(ind_known);
+    RYpsc   = RYpsc(ind_known,:);
     
     switch expansion_order,
       
@@ -66,7 +67,6 @@ switch expansion
         RJppsc  = es_result.control.RJpp_sc;
         RYppsc(1:nm,:,:)      = RSppsc;
         RYppsc(nm+(1:nr),:,:) = RJppsc;
-        RYpsc   = RYpsc(ind_known,:);
         RYppsc  = RYppsc(ind_known,:,:);        
         d_log_p = solve_quadratic2(C_prior_inv,d_log_y,RYpsc,RYppsc);
     
@@ -85,8 +85,8 @@ switch expansion
     s = es_result.c(ind_ext);
     p = [u; s];
     
-    RSp   = es_result.control.RSp;
-    RJp   = es_result.control.RJp;
+    RSp   = es_result.control.RSp_un;
+    RJp   = es_result.control.RJp_un;
 
     % merge the known differences to a vector y and compute the response coeffs  
     
@@ -102,8 +102,8 @@ switch expansion
         delta_p = inv( RYp' * RYp + C_prior_inv ) * RYp' * delta_y;
 
       case 2
-        RSpp  = es_result.control.RSpp;
-        RJpp  = es_result.control.RJpp;
+        RSpp  = es_result.control.RSpp_un;
+        RJpp  = es_result.control.RJpp_un;
         RYpp(1:nm,:,:)      = RSpp;
         RYpp(nm+(1:nr),:,:) = RJpp;
         RYpp    = RYpp(ind_known,:,:);

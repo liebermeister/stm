@@ -1,6 +1,6 @@
-function likelihood = elasticity_sampling_ts_likelihood(result,p)
+function likelihood = elasticity_sampling_tc_likelihood(result,p)
 
-% likelihood = elasticity_sampling_ts_likelihood(result,p)
+% likelihood = elasticity_sampling_tc_likelihood(result,p)
 %
 % Likelihood function for concentration time series
 

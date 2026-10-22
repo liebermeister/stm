@@ -3,6 +3,8 @@ function es_synergy_ensemble_comparison_graphics(network_CoHid, res, condition1,
 % es_synergy_ensemble_comparison_graphics(network_CoHid, res, condition1, condition2, print_flag, filenames, result_file)
 %
 % Graphics: Compare synergy values between two model ensembles - show statistically significant differences
+%
+% res: output of interaction_statistics
   
 % --------------------------------------------------------------
 % graphics 
@@ -31,31 +33,31 @@ col = rb_colors(20); col = col(4:17,:);
 % mean values (all values are shown)
 
 figure(3); clf; 
-interaction_network_plot(network_CoHid, res.p_influence.mean_total,res.p_interaction.mean_total, col,struct('relative_threshold',0.1)); 
+synergy_network_plot(network_CoHid, res.p_influence.mean_total,res.p_interaction.mean_total, col,struct('relative_threshold',0.1)); 
 
 figure(4); clf; 
-interaction_network_plot(network_CoHid, res.p_influence.mean_delta,res.p_interaction.mean_delta, col,struct('relative_threshold',0.1)); 
+synergy_network_plot(network_CoHid, res.p_influence.mean_delta,res.p_interaction.mean_delta, col,struct('relative_threshold',0.1)); 
 
 figure(5); clf; 
-interaction_network_plot(network_CoHid, res.p_influence.mean_a,res.p_interaction.mean_a, col,struct('relative_threshold',0.1)); 
+synergy_network_plot(network_CoHid, res.p_influence.mean_a,res.p_interaction.mean_a, col,struct('relative_threshold',0.1)); 
 
 figure(6); clf; 
-interaction_network_plot(network_CoHid, res.p_influence.mean_b,res.p_interaction.mean_b, col,struct('relative_threshold',0.1)); 
+synergy_network_plot(network_CoHid, res.p_influence.mean_b,res.p_interaction.mean_b, col,struct('relative_threshold',0.1)); 
 
 
 % mean values (only significant values are shown)
 
 figure(7); clf; 
-interaction_network_plot(network_CoHid, res.p_influence.mean_total_significant,res.p_interaction.mean_total_significant, col, struct('relative_threshold',0.1)); 
+synergy_network_plot(network_CoHid, res.p_influence.mean_total_significant,res.p_interaction.mean_total_significant, col, struct('relative_threshold',0.1)); 
 
 figure(8); clf; 
-interaction_network_plot(network_CoHid, res.p_influence.mean_delta_significant,res.p_interaction.mean_delta_significant, col, struct('relative_threshold',0.1)); 
+synergy_network_plot(network_CoHid, res.p_influence.mean_delta_significant,res.p_interaction.mean_delta_significant, col, struct('relative_threshold',0.1)); 
 
 figure(9); clf; 
-interaction_network_plot(network_CoHid, res.p_influence.mean_a_significant,res.p_interaction.mean_a_significant, col, struct('relative_threshold',0.1)); 
+synergy_network_plot(network_CoHid, res.p_influence.mean_a_significant,res.p_interaction.mean_a_significant, col, struct('relative_threshold',0.1)); 
 
 figure(10); clf; 
-interaction_network_plot(network_CoHid, res.p_influence.mean_b_significant,res.p_interaction.mean_b_significant, col, struct('relative_threshold',0.1)); 
+synergy_network_plot(network_CoHid, res.p_influence.mean_b_significant,res.p_interaction.mean_b_significant, col, struct('relative_threshold',0.1)); 
 
 
 if print_flag,

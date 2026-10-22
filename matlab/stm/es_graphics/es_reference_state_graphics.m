@@ -1,7 +1,20 @@
 function es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
 
-% -------------------------------------------------------------
-% graphics for elasticity sampling reference states
+% ES_REFERENCE_STATE_GRAPHICS - Graphics for elasticity sampling reference states
+%
+% es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
+%
+% network:          network structure
+% es_options:       options used for elasticity sampling
+% result:           output of es_sample_model (or es_reference_state)
+% target_reaction:  name of target reaction for response coefficients
+%                   (if empty, the production of the external metabolite 'Biomass' is used)
+% es_filenames:     struct with fields 'psfile_dir' and 'psfile_base' (only needed for saving graphics)
+% network_CoHid:    network structure for graphics, possibly with hidden cofactors (optional)
+% network_CoSplit:  network structure for graphics, possibly with split cofactors (optional)
+% psfile_dir:       directory for graphics files (optional)
+%
+% If es_options.print_graphics = 1, the graphics are saved as .eps files
 
 eval(default('network_CoHid','network','network_CoSplit','[]'));
 if isempty(network_CoSplit),
@@ -56,6 +69,7 @@ if length(target_reaction),
   rs_enz     = column(result.control.RJu_sc(ind_target,:));
   rs_ext     = zeros(nm,1); 
   rs_ext(ind_ext) = result.control.RJs_sc(ind_target,:);
+  rs_enz(ind_target,1) = nan;
   output = network.actions{ind_target};
 else,
   %% response coefficients production of (external) target metabolite
@@ -67,7 +81,6 @@ else,
   output = [network.metabolites{ind_target} ' production']; 
 end
 
-rs_enz(ind_target,1) = nan;
 figure(4); clf; 
 es_graphics(network,network_CoHid,'response_coefficients',struct('R',rs_enz,'v',result.J),p);
 

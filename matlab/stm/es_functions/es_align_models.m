@@ -1,43 +1,19 @@
 function r = es_align_models(model_list, field_metabolite_id, field_reaction_id, how)
 
-% ES_ALIGN_MODELS
+% ES_ALIGN_MODELS - Find common metabolites and reactions in several models
 % 
-% [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list] = es_align_models(model_list,field_metabolite_id,field_reaction_id)
+% r = es_align_models(model_list, field_metabolite_id, field_reaction_id, how)
 % 
-% fields of 'r': [metabolite_ids, reaction_ids, metabolite_indices_list, reaction_indices_list]
+% model_list:          list of network structures
+% field_metabolite_id: name of the network field containing metabolite ids (e.g. 'metabolite_KEGGID')
+% field_reaction_id:   name of the network field containing reaction ids (e.g. 'reaction_KEGGID')
+% 
+% fields of 'r': [metabolite_ids, metabolite_names, reaction_ids, reaction_names, metabolite_indices_list, reaction_indices_list]
 % how: 'union' or 'intersection'
 % 'intersection' -> items common to all models
 % 'union'        -> items appearing in any model
 
 eval(default('how','''intersection''')); %% alternative: 'union'
-
-if 0,
-  model_name      = 'eccm'; 
-  condition_name  = 'ishii_growth_07';
-  filenames       = stm_model_filenames(model_name,condition_name); 
-  cd([filenames.es_dir]); load(filenames.model_data_file);
-  model2 = network;
-  
-  model_name      = 'bscm'; 
-  condition_name  = 'glucose';
-  filenames       = stm_model_filenames(model_name,condition_name); 
-  cd([filenames.es_dir]); load(filenames.model_data_file);
-  model1 = network;
-  
-  model_name      = 'ycm'; 
-  condition_name  = 'diauxic_glucose';
-  filenames       = stm_model_filenames(model_name,condition_name); 
-  cd([filenames.es_dir]); load(filenames.model_data_file);
-  model3 = network;
-  
-  model_list = {model1, model2, model3};
-  field_metabolite_id = 'metabolite_KEGGID';
-  field_reaction_id   = 'reaction_KEGGID';
-  
-  r = es_align_models(model_list,field_metabolite_id,field_reaction_id);
-
-end
-
 
 % -----------------------------------------------------------------------------
 

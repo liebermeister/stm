@@ -1,19 +1,12 @@
 function r = es_sample_model_write_flux_task(network,es_constraints,es_options,filename)
 
-% ES_SAMPLE_MODEL_WRITE_FLUX_TASK
+% ES_SAMPLE_MODEL_WRITE_FLUX_TASK - Write task file for computing a feasible flux distribution with external software
 %
-% result = es_sample_model_write_flux_task(N, W, ind_ext, es_constraints, es_options)
+% r = es_sample_model_write_flux_task(network, es_constraints, es_options, filename)
 %
-% analogous to es_sample_model; write task file for naama to compute feasible flux distribution
-
-if 0,
-  addpath ~/projekte/stm/matlab/models/ 
-  model_name = 'eccm'; condition_name = 'ishii_growth_07';  
-  filenames       = stm_model_filenames(model_name,condition_name); 
-  cd([filenames.es_dir]); load(filenames.model_data_file);   
-  filename = '~/projekte/stm/matlab/models_for_naama/eccm_for_naama';
-  r = es_sample_model_write_flux_task(network,es_constraints,es_options);
-end
+% Analogous to es_sample_model; the struct r (with the flux and thermodynamic constraints)
+% is saved to the .mat file 'filename' (optional). The solution can be read with
+% es_sample_model_read_flux_task
 
 eval(default('filename','[]'));
 nx = sum(network.external);

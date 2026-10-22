@@ -1,16 +1,22 @@
-function es_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir, R_target_u_sc,R_target_uu_sc,flag_analyse_synergy_cycles,n_cluster);
+function es_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir, R_target_u_sc,R_target_uu_sc,flag_analyse_synergy_cycles,n_cluster)
 
-% es_synergy_graphics(network, network_CoHid, result, es_filenames, result_file, target_reaction, print_style, psfile_dir, R_target_u_sc,R_target_uu_sc,flag_analyse_synergy_cycles,n_cluster);
+% ES_SYNERGY_GRAPHICS - Graphics for first- and second-order response coefficients
+%
+% es_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir, R_target_u_sc, R_target_uu_sc, flag_analyse_synergy_cycles, n_cluster)
 %
 % Statistical analysis of first- and second-order response coefficients 
-% based a previous single elasticity sampling run
+% based on a previous single elasticity sampling run
 %
-% - elasticity sampling of reaction fluxes and chemical potentials
 % - statistics over response coefficients
-% - compute epistastis measure
+% - synergy degrees, clustering of synergies, and cycles in the synergy network
 %
-% read data from [result_file] in directory [es_filenames.data_dir 'es_sampling/']
-% save graphics to directory 'psfile_dir'
+% network, network_CoHid: network structures (the second one for graphics)
+% result:                 output of es_sample_model (with second-order response coefficients)
+% es_filenames:           struct with field 'psfile_base' (only needed for saving graphics)
+% target_reaction:        name of the target reaction
+% psfile_dir:             if non-empty, graphics are saved to this directory
+% R_target_u_sc, R_target_uu_sc: (optional) first- and second-order response coefficients
+%                         to be used (instead of those in 'result')
 
 eval(default('R_target_u_sc','[]','R_target_uu_sc','[]','n_cluster','10','flag_analyse_synergy_cycles','1','psfile_dir','[]'));
 
@@ -26,15 +32,6 @@ end
 network_CoHid.graphics_par = join_struct(struct('omitreactions',[],'omitmetabolites',[]),network_CoHid.graphics_par);
 
 
-% ------------------------------------------------------
-% load prepared results
-
-if isempty(network),
-  cd([es_filenames.es_dir]); 
-  load(result_file);            % load 'options', 'result'
-  load(es_filenames.network_file); % load 'network'
-end
-
 N       = network.N;
 W       = network.regulation_matrix;
 [nm,nr] = size(N);
@@ -49,7 +46,7 @@ ind_ext = find(network.external);
 
 if isempty(R_target_u_sc),
   ind_target     = find(strcmp(target_reaction,network.actions));
-  if isfield(result.control,'RJu_sc'),
+  if isfield(result.control,'RJuu_sc'),
     R_target_u_sc  = column(result.control.RJu_sc(ind_target,:));
     R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
   else
@@ -74,7 +71,7 @@ q_hi = quantile(dum,0.95);
 
 synergy_thr = synergy;
 synergy_thr(find(double(synergy_thr>q_lo) .* double(synergy_thr<q_hi))) = 0;
-synergy_thr = synergy_thr/nanmax(abs(dum)); 
+synergy_thr = synergy_thr/max(abs(dum),[],'omitnan');
 synergy_thr = 0.5*(synergy_thr + synergy_thr');
 
 
@@ -156,7 +153,7 @@ plot(influences(ind_triu),synergies_nan(ind_triu),'.','Color',[.7 .8 1],'MarkerS
 axis_almost_tight; a = axis; 
 plot([a(1) a(2)],[0 0],'--k'); hold on; 
 plot([0 0],[a(3) a(4)],'--k'); hold on;
-errorbar(influence,nanmean(synergies_nan),nanstd(synergies_nan),'.','Color',[.2 .2 .8],'LineWidth',2); hold off
+errorbar(influence,mean(synergies_nan,'omitnan'),std(synergies_nan,'omitnan'),'.','Color',[.2 .2 .8],'LineWidth',2); hold off
 xlabel('Influence (1st order scaled control)'); ylabel('Synergy (2nd order scaled control)');
 a1 = nanquantile(influences(ind_triu),0.001);
 a2 = nanquantile(influences(ind_triu),0.999);
@@ -209,7 +206,7 @@ mean_synergy_degree = mean(synergy_degree)
 figure(114); clf; set(gca,'FontSize',18);
 numbers = 0:15;
 bar(numbers, [ histc(synergy_degree_pos,numbers) histc(synergy_degree_neg,numbers)],'stacked'); 
-legend(sprintf('Positive, total: %s',total_positive_synergies),sprintf('Negative, total: %s',total_negative_synergies)); 
+legend(sprintf('Positive, total: %d',total_positive_synergies),sprintf('Negative, total: %d',total_negative_synergies)); 
 xlabel('Synergy degree'); ylabel('Count number'); 
 
 
@@ -409,49 +406,3 @@ figure(303); subplot(3,1,1); title('Cycle numbers (thresholded synergy)');
 figure(303); subplot(3,1,2); title('Cycle numbers (aggravating synergy)');
 figure(303); subplot(3,1,3); title('P-value (number of positive cycles)');
 
-
-return
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% other clustering algorithms
-
-
-% ---------------------------------------------
-% compute ordering by eigenvalue decomposition and k-means
-
-neig   = 50;
-nclust = 10;
-
-[V,D]                = eig(synergy);
-d                    = diag(D);          
-[dum,order]          = sort(-abs(d));
-X                    = diag(sqrt(abs(d(order)))) * V(:,order(1:neig));
-sd                   = sign(d(order(1:neig)));
-[cluster_indices, c] = kmeans(X, nclust);
-cluster_synergies = c*diag(sd)*c';
-[cluster_indices,cluster_synergies] = sort_clusters(network,cluster_indices,cluster_synergies);
-
-
-% -----------------------------------------------------------------------
-% prism algorithm
-
-nclust = 15;
-
-[Z,Conflict,Direct] = prism(synergy_thr,.5,2,1);
-cluster_indices     = cluster(Z,'MaxClust',nclust);
-cluster_indices     = sort_clusters(network,cluster_indices);
-
-
-%% OTHER GRAPHICS
-% Cumulative distribution of synergy values
-
-% figure(101); clf
-% indices = find(triu(ones(size(synergy,1))));
-% plot(sort(synergy(indices)),[1:length(indices)]/length(indices));
-% %h = bar([-0.05:0.005:0.05],log10(n)); axis tight; 
-% %set(h,'FaceColor',[.9 .9 .9]);
-% xlabel('Scaled second response coefficients');
-% ylabel('Cumulative distribution');
-
-% add titles (after printing)

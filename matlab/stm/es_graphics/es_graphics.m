@@ -1,8 +1,16 @@
 function M = es_graphics(network, network_CoHid, graphics_type, data, p)
 
+% ES_GRAPHICS - Network graphics for elasticity sampling results
+%
 % M = es_graphics(network, network_CoHid, graphics_type, data, p)
 %
-% graphics_type: names, fluxes, flux_movie, ...
+% graphics_type: 'names', 'metabolites', 'metabolite_ratios', 'enzymes', 'enzyme_ratios',
+%                'fluxes', 'elasticities', 'flux_movie', 'thermodynamic_forces', 'dissipation',
+%                'chemical_potentials', 'response_coefficients', 'response_coefficients_Sext',
+%                'individual_metabolites', 'individual_fluxes', 'individual_enzymes'
+% data:          struct with the data to be shown (fields depend on graphics_type)
+% p:             graphics options (see netgraph_concentrations)
+% M:             movie (only for graphics_type 'flux_movie')
 
 eval(default('data','struct','p','struct'));
 
@@ -197,8 +205,8 @@ switch graphics_type,
       subplot(ni,nk,it); 
       hold on;
       if isfield(data,'model'),
-        for it = 1: prod(size(data.model)),
-          plot(1:n_exp,log(data.model(it).c(this_ind,:))/log(10),'c-');
+        for k = 1:numel(data.model),
+          plot(1:n_exp,log(data.model(k).c(this_ind,:))/log(10),'c-');
         end
       end
       if isfield(data,'log_c'),
@@ -218,8 +226,8 @@ switch graphics_type,
       this_ind = ind_data(it);
       subplot(ni,nk,it);         hold on;
       if isfield(data,'model'),
-        for it = 1: prod(size(data.model)),
-          plot(1:n_exp,data.model(it).v(this_ind,:),'c-');
+        for k = 1:numel(data.model),
+          plot(1:n_exp,data.model(k).v(this_ind,:),'c-');
         end
       end
       errorbar(1:n_exp,data.v.mean(this_ind,:),data.v.std(this_ind,:),'ro'); 
@@ -238,8 +246,8 @@ switch graphics_type,
       subplot(ni,nk,it); 
         hold on;
         if isfield(data,'model'),
-          for it = 1: prod(size(data.model)),
-            plot(1:n_exp,log(data.model(it).u(this_ind,:))/log(10),'c-');
+          for k = 1:numel(data.model),
+            plot(1:n_exp,log(data.model(k).u(this_ind,:))/log(10),'c-');
           end
         end
         errorbar(1:n_exp,data.log_u.mean(this_ind,:)/log(10),data.log_u.std(this_ind,:)/log(10),'ro'); 

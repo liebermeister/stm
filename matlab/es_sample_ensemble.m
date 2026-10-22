@@ -4,7 +4,7 @@ function [output, output_list] = es_sample_ensemble(N, W, ind_ext, es_constraint
 %
 % [output, output_list] = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)
 %
-% Run elasticity sampling repeatedly, compute every time an output function 
+% Run elasticity sampling repeatedly, compute every time an output function
 % (any kind of matlab variable), and return a list of the output values.
 %
 % This function also allows for posterior sampling (Metropolis-Monte Carlo algorithm)
@@ -16,7 +16,7 @@ function [output, output_list] = es_sample_ensemble(N, W, ind_ext, es_constraint
 %   N         - Stoichiometric matrix (nm x nr)
 %   W         - Allosteric regulation matrix (nr x nm)
 %   ind_ext   - indices of external metabolites
-% 
+%
 %  For the inputs es_constraints and es_options, see es_default_options
 %
 %  output_function - Output function for which response coefficients are sampled (*1)
@@ -37,14 +37,14 @@ function [output, output_list] = es_sample_ensemble(N, W, ind_ext, es_constraint
 % (2) If a 'select_function' is provided, only samples that yield a non-zero value
 %     of this function will be considered.
 %
-% (3)  If a score function (a log likelihood) is provided, it is evaluated 
+% (3)  If a score function (a log likelihood) is provided, it is evaluated
 %      every time for each sample and the values are used for Metropolis sampling
 %      instead of simple repeated sampling.
 
 
 eval(default('select_function','[]','score_function','[]','function_args','[]'));
 
-if es_options.set_alpha_to_half,
+if es_options.set_alpha_to_half
   warning('Attempted ensemble sampling with fixed saturation values');
 end
 
@@ -55,26 +55,26 @@ old_score = -inf;
 
 es_options.seed = nan;
 
-for it = 1:es_options.n_samples,
+for it = 1:es_options.n_samples
   display(sprintf('\nSample %d/%d',it,es_options.n_samples));
   my_result = es_sample_model(N,W,ind_ext,es_constraints,es_options);
-  if ~isempty(select_function),
+  if ~isempty(select_function)
     accept = feval(select_function,my_result,function_args);
-    while ~accept,
+    while ~accept
       display(' Invalid sample; drawing another sample');
       my_result = es_sample_model(N,W,ind_ext,es_constraints,es_options);
       accept = feval(select_function,my_result,function_args);
     end
   end
   my_output = feval(output_function,my_result,function_args);
-  if isempty(score_function),
+  if isempty(score_function)
     output_list{it} = my_output;
   else
     my_score = feval(score_function,my_result,function_args);
-    if [my_score > old_score] + [rand < exp(my_score - old_score)] 
+    if [my_score > old_score] + [rand < exp(my_score - old_score)]
       output_list{it} = my_output;
       old_score = my_score;
-    else,
+    else
       output_list{it} = output_list{it-1};
     end
   end
@@ -85,23 +85,23 @@ end
 
 output = [];
 
-if isscalar(output_list{1}),
+if isscalar(output_list{1})
 
-  for it = 1:length(output_list),
+  for it = 1:length(output_list)
     output(it,:) = output_list{it};
   end
 
 else
 
-  if isvector(output_list{1}),
-    for it = 1:length(output_list),
+  if isvector(output_list{1})
+    for it = 1:length(output_list)
       output(:,it) = output_list{it};
     end
-  
+
   else % tensor
 
-    if isnumeric(output_list{1}),
-      for it = 1:length(output_list),
+    if isnumeric(output_list{1})
+      for it = 1:length(output_list)
         output(:,:,it) = output_list{it};
       end
     end

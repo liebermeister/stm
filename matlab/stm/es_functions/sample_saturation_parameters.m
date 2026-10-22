@@ -13,37 +13,37 @@ if ~isfield(es_options,'set_alpha_to_half'), es_options.set_alpha_to_half = 0; e
 
 empty = sparse(nr,nm); alpha_A = empty; alpha_I = empty; alpha_M = empty;
 
-if es_options.set_alpha_to_half,
+if es_options.set_alpha_to_half
   alpha_M(ind_Mp) = 0.5;
-  alpha_M(ind_Mm) = 0.5;  
+  alpha_M(ind_Mm) = 0.5;
   alpha_A(ind_Wp) = 0.5;
   alpha_I(ind_Wm) = 0.5;
-  if es_options.verbose,
+  if es_options.verbose
     display(' Setting all alpha values = 0.5');
   end
-else,
+else
   alpha_M(ind_Mp)  = es_constraints.alpha_min + [es_constraints.alpha_max-es_constraints.alpha_min] * rand(size(ind_Mp));
   alpha_M(ind_Mm)  = es_constraints.alpha_min + [es_constraints.alpha_max-es_constraints.alpha_min] * rand(size(ind_Mm));
   alpha_A(ind_Wp)  = es_constraints.alpha_min + [es_constraints.alpha_max-es_constraints.alpha_min] * rand(size(ind_Wp));
   alpha_I(ind_Wm)  = es_constraints.alpha_min + [es_constraints.alpha_max-es_constraints.alpha_min] * rand(size(ind_Wm));
-  if es_options.verbose,
+  if es_options.verbose
     display(' Drawing alpha values uniformly from [0,1]');
   end
 
-  if es_options.set_alpha_nonuniform,
+  if es_options.set_alpha_nonuniform
     %% THIS STILL HAS TO BE TESTED!!!!
-    if size(es_constraints.alpha_M_mean),
+    if size(es_constraints.alpha_M_mean)
       [Beta_M_alpha, Beta_M_beta] = Beta_mean_std_to_parameters(es_constraints.alpha_M_mean, es_constraints.alpha_M_std);
       rnd_M = betarnd(full(Beta_M_alpha), full(Beta_M_beta));
       alpha_M(ind_Mp(isfinite(rnd_M(ind_Mp)))) = rnd_M(ind_Mp(find(isfinite(rnd_M(ind_Mp)))));
       alpha_M(ind_Mm(isfinite(rnd_M(ind_Mm)))) = rnd_M(ind_Mm(find(isfinite(rnd_M(ind_Mm)))));
     end
-    if size(es_constraints.alpha_A_mean),
+    if size(es_constraints.alpha_A_mean)
       [Beta_A_alpha, Beta_A_beta] = Beta_mean_std_to_parameters(es_constraints.alpha_A_mean, es_constraints.alpha_A_std);
       rnd_A = betarnd(full(Beta_A_alpha), full(Beta_A_beta));
       alpha_A(ind_Wp(isfinite(rnd_A(ind_Wp)))) = rnd_A(ind_Wp(find(isfinite(rnd_A(ind_Wp)))));
     end
-    if size(es_constraints.alpha_I_mean),
+    if size(es_constraints.alpha_I_mean)
       [Beta_I_alpha, Beta_I_beta] = Beta_mean_std_to_parameters(es_constraints.alpha_I_mean, es_constraints.alpha_I_std);
       rnd_I = betarnd(full(Beta_I_alpha), full(Beta_I_beta));
       alpha_I(ind_Wm(isfinite(rnd_I(ind_Wm)))) = rnd_I(ind_Wm(find(isfinite(rnd_I(ind_Wm)))));

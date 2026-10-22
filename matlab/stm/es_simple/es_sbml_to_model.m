@@ -12,7 +12,7 @@ function [network, result, options, constraints] = es_sbml_to_model(sbml_filenam
 % Function arguments:
 %  sbml_filename         sbml file
 %  external_metabolites  will be set external (in addition to "dead ends" detected automatically)
-%  cofactors             will also be set external 
+%  cofactors             will also be set external
 %  v_sign                vector of predefined signs for flux distribution
 
 eval(default('external_metabolites','{}','cofactors','{}','v_sign','[]'));
@@ -50,7 +50,7 @@ N       = network.N;
 W       = zeros(size(N'));
 ext_ind = find(network.external);
 
-if ~isempty(v_sign),
+if ~isempty(v_sign)
   constraints.v_fix(v_sign==0)  = 0;
   constraints.v_sign            = v_sign;
   constraints.v_sign(v_sign==0) = nan;

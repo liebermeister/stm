@@ -3,7 +3,7 @@ function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, e
 % ES_SAMPLE_MODEL - Sample all model parameters for a network
 %
 % result = es_sample_model(N, W, ind_ext, es_constraints, es_options)
-% 
+%
 % This script reconstructs one model instance, including the sampled elasticities.
 % For samplig multiple model instances, see 'es_sample_ensemble'.
 %
@@ -43,9 +43,9 @@ if ~isnan(es_options.seed), rng(es_options.seed); end
 
 M_max = es_options.limit_cooperativity;
 
-if  max(max(abs(N))) > M_max,
+if  max(max(abs(N))) > M_max
   display(' * Large stoichiometric coefficients encountered. Compensating them by small');
-  display('   reaction cooperativities h; predefined reaction affinities and equilibrium'); 
+  display('   reaction cooperativities h; predefined reaction affinities and equilibrium');
   display('   constants are adjusted');
   ind = find(max(abs(N)) > M_max);
   es_options.h(ind) = M_max./max(abs(N(:,ind)));

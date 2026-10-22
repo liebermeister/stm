@@ -7,8 +7,8 @@ function find_hyperantagonistic(fx,Fxx)
 
 nr = length(fx);
 
-for i1 = 1:nr,
-  for i2 = 1:i1-1,
+for i1 = 1:nr
+  for i2 = 1:i1-1
     fa  = fx(i1);
     fb  = fx(i2);
     faa = Fxx(i1,i1);

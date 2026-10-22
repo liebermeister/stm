@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of prism_clustering</title>
+  <meta name="keywords" content="prism_clustering">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">matlab</a> &gt; <a href="../index.html">stm</a> &gt; <a href="index.html">es_synergies</a> &gt; prism_clustering.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for matlab/stm/es_synergies&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>prism_clustering
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [Z,Conflict,Direct]=prism_clustering(ECM,Alpha,Gamma,PrismR) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">
+ function [Z,Conflict,Direct]=prism_clustering(ECM,Alpha,Gamma,PrismR)
+
+ PRISM algorithm by Segre et al. (2005) (renamed from 'prism' to avoid
+ a name conflict with Matlab's colormap function 'prism')
+ 
+ Cluster a two-color network into monochromatically interacting clusters
+ 
+ ECM: A symmetric square matrix describing the interaction network
+ ECM(i,j): Interaction between nodes i and j: 
+ (0) No interaction; (1) Positive ; (-1) Negative ;
+
+ Alpha: Associative (0) versus Direct (1) contributions to cluster affinities. 
+ Set between 0 and 1. 
+
+ Gamma: Raise associative correlation to a power for increasing the 
+        importance of high similarity (default is 1 - no enhancement). 
+
+ PrismR: Run in Prism (0, default) or in Prism-R (1) mode. 
+
+ The function returns the clustering in Z (see help linkage)
+ Also returns:
+    Conflict: the number of conflicts generated in each clustering step
+    where, Qmodule = sum((Conflict&gt;0).*Conflict) 
+    Direct: the direct postive and negative connections between the clusters 
+
+ 
+ &quot;Modular epistasis in yeast metabolism&quot;
+ Daniel Segrè, Alexander DeLuna, George M. Church, Roy Kishony
+ 
+
+ For questions or comments please contact:
+
+ Roy Kishony
+ Bauer Center for Genomics Research
+ Harvard University
+ 7 Divinity Ave
+ Cambridge, MA 02138
+ E-mail: rkishony@cgr.harvard.edu
+
+
+ R.K. 4/24/04</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 22-Oct-2026 20:12:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

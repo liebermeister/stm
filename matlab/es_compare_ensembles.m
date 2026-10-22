@@ -14,8 +14,9 @@ function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)
 %
 %   output1  - Matrix or tensor from 1st model variant (from 'es_sample_ensemble')
 %   output2  - Matrix or tensor from 2nd model variant (from 'es_sample_ensemble')
-%   n_per    - Number of samples in permutation test
-%   fdr      - False discovery rate
+%   n_per    - Number of samples in permutation test (default 100)
+%   fdr      - False discovery rate (default 0.05)
+%   verbose  - Verbose output (default 0)
 %
 % Output: Data structure 'res' with fields:
 %
@@ -44,7 +45,7 @@ function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)
 
 eval(default('n_per','100','fdr','0.05', 'verbose', '0'));
 
-if norm(size(output1)-size(output1)), 
+if ~isequal(size(output1),size(output2)), 
   error('function arguments output1 and output2 must have the same size'); 
 end
 
@@ -57,7 +58,7 @@ switch length(size(output1)),
   
   case 3,
     D(:,:,:,1) = output1;
-    D(:,:,:,1) = output2;
+    D(:,:,:,2) = output2;
     res = interaction_anova(D, n_per, fdr, [], verbose);
 
 end

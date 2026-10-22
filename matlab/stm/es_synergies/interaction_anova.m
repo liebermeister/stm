@@ -1,8 +1,8 @@
 function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)
 
-%INFLUENCE_ANOVA - Anova of a variable characterising pairs reactions 
+%INTERACTION_ANOVA - Anova of a variable characterising pairs reactions 
 %
-%p = influence_anova(D, n_per, fdr, ind_intervention)
+%p = interaction_anova(D, n_per, fdr, ind_intervention, verbose)
 %
 % Anova of a variable characterising pairs reactions 
 %   (e.g., all second-order control coefficients for a single objective)
@@ -12,6 +12,7 @@ function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)
 %                       nr: # reactions (corresponds to 'reaction' vector)
 %                    n_sim: # number of MC samples
 %                        2: two qualitative conditions to be compared (e.g. different fluxes)
+% n_per:            sample number in permutation tests
 % fdr:              false discovery rate
 % ind_intervention: reaction indices to be selected for the analysis (optional)
 %
@@ -40,9 +41,9 @@ function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)
 %   p.n_mean_delta_significant # significant elements for difference between values for both variants
 
 
-eval(default('fdr','0.01','verbose','0'));
+eval(default('fdr','0.01','ind_intervention','[]','verbose','0'));
 
-if exist('ind_intervention','var'), D = D(ind_intervention,ind_intervention,:,:); end
+if length(ind_intervention), D = D(ind_intervention,ind_intervention,:,:); end
 
 if verbose, display('Testing all pairs of interventions'); end
 
@@ -111,11 +112,11 @@ for r1 = 1:nr-1,
     
     for it_perm = 1:n_per, 
       rand_indices = randperm(n_finite_a);
-      indices = finite_indices(rand_indices(1:2*n_sim));
-      this_mean(it_perm) = mean(Da(indices));
+      indices = finite_indices_a(rand_indices(1:n_sim));
+      this_mean_a(it_perm) = mean(Da(indices));
     end
     
-    p.p_value_mean_a(r1,r2) =  pvalue_from_countnumber(p.mean_a(r1,r2),this_mean);
+    p.p_value_mean_a(r1,r2) =  pvalue_from_countnumber(p.mean_a(r1,r2),this_mean_a);
 
     
     % mean interaction value for condition B
@@ -129,11 +130,11 @@ for r1 = 1:nr-1,
     
     for it_perm = 1:n_per, 
       rand_indices = randperm(n_finite_b);
-      indices = finite_indices(rand_indices(1:2*n_sim));
-      this_mean(it_perm) = mean(Db(indices));
+      indices = finite_indices_b(rand_indices(1:n_sim));
+      this_mean_b(it_perm) = mean(Db(indices));
     end
     
-    p.p_value_mean_b(r1,r2) = pvalue_from_countnumber(p.mean_b(r1,r2),this_mean);
+    p.p_value_mean_b(r1,r2) = pvalue_from_countnumber(p.mean_b(r1,r2),this_mean_b);
 
 % difference between two conditions
     p.mean_delta(r1,r2) = [1, -1] * mean(data_table,2);
@@ -165,7 +166,7 @@ p.mean_a_significant(find(tril(ones(nr)))) = nan;
 p.mean_b_significant(find(tril(ones(nr)))) = nan;
 p.mean_delta_significant(find(tril(ones(nr))))  = nan;
 
-p.n_mean_total_significant   = nansum(nansum(abs(p.mean_total_significant  )));
-p.n_mean_a_significant       = nansum(nansum(abs(p.mean_a_significant)));
-p.n_mean_b_significant       = nansum(nansum(abs(p.mean_b_significant)));
-p.n_mean_delta_significant   = nansum(nansum(abs(p.mean_delta_significant )));
+p.n_mean_total_significant   = sum(abs(p.mean_total_significant  ),'all','omitnan');
+p.n_mean_a_significant       = sum(abs(p.mean_a_significant),'all','omitnan');
+p.n_mean_b_significant       = sum(abs(p.mean_b_significant),'all','omitnan');
+p.n_mean_delta_significant   = sum(abs(p.mean_delta_significant ),'all','omitnan');

@@ -1,12 +1,12 @@
 %---------------------------------------------------------
 % demo_elasticity_sampling_noor_2016
-% Demo script for thermodynamically feasible elasticity sampling 
+% Demo script for thermodynamically feasible elasticity sampling
 %---------------------------------------------------------
 
 clear; clearvars -global
 
 % check correct installation of elasticity sampling code
-es_dependencies; 
+es_dependencies;
 
 model_dir = [es_BASEDIR '/../resource-data/models-other/model_noor_2016_modified'];
 
@@ -15,9 +15,9 @@ cd(model_dir);
 %---------------------------------------------------------
 % Elasticity sampling demo
 %
-% In this script, we load a metabolic network model, 
-% run elasticity sampling with two types of rate laws, 
-% and compare the results of the two model ensembles 
+% In this script, we load a metabolic network model,
+% run elasticity sampling with two types of rate laws,
+% and compare the results of the two model ensembles
 %---------------------------------------------------------
 
 
@@ -36,29 +36,29 @@ model_state_file = [model_dir filesep 'e_coli_noor_2016_plus_overflow_oxa_intern
 % [network.N' * log(c) - network.kinetics.Keq, v]
 
 %-------------------------------------------------------------------------------
-% The matlab command for elasticity sampling requires the stoichiometric matrix N 
+% The matlab command for elasticity sampling requires the stoichiometric matrix N
 % and the allosteric regulation matrix W.
 
 % We extract these matrices from the network structure.
- 
-N = network.N;                  % stoichiometric matrix 
+
+N = network.N;                  % stoichiometric matrix
 W = network.regulation_matrix;  % allosteric regulation matrix
- 
+
 
 %-------------------------------------------------------------------------------
 % User options for elasticity sampling are stored in two matlab structs,
-% 'es_options' and 'es_constraints'. 
- 
-% 'es_options' contains general settings for the calculation workflow, 
+% 'es_options' and 'es_constraints'.
+
+% 'es_options' contains general settings for the calculation workflow,
 % 'es_constraints' contains numerical details about the model.
- 
+
 [es_options, es_constraints] = es_default_options(N);
 
 
 %-------------------------------------------------------------------------------
-% After inserting the flux mode into 'es_constraints', we run elasticity sampling 
+% After inserting the flux mode into 'es_constraints', we run elasticity sampling
 % All output will be stored in a data structure 'result'
- 
+
 % Set fixed fluxes, concentrations, and equilibrium constants
 
 es_constraints.v_fix         = v;
@@ -68,7 +68,6 @@ es_constraints.Keq_fix       = network.kinetics.Keq;
 es_constraints.dmu_limit_min = 0.05;
 
 es_options.ind_ignore        = [];
-es_options.flag_second_order = 0;
 es_options.sampling_method   = 'v from data';
 es_options.kinetic_law       = 'cs';
 es_options.flag_second_order = 1;
@@ -81,10 +80,10 @@ es_options.print_graphics    = 0;
 % Graphics
 % ---------------------------------------
 
-% For clarity, omit NAD compounds from graphics 
+% For clarity, omit NAD compounds from graphics
 % network.graphics_par.omitmetabolites       = {'NAD+ [c]', 'NAD+ [m]', 'NADH [c]', 'NADH [m]'};
 
-target_reaction    = 'Overflow'; 
+target_reaction    = 'Overflow';
 
 ca;
 es_reference_state_graphics(network, es_options, result, target_reaction);

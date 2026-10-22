@@ -4,11 +4,11 @@ function control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)
 %
 % control = es_control_analysis(RSp, RJp, RSpp, RJpp, c, v, u, ind_ext)
 %
-% Given parameter response matrices RSp and RJp and tensors RSpp and RJpp, 
-% compute the corresponding matrices and tensors for enzymes and external 
+% Given parameter response matrices RSp and RJp and tensors RSpp and RJpp,
+% compute the corresponding matrices and tensors for enzymes and external
 % metabolites separately and compute all scaled response coefficients
-% 
-% Distinguish between response coefficients for enzymes (u) and external 
+%
+% Distinguish between response coefficients for enzymes (u) and external
 % metabolites s = c(ind_ext), while p denotes all parameters p = [u; s]
 
 nr = size(RJp,1);

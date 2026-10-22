@@ -1,13 +1,19 @@
-% ES_DEPENDENCIES - Check for dependencies of the ES toolbox
-
 function es_dependencies()
 
-if ~exist('mnt_version','file'),
-  error('Please install the Metabolic Network Toolbox (https://github.com/wolframliebermeister/mnt)');
+% ES_DEPENDENCIES - Check whether the packages used by the STM toolbox are installed
+%
+% es_dependencies()
+%
+% (see README.md for details)
+
+if ~exist('mnt_version','file')
+  error('Please install the Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox)');
 end
 
+% check the packages used by the Metabolic Network Toolbox
+% (matlab-utils, SBtab, libSBML, Tensor Toolbox, efmtool)
 mnt_dependencies
 
-if ~exist('tensor','file'),
-  error('Please install the Tensor toolbox (see http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)');
+if ~exist('parameter_balancing','file')
+  warning('Please install Parameter balancing for Matlab (https://github.com/liebermeister/parameter-balancing-matlab) - It is used in the workflow demo and for building the E. coli model.');
 end

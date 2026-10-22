@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_reference_state_graphics</title>
+  <meta name="keywords" content="es_reference_state_graphics">
+  <meta name="description" content="ES_REFERENCE_STATE_GRAPHICS - Graphics for elasticity sampling reference states">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">matlab</a> &gt; <a href="../index.html">stm</a> &gt; <a href="index.html">es_graphics</a> &gt; es_reference_state_graphics.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for matlab/stm/es_graphics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>es_reference_state_graphics
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>ES_REFERENCE_STATE_GRAPHICS - Graphics for elasticity sampling reference states</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ES_REFERENCE_STATE_GRAPHICS - Graphics for elasticity sampling reference states
+
+ es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
+
+ network:          network structure
+ es_options:       options used for elasticity sampling
+ result:           output of es_sample_model (or es_reference_state)
+ target_reaction:  name of target reaction for response coefficients
+                   (if empty, the production of the external metabolite 'Biomass' is used)
+ es_filenames:     struct with fields 'psfile_dir' and 'psfile_base' (only needed for saving graphics)
+ network_CoHid:    network structure for graphics, possibly with hidden cofactors (optional)
+ network_CoSplit:  network structure for graphics, possibly with split cofactors (optional)
+ psfile_dir:       directory for graphics files (optional)
+
+ If es_options.print_graphics = 1, the graphics are saved as .eps files</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="es_graphics.html" class="code" title="function M = es_graphics(network, network_CoHid, graphics_type, data, p)">es_graphics</a>	ES_GRAPHICS - Network graphics for elasticity sampling results</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../matlab/demo/demo_stm_noor_2016_modified.html" class="code" title="">demo_stm_noor_2016_modified</a>	---------------------------------------------------------</li><li><a href="../../../matlab/demo/demo_stm_workflow.html" class="code" title="">demo_stm_workflow</a>	elasticity_sampling_workflow - Demo script</li><li><a href="../../../matlab/stm/es_simple/es_model_to_sampling.html" class="code" title="function result = es_model_to_sampling(network, network_CoHid, v, target_reaction, ind_ignore, print_graphics, psfile_dir, graphics_file)">es_model_to_sampling</a>	ES_MODEL_TO_SAMPLING - Wrapper function for es_reference_state plus some graphics routines</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 22-Oct-2026 20:12:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

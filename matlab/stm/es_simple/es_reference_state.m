@@ -4,7 +4,7 @@ function [result, fluxes, es_options, es_constraints] = es_reference_state(netwo
 %
 % [result, fluxes, es_options, es_constraints] = es_reference_state(network, es_options, es_constraints)
 %
-% Construct a reference state and compute the elasticities, 
+% Construct a reference state and compute the elasticities,
 % assuming half-saturation (i.e., saturation values alpha = 0.5)
 %
 % This function is a wrapper around 'es_sample_model.m'

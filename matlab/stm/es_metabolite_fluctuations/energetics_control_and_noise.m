@@ -2,24 +2,30 @@ function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz,
 
 %ENERGETICS_CONTROL_AND_NOISE - Analyse control coefficients and noise levels (assuming uniform white noise in each reaction!)
 %
-%[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, v, mu, omega_list, tau_list, psfile_dir, basename, es_options, es_constraints, volume)
+%[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network, network_CoHid, c, v, mu, omega_list, tau_list, omega_fast, omega_slow, psfile_dir, basename, es_options, es_constraints, volume)
 %
-% Recommended units: 
+% omega_list:             list of circular frequencies (increasing)
+% tau_list:               list of time scales for smoothed variances (default 10.^[-2:0.1:4])
+% omega_fast, omega_slow: frequencies (from omega_list) for the network graphics (default: last and first element)
+% psfile_dir, basename:   if psfile_dir is non-empty, graphics are saved to this directory
+%
+% Recommended units:
 %  Enzyme levels in  mol
 %  Volume            m^3
 %  Metabolite levels mM
 %  Fluxes            mol/s
 %  Accordingly, the spectral densities will be in mM^2 and (mol/s)^2
-% 
-% Spectral densities are computed under the assumption that white noise 
-% has a spectral density of 1. If white noise is defined as having a covariance 
-% given by the Dirac delta function (with prefactor 1), as assumed in the 
-% chemical Langevin equation, this corresponds to a Fourier transformation 
-% with prefactor 1 for the transformation omega -> t and prefactor 1/2pi for the 
+%
+% Spectral densities are computed under the assumption that white noise
+% has a spectral density of 1. If white noise is defined as having a covariance
+% given by the Dirac delta function (with prefactor 1), as assumed in the
+% chemical Langevin equation, this corresponds to a Fourier transformation
+% with prefactor 1 for the transformation omega -> t and prefactor 1/2pi for the
 % transformation t -> omega
 
 eval(default('es_options','[]', 'es_constraints','[]','volume','1'));
 
+if isempty(tau_list),   tau_list   = 10.^[-2:0.1:4];  end
 if isempty(omega_slow), omega_slow = omega_list(1);   end
 if isempty(omega_fast), omega_fast = omega_list(end); end
 
@@ -36,7 +42,7 @@ if isempty(es_constraints), es_constraints = struct; end
 
 % default: simple choice -> keq = 1
 es_def_options.seed              = nan;
-es_def_constraints.log_c_fix     = 1/RT * es_def_constraints.mu_fix; 
+es_def_constraints.log_c_fix     = 1/RT * es_def_constraints.mu_fix;
 es_def_options.set_alpha_to_half = 1; % set enzymes to half-saturation
 
 es_options            = join_struct(es_def_options,es_options);
@@ -58,7 +64,7 @@ v_molnumbers_plus  = result.v_plus  * N_avogadro;
 v_molnumbers_minus = result.v_minus * N_avogadro;
 %% conc: values assuming that fluxes are expressed in mM/s
 Ec  = result.elasticities.un_E_c;
-Ep  = 1/N_avogadro * [diag(sqrt(v_molnumbers_plus)), diag(sqrt(v_molnumbers_plus))];
+Ep  = 1/N_avogadro * [diag(sqrt(v_molnumbers_plus)), diag(sqrt(v_molnumbers_minus))];
 noise_production   = [v_molnumbers_plus + v_molnumbers_minus] / N_avogadro;
 
 % static contol coefficients
@@ -81,10 +87,10 @@ z       = 1;
 ind_int = find(network.external ==0);
 
 % The spectral power density is defined as the Fourier transform of the covariance
-% function, with the convention 
+% function, with the convention
 
-for omega = omega_list,
-  [RS, RJ]     = spectral_response_coefficients(1/volume*N0, L, [], struct('omega',omega),Ec(:,ind_int),Ep); 
+for omega = omega_list
+  [RS, RJ]     = spectral_response_coefficients(1/volume*N0, L, [], struct('omega',omega),Ec(:,ind_int),Ep);
   % here: count flux changes relative to flux direction
   RJ = diag(sign(v)) * RJ;
   Sigma_c      = [Sigma_c,      real(diag(RS * RS'))];
@@ -104,55 +110,55 @@ ca
 % -------------------------------------------------------
 % static control coefficients
 
-figure(1001); clf; set(gca,'Fontsize',18); 
+figure(1001); clf; set(gca,'Fontsize',18);
 blob_im_energetics(CJ_sc,'Reaction perturbed','Reaction')
-%im(CJ_sc,1.01*max(abs(CJ_sc(:)))); colormap([0.7 0.7 0.7; rb_colors]); 
+%im(CJ_sc,1.01*max(abs(CJ_sc(:)))); colormap([0.7 0.7 0.7; rb_colors]);
 %xlabel('Reaction perturbed'); ylabel('Reaction'); colorbar
 
-figure(1002); clf; set(gca,'Fontsize',18); 
+figure(1002); clf; set(gca,'Fontsize',18);
 blob_im_energetics(CS_sc, 'Reaction perturbed', 'Metabolite')
 % im(CS_sc,1.01*max(abs(CS_sc(:)))); colormap([0.7 0.7 0.7; rb_colors]);
 % xlabel('Reaction perturbed'); ylabel('Metabolite'); colorbar
 
 
 % -------------------------------------------------------
-% fluctuations caused by chemical noise at omega = 2 pi / s 
+% fluctuations caused by chemical noise at omega = 2 pi / s
 % (oscillations of 1 Hertz)
 
-[RS, RJ] = spectral_response_coefficients(N0, L, [], struct('omega',2*pi),Ec(:,ind_int),Ep); 
+[RS, RJ] = spectral_response_coefficients(1/volume*N0, L, [], struct('omega',2*pi),Ec(:,ind_int),Ep);
 % here: count flux changes relative to flux direction
 RJ = diag(sign(v)) * RJ;
 
 Sigma_c_specific_1Hertz = abs(RS(:,1:nr).^2) + abs(RS(:,nr+1:end).^2);
 Sigma_j_specific_1Hertz = abs(RJ(:,1:nr).^2) + abs(RJ(:,nr+1:end).^2);
 
-figure(2001); clf; 
-subplot('Position',[0.2 0.1 0.77 0.7]); set(gca,'Fontsize',18); 
+figure(2001); clf;
+subplot('Position',[0.2 0.1 0.77 0.7]); set(gca,'Fontsize',18);
 blob_im_energetics(Sigma_j_specific_1Hertz, 'Reaction (origin of chemical noise)', 'Reaction (origin of chemical noise)')
-% im(Sigma_j_specific_1Hertz,[],network.actions,network.actions); colormap(rb_colors); 
+% im(Sigma_j_specific_1Hertz,[],network.actions,network.actions); colormap(rb_colors);
 % axis square; my_xticklabel; xlabel('Reaction (origin of chemical noise)'); colorbar
 
-figure(2002); clf; 
+figure(2002); clf;
 subplot('Position',[0.4 0.1 0.57 0.7]);
 blob_im_energetics(Sigma_c_specific_1Hertz, 'Reaction (origin of chemical noise)', 'Reaction (origin of chemical noise)')
-% im(Sigma_c_specific_1Hertz,[],network.metabolites(ind_int),network.actions); colormap(rb_colors); 
+% im(Sigma_c_specific_1Hertz,[],network.metabolites(ind_int),network.actions); colormap(rb_colors);
 % my_xticklabel; xlabel('Reaction (origin of chemical noise)'); colorbar
 
 
 % -------------------------------------------------------
 % display spectral densities
 
-figure(2); clf; 
-hold on; 
-h = plot(1/(2*pi) * omega_list,Sigma_c'); 
-set(gca,'XScale','Log', 'YScale','Log'); set(gca,'Fontsize',18) 
-axis tight; line_colors(h,'copper'); 
+figure(2); clf;
+hold on;
+h = plot(1/(2*pi) * omega_list,Sigma_c');
+set(gca,'XScale','Log', 'YScale','Log'); set(gca,'Fontsize',18)
+axis tight; line_colors(h,'copper');
 %legend(escape_underscores(network.metabolites(ind_int)),'Fontsize',6);
 xlabel('Frequency [1/s]'); ylabel('Spectral density [mM^2 s]');
 
-figure(3); clf; 
-hold on; 
-h = plot(1/(2*pi) * omega_list,Sigma_j'); set(gca,'XScale','Log', 'YScale','Log'); 
+figure(3); clf;
+hold on;
+h = plot(1/(2*pi) * omega_list,Sigma_j'); set(gca,'XScale','Log', 'YScale','Log');
 axis tight; line_colors(h,'copper'); set(gca,'Fontsize',18);
 xlabel('Frequency [1/s]'); ylabel('Spectral density [(mol/s)^2 s]');
 %legend(escape_underscores(network.actions),'Fontsize',6,'Location','EastOutside');
@@ -178,14 +184,14 @@ dum = nan*ones(nm,1);
 % Spectral metabolite correlations (threshold for display: 10%)
 
 dum = zeros(nm,nm);
-dum(ind_int,ind_int) = Sigma_c_list{ find(omega_list == omega_slow) }; 
-figure(110); 
-netgraph_metabolite_synergies(network_CoHid, diag(dum), dum, rb_colors, struct('relative_threshold',0.1,'actprintnames',0,'metprintnames',0)); 
+dum(ind_int,ind_int) = Sigma_c_list{ find(omega_list == omega_slow) };
+figure(110);
+netgraph_metabolite_synergies(network_CoHid, diag(dum), dum, rb_colors, struct('relative_threshold',0.1,'actprintnames',0,'metprintnames',0));
 
 % 1/sec
-dum(ind_int,ind_int) = Sigma_c_list{find(omega_list == omega_fast) };  
+dum(ind_int,ind_int) = Sigma_c_list{find(omega_list == omega_fast) };
 figure(111);
-netgraph_metabolite_synergies(network_CoHid, diag(dum), dum, rb_colors, struct('relative_threshold',0.1,'metprintnames',0)); 
+netgraph_metabolite_synergies(network_CoHid, diag(dum), dum, rb_colors, struct('relative_threshold',0.1,'metprintnames',0));
 
 
 % -------------------------------------------------
@@ -196,40 +202,39 @@ gp = struct('relative_threshold',0.1,'arrowstyle','none','actprintnames',0,'metp
 % 1/(1000) 1/sec  (16.7 minutes period)
 %dum = Sigma_j_list{ find(omega_list == 2 * pi * 1/(1000)) };
 dum = Sigma_j_list{ find(omega_list == omega_fast) };
-figure(112); synergy_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp); 
+figure(112); synergy_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp);
 
 % 1/sec
 %dum = Sigma_j_list{ find(omega_list == 2 * pi * 1) };
 dum = Sigma_j_list{ find(omega_list == omega_slow)};
-figure(113); synergy_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp); 
+figure(113); synergy_network_plot(network_CoHid, diag(dum), dum, rb_colors, gp);
 
 
 % -------------------------------------------------
 
-figure(20); netgraph_concentrations(network_CoHid, [],abs(result.A/RT),1,struct('colormap',rb_colors,'arrowstyle','none','actprintnames',0,'metprintnames',0)); 
+figure(20); netgraph_concentrations(network_CoHid, [],abs(result.A/RT),1,struct('colormap',rb_colors,'arrowstyle','none','actprintnames',0,'metprintnames',0));
 
-figure(21); netgraph_concentrations(network_CoHid, result.mu,[],1, struct('colormap',rb_colors,'actprintnames',0,'metprintnames',0,'showsign',1)); 
+figure(21); netgraph_concentrations(network_CoHid, result.mu,[],1, struct('colormap',rb_colors,'actprintnames',0,'metprintnames',0,'showsign',1));
 
-figure(22); netgraph_concentrations(network_CoHid, [] , 1/max(noise_production) * noise_production, 1, struct('colormap',rb_colors,'actprintnames',0,'metprintnames',0)); 
+figure(22); netgraph_concentrations(network_CoHid, [] , 1/max(noise_production) * noise_production, 1, struct('colormap',rb_colors,'actprintnames',0,'metprintnames',0));
 
 
 % -------------------------------------------------
 % variance quantities measured on different time scales
 
-tau_list = 10.^[-2:0.1:4];
 Var_c = spectral_density_to_smooth_variance(omega_list,Sigma_c,tau_list);
 Var_j = spectral_density_to_smooth_variance(omega_list,Sigma_j,tau_list);
 
-figure(1011); clf; 
-h = plot(tau_list,sqrt(Var_c)); 
+figure(1011); clf;
+h = plot(tau_list,sqrt(Var_c));
 set(gca,'XScale','log','YScale','log','Fontsize',18);
-xlabel('Observation time scale {\tau} [s]'); ylabel('Concentration Std Dev [mM]'); 
+xlabel('Observation time scale {\tau} [s]'); ylabel('Concentration Std Dev [mM]');
 line_colors(h,'copper')
 axis tight
 %legend(escape_underscores(network.metabolites(network.external==0)),'Fontsize',6);
 
-figure(1012); clf; 
-h = plot(tau_list,sqrt(Var_j)); 
+figure(1012); clf;
+h = plot(tau_list,sqrt(Var_j));
 set(gca,'XScale','log','YScale','log','Fontsize',18)
 xlabel('Observation time scale {\tau} [s]'); ylabel('Flux Std Dev [mol/s]');
 line_colors(h,'copper')
@@ -238,7 +243,7 @@ axis tight
 
 figure(1013); clf; set(gca,'Fontsize',18)
 h = plot(tau_list,diag(1./c(find(network.external==0))) * sqrt(Var_c)); set(gca,'XScale','log','YScale','log');
-xlabel('Observation time scale {\tau} [s]'); ylabel('Concentration CV [unitless]'); 
+xlabel('Observation time scale {\tau} [s]'); ylabel('Concentration CV [unitless]');
 line_colors(h,'copper')
 %legend(escape_underscores(network.metabolites(network.external==0)),'Fontsize',6);
 
@@ -248,11 +253,10 @@ xlabel('Observation time scale {\tau} [s]'); ylabel('Flux CV [unitless]');
 line_colors(h,'copper')
 %legend(escape_underscores(network.actions),'Fontsize',6);
 
-if length(psfile_dir),
+if length(psfile_dir)
   cd(psfile_dir);
   display(sprintf('Saving graphics to directory %s', psfile_dir));
-  figure(2); export_fig([ psfile_dir '/' basename '_spectral_conc_freq.eps'], gcf, '-depsc');
-  %exportfig(2, [ psfile_dir '/' basename '_spectral_conc_freq.eps'], '-f2', '-depsc');
+  print([ psfile_dir '/' basename '_spectral_conc_freq.eps'], '-f2', '-depsc');
   print([ psfile_dir '/' basename '_spectral_flux_freq.eps'], '-f3', '-depsc');
   %print([ psfile_dir '/' basename '_spectral_conc_slow_network.eps'], '-f10', '-depsc');
   %print([ psfile_dir '/' basename '_spectral_conc_fast_network.eps'], '-f11', '-depsc');
@@ -282,7 +286,7 @@ figure(113);  title('Fluxes, fast fluctuations');
 figure(20);   title('Absolute thermodynamic forces');
 figure(21);   title('Chemical potentials');
 figure(22);   title('Noise production');
-figure(1001); title('Scaled flux control coefficients');          
-figure(1002); title('Scaled concentration control coefficients'); 
-figure(2001); xlabel('Flux spectral density [(mol/s)^2 s] at 1/s');          
-figure(2002); xlabel('Concentration spectral density [mM^2 s] at 1/s');          
+figure(1001); title('Scaled flux control coefficients');
+figure(1002); title('Scaled concentration control coefficients');
+figure(2001); xlabel('Flux spectral density [(mol/s)^2 s] at 1/s');
+figure(2002); xlabel('Concentration spectral density [mM^2 s] at 1/s');

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_compare_ensembles</title>
+  <meta name="keywords" content="es_compare_ensembles">
+  <meta name="description" content="ES_COMPARE_ENSEMBLES - Compare an output function between two model ensembles">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">matlab</a> &gt; es_compare_ensembles.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>es_compare_ensembles
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>ES_COMPARE_ENSEMBLES - Compare an output function between two model ensembles</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function res = es_compare_ensembles(output1, output2, n_per, fdr, verbose) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ES_COMPARE_ENSEMBLES - Compare an output function between two model ensembles
+
+ res = es_compare_ensembles(output1, output2, n_per, fdr, verbose)
+ 
+ Significance test for model outputs obtained from multiple elasticity sampling
+
+ Significant differences are computed from the outputs of a previous multiple 
+ elasticity sampling for two model variants (see 'es_sample_ensemble').
+ Both model variants must have the same number of metabolites and reactions.
+
+ Inputs
+
+   output1  - Matrix or tensor from 1st model variant (from 'es_sample_ensemble')
+   output2  - Matrix or tensor from 2nd model variant (from 'es_sample_ensemble')
+   n_per    - Number of samples in permutation test (default 100)
+   fdr      - False discovery rate (default 0.05)
+   verbose  - Verbose output (default 0)
+
+ Output: Data structure 'res' with fields:
+
+   res.mean_total               - Mean value for all samples (total mean)
+   res.mean_a                   - Mean value for 1st variant
+   res.mean_b                   - Mean value for 2nd variant
+   res.mean_delta               - Difference between values for both variants
+
+   res.p_value_mean_total       - p value of [mean value for all samples ~= total mean]
+   res.p_value_mean_a           - p value of [mean value for 1st variant ~= total mean]
+   res.p_value_mean_b           - p value of [mean value for 2nd variant ~= total mean]
+   res.p_value_mean_delta       - p value of [difference between values for both variants
+                                - ~= difference between values from shuffled variants]
+                                
+   res.mean_total_significant   - Significant elements for mean value for all samples
+   res.mean_a_significant       - Significant elements for mean value for 1st variant
+   res.mean_b_significant       - Significant elements for mean value for 2nd variant
+   res.mean_delta_significant   - Significant elements for difference between variants
+                                - Values: 1 (significantly high),  -1 (significantly low)
+
+   res.n_mean_total_significant - # significant elements for mean value for all samples
+   res.n_mean_a_significant     - # significant elements for mean value for 1st variant
+   res.n_mean_b_significant     - # significant elements for mean value for 2nd variant
+   res.n_mean_delta_significant - # significant elements for difference between variants</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../matlab/stm/es_synergies/influence_anova.html" class="code" title="function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)">influence_anova</a>	INFLUENCE_ANOVA - Anova of a variable characterising single reactions</li><li><a href="../matlab/stm/es_synergies/interaction_anova.html" class="code" title="function p = interaction_anova(D,n_per,fdr,ind_intervention, verbose)">interaction_anova</a>	INTERACTION_ANOVA - Anova of a variable characterising pairs reactions</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../matlab/demo/demo_stm_glycolysis.html" class="code" title="">demo_stm_glycolysis</a>	demo_elasticity_sampling_glycolysis - Demo script for thermodynamically feasible elasticity sampling</li><li><a href="../matlab/demo/demo_stm_workflow.html" class="code" title="">demo_stm_workflow</a>	elasticity_sampling_workflow - Demo script</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 22-Oct-2026 20:12:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

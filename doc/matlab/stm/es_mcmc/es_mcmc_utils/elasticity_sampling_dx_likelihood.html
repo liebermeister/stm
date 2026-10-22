@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of elasticity_sampling_dx_likelihood</title>
+  <meta name="keywords" content="elasticity_sampling_dx_likelihood">
+  <meta name="description" content="likelihood = elasticity_sampling_dx_likelihood(result,p)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">matlab</a> &gt; <a href="../../index.html">stm</a> &gt; <a href="../index.html">es_mcmc</a> &gt; <a href="index.html">es_mcmc_utils</a> &gt; elasticity_sampling_dx_likelihood.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for matlab/stm/es_mcmc/es_mcmc_utils&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>elasticity_sampling_dx_likelihood
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>likelihood = elasticity_sampling_dx_likelihood(result,p)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function likelihood = elasticity_sampling_dx_likelihood(result,p) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> likelihood = elasticity_sampling_dx_likelihood(result,p)
+
+ Likelihood function scoring whether the response to differential
+ enzyme expression (in delta_E) matches the experimental metabolite
+ and flux changes (in delta_S and delta_J).
+
+ result: output of es_sample_model (computed with es_options.flag_second_order = 1)
+ p:      parameters, see elasticity_sampling_dx_likelihood_pars
+
+ delta_E: matrix of relative enzyme changes (dE/E)
+ rows: enzymes; columns: different expression patterns
+ matrices delta_S (met. concentrations) and delta_J (fluxes)
+ are defined accordingly
+ in delta_E, all values must be given; in delta_S and delta_J,
+ missing values (NaN) are allowed
+
+ The predicted changes are computed by a second-order expansion
+ (logarithmic), see es_simulate_perturbation</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../matlab/stm/es_perturbations/es_simulate_perturbation.html" class="code" title="function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)">es_simulate_perturbation</a>	ES_SIMULATE_PERTURBATION - Predict the effects of a given differential profile</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 22-Oct-2026 20:12:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

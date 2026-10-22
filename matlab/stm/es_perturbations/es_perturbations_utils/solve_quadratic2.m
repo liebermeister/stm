@@ -5,13 +5,13 @@ function x = solve_quadratic2(A,c,B,D,seed)
 % where B*x + 1/2 D (x o x ) = c     (2)
 % with symmetric matrix A and symmetric tensor D
 %
-% with a langrangian multiplier vector l 
-% we get 
+% with a langrangian multiplier vector l
+% we get
 %
 % min = 1/2 x' A x + l' ( B x + 1/2 D (x o x) )
 % 0   = x' A   + l' B + 1/2 l' (x' D )
 % 0   = ( A + 1/2 l' D ) x + B' l
-% x = - inv( A + 1/2 l o D) B' l 
+% x = - inv( A + 1/2 l o D) B' l
 %
 % inserting it into (2) yields
 % 0 = - B ( inv( A + 1/2 l o D) B' l) + 1/2 D * (( inv( A + 1/2 l o D) B' l) o ( inv( A + 1/2 l o D) B' l)) - c
@@ -45,7 +45,6 @@ cpred   = B * x + 1/2 * tensor_product(tensor_product(D,x,2,1),x,2,1);
 
 mismatch = abs( (cpred - c) ./ (cpred + c) );
 
-if max(mismatch)>10^-10,
+if max(mismatch)>10^-10
   warning('solve_quadratic2: constraint mismatch %g', max(mismatch));
 end
-

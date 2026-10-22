@@ -1,60 +1,60 @@
 function r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)
 
-%ES_SIMULATE_PERTURBATION - Predict the effects of a given differential profile 
+%ES_SIMULATE_PERTURBATION - Predict the effects of a given differential profile
 %
 % r = es_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result,expansion,expansion_order)
 %
-% Compute the predicted effects of a given differential profile 
+% Compute the predicted effects of a given differential profile
 % of enzyme expression (u) and external metabolites (s)
 % on balanced concentrations c and fluxes j
 % based on an expansion using the response coefficients in "es_result"
-% 
+%
 % N, W, ind_ext: structural information about the network
 % s_ratio:       external concentration ratio vector
 % u_ratio:       expression ratio vector
 % es_result:     output from a previous elasticity sampling (function 'es_sample_model')
 % expansion:     {'logarithmic','non-logarithmic'}
-%                -> depending on the expansion type, the output refers to logarithmic 
-%                   or non-logarithmic values; 
+%                -> depending on the expansion type, the output refers to logarithmic
+%                   or non-logarithmic values;
 % expansion_order          1 or 2 expansion_order of the expansion
 %
 % output r contains the ratios etc.
 
 p_ratio = [u_ratio; s_ratio];
-p_ratio(isnan(p_ratio)) = 1; 
+p_ratio(isnan(p_ratio)) = 1;
 
 [nm,nr] = size(N);
 nsample = size(u_ratio,2);
 c       = es_result.c;
 v       = es_result.v;
 
-switch expansion,
-  
-  case 'logarithmic',
+switch expansion
 
-% fits better the multiplicative nature of kinetic models
-% but doesn't preserve stationarity condition of fluxes
-    
+  case 'logarithmic'
+
+    % fits better the multiplicative nature of kinetic models
+    % but doesn't preserve stationarity condition of fluxes
+
     RSpsc   = es_result.control.RSp_sc;
     RJpsc   = es_result.control.RJp_sc;
-    
-    switch expansion_order,
-      
+
+    switch expansion_order
+
       case 1
-        
+
         d_c = squeeze(RSpsc(:,:)) * log(p_ratio);
         d_v = squeeze(RJpsc(:,:)) * log(p_ratio);
-        
+
       case 2
-        
+
         RSppsc  = es_result.control.RSpp_sc;
         RJppsc  = es_result.control.RJpp_sc;
-        
-        for i2 = 1:nsample          
+
+        for i2 = 1:nsample
           dlogS2(:,i2) =  tensor_product(tensor_product(...
               squeeze(RSppsc(:,:,:)),...
               log(p_ratio(:,i2)),2,1),log(p_ratio(:,i2)),2,1);
-          dlogJ2(:,i2) =  tensor_product(tensor_product(...          
+          dlogJ2(:,i2) =  tensor_product(tensor_product(...
               squeeze(RJppsc(:,:,:)),...
               log(p_ratio(:,i2)),2,1),log(p_ratio(:,i2)),2,1);
         end
@@ -64,32 +64,32 @@ switch expansion,
     end
 
     d_c(ind_ext,:) = log(s_ratio);
-    
-  case 'non-logarithmic',
-    
-% preserves stationarity condition of fluxes
-% but doen't fit the multiplicative nature of kinetic models
-    
+
+  case 'non-logarithmic'
+
+    % preserves stationarity condition of fluxes
+    % but doen't fit the multiplicative nature of kinetic models
+
     u = es_result.u;
     s = es_result.c(ind_ext);
     p = [u; s];
     delta_p = p_ratio .* p - p;
-    
+
     RSp   = es_result.control.RSp_un;
     RJp   = es_result.control.RJp_un;
-    
+
     switch expansion_order
-      
+
       case 1
-        
+
         d_c = squeeze(RSp(:,:)) * delta_p;
         d_v = squeeze(RJp(:,:)) * delta_p;
-        
+
       case 2
-        
+
         RSpp  = es_result.control.RSpp_un;
         RJpp  = es_result.control.RJpp_un;
-        
+
         for i2 = 1:nsample
           delta_S2(:,i2) =  tensor_product(tensor_product(...
               squeeze(RSpp(:,:,:)),...
@@ -98,14 +98,14 @@ switch expansion,
               squeeze(RJpp(:,:,:)),...
               delta_p(:,i2),2,1),delta_p(:,i2),2,1);
         end
-        
+
         d_c = squeeze(RSp(:,:)) * delta_p + 0.5 * delta_S2;
         d_v = squeeze(RJp(:,:)) * delta_p + 0.5 * delta_J2;
-        
+
     end
-    
+
     d_c(ind_ext,:) = s_ratio .* s - s;
-    
+
 end
 
 
@@ -115,9 +115,9 @@ end
 r.c_init = es_result.c;
 r.v_init = es_result.v;
 
-switch expansion, 
-  
-  case ('non-logarithmic'), 
+switch expansion
+
+  case ('non-logarithmic')
 
     % exclude negative concentrations
     d_c(r.c_init + d_c<0) = -r.c_init(r.c_init + d_c<0);
@@ -125,14 +125,14 @@ switch expansion,
     r.c_new    = r.c_init + d_c;
     r.v_ratio  = 1 + d_v./r.v_init;
     r.v_new    = r.v_init + d_v;
-  
-  case ('logarithmic'),
+
+  case ('logarithmic')
 
     r.c_ratio  = exp(d_c);
     r.c_new    = r.c_ratio .* r.c_init;
-    % ensure stationarity: 
+    % ensure stationarity:
     K = null(full(N(setdiff(1:nm,ind_ext),:))); % kernel matrix
-    dum = exp(d_v); dum(isnan(dum))=0; 
+    dum = exp(d_v); dum(isnan(dum))=0;
     d_v_nonlog = K * pinv(K) * [r.v_init .* dum] - r.v_init;
     r.v_ratio  = 1 + d_v_nonlog./r.v_init;
     r.v_new    = r.v_init + d_v_nonlog;

@@ -4,12 +4,12 @@ function likelihood = elasticity_sampling_tc_likelihood(result,p)
 %
 % Likelihood function for concentration time series
 
-parameters.u   = result.u;     
-parameters.c   = result.c;     
-parameters.KA  = result.KA;    
-parameters.KI  = result.KI;    
-parameters.KM  = result.KM;    
-parameters.KV  = result.KV;    
+parameters.u   = result.u;
+parameters.c   = result.c;
+parameters.KA  = result.KA;
+parameters.KI  = result.KI;
+parameters.KM  = result.KM;
+parameters.KV  = result.KV;
 parameters.Keq = result.Keq;
 
 p.network.kinetics =  set_kinetics(p.network,'ms',parameters);

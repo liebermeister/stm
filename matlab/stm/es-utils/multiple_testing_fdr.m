@@ -4,7 +4,7 @@ function significant = multiple_testing_fdr(all_p, false_discovery_rate)
 %
 % Significance (yes/no) for multiple tests at a given false discovery rate
 %
-% Formula from http://en.wikipedia.org/wiki/False_discovery_rate, 
+% Formula from http://en.wikipedia.org/wiki/False_discovery_rate,
 %         assuming independent tests!!!
 %
 % all_p (vector or matrix) contains the p values for all tests
@@ -19,7 +19,7 @@ sorted_p    = sort(p);
 n_accept    = max(find( ...
      sorted_p <=  ( (1:n_tests)' / n_tests * alpha )...
     ) );
-if length(n_accept),
+if length(n_accept)
   p_accept    = sorted_p(n_accept);
 else
   p_accept    = 0;

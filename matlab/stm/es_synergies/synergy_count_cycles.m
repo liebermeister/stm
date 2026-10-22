@@ -21,7 +21,7 @@ E_nonzero_triu = double(E_sign_triu~=0);
 n_cycles=[ 0 0];
 d_cycles=[ 0 0];
 
-for it = 3:10,
+for it = 3:10
   n_cycles(it) = sum(sum(E_nonzero_triu .* E_nonzero_triu^(it-1) ));
   d_cycles(it) = sum(sum(E_sign_triu    .* E_sign_triu^(it-1)    ));
 end
@@ -32,9 +32,9 @@ neg_cycles = 0.5 * (n_cycles - d_cycles);
 frac_pos = pos./(n_cycles+10^-10);
 frac_pos(n_cycles==0) = nan;
 
-if exist('n_rand','var'),
-  
-  for it = 1:n_rand,
+if exist('n_rand','var')
+
+  for it = 1:n_rand
     E_rnd = randomize_synergies(E);
     [n_cycles_rnd(it,:),frac_pos_rnd(it,:)] = synergy_count_cycles(E_rnd);
   end

@@ -1,6 +1,9 @@
-function [Z,Conflict,Direct]=prism(ECM,Alpha,Gamma,PrismR)
+function [Z,Conflict,Direct]=prism_clustering(ECM,Alpha,Gamma,PrismR)
 %
-% function [Z,Conflict,Direct]=prism(ECM,Alpha,Gamma,PrismR)
+% function [Z,Conflict,Direct]=prism_clustering(ECM,Alpha,Gamma,PrismR)
+%
+% PRISM algorithm by Segre et al. (2005) (renamed from 'prism' to avoid
+% a name conflict with Matlab's colormap function 'prism')
 % 
 % Cluster a two-color network into monochromatically interacting clusters
 % 
@@ -24,7 +27,7 @@ function [Z,Conflict,Direct]=prism(ECM,Alpha,Gamma,PrismR)
 %
 % 
 % "Modular epistasis in yeast metabolism"
-% Daniel Segrè, Alexander DeLuna, George M. Church, Roy Kishony
+% Daniel SegrÃ¨, Alexander DeLuna, George M. Church, Roy Kishony
 % 
 %
 % For questions or comments please contact:

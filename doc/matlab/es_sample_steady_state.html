@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_sample_steady_state</title>
+  <meta name="keywords" content="es_sample_steady_state">
+  <meta name="description" content="ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">matlab</a> &gt; es_sample_steady_state.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>es_sample_steady_state
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state(N, W, ind_ext, es_constraints, es_options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ES_SAMPLE_STEADY_STATE - Sample feasible stationary state for a network
+
+ [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = es_sample_steady_state(N, W, ind_ext, es_constraints, es_options)
+
+ Sample thermodynamically consistent steady states, including concentrations,
+   fluxes, and thermodynamic quantities. Enzyme levels are freely sampled.
+
+ Inputs (with nm: # metabolites; nr: # reactions)
+   N                            - Stoichiometric matrix (nm x nr)
+   W                            - Allosteric regulation matrix (nr x nm)
+   ind_ext                      - indices of external metabolites
+   es_constraints, es_options:  - explained below (also see 'es_default_options')
+
+ Outputs (with nm: # metabolites; nr: # reactions)
+   c0        - Vector of chemical equilibrium concentrations (optional)
+   c         - Vector of concentrations
+   u         - Vector of enzyme levels
+   J         - Flux vector
+   Keq       - Vector of equilibrium constants
+   mu        - Vector of chemical potentials
+   K         - Kernel matrix 
+   Kma       - Vector of mass-action ratios
+   zeta      - zeta vector computed from reaction affinities
+   A         - Vector of reaction affinities (thermodynamic driving forces)
+
+
+ Sampling methods used:
+
+   Fluxes: 
+     If a flux vector is predefined in es_constraints.v_fix (no missing values), 
+     this flux vector is directly used. Otherwise, a method to determine the
+     fluxes must be given in 'es_options.sampling_method':
+     
+     'accept_flux':         use values given in  es_constraints.v_mean
+     'sample_and_discard':  sample flux values from the distribution defined by
+                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.v_sign
+                            and omit unfeasible cycles
+     'v and mu',            sample flux values using sample_feasible_v.m
+     'v from data':         sample flux values from the distribution defined by
+                            es_constraints.v_mean, es_constraints.v_std, and es_constraints.v_sign
+   
+   Concentrations: 
+     Concentrations given in log_c_fix will be directly used. The remaining 
+     concentrations are randomly sampled based on log_c_mean and log_c_std.
+   
+   Chemical potentials
+     The method chosen to determine concentrations and flux depends on the 
+     information provided in the &quot;[..]_fix&quot; fields of es_constraints:
+     mu_fix, dmu_fix, Keq_fix, mu0_fix.
+
+
+  Fields in 'es_constraints' and 'es_options' relevant to this function:
+    es_options.seed               - Random seed used
+    es_options.sampling_methods   - Alternative sampling procedures
+                                    'v from data'
+                                    'v and mu'
+                                    'c0 and c'
+                                    'sample_and_discard'
+                                    'accept_flux'
+    es_constraints.v_fix          - Predefined fluxes (vector, NaNs are ignored)
+    es_constraints.v_min          - Lower flux bounds (vector, NaNs are ignored)
+    es_constraints.v_max          - Upper flux bounds (vector, NaNs are ignored)
+    es_constraints.v_sign         - Flux signs (vector, NaNs are ignored)
+    es_constraints.log_u_mean     - Mean enzyme level (for sampling)
+    es_constraints.log_u_std      - Std dev for enzyme levels (for sampling)
+    es_constraints.log_c_mean     - Mean metabolite concentration (for sampling)
+    es_constraints.log_c_std      - Std dev for metabolite concentrations (for sampling)
+  
+   Additional fields required, depending on 'es_options.sampling_method':
+     'v from data'          es_constraints.v_mean
+                            es_constraints.v_std
+   
+     'v and mu'             es_constraints.mu_fix
+   
+     'c0 and c'             es_constraints.log_c0
+                            es_constraints.log_c0_std
+   
+     'sample_and_discard'   es_options.ind_ignore
+
+   For some methods, additionally required:
+      es_options.ind_ignore  reactions to be ignored in thermodynamic loops 
+                             (only needed for flux correction by loop substraction)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>	ES_SAMPLE_MODEL - Sample all model parameters for a network</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 22-Oct-2026 20:12:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

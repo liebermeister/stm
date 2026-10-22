@@ -1,10 +1,10 @@
-function epistasis = es_segre_epistasis(f_ref,f_single,f_double)
+function epistasis = segre_epistasis(f_ref,f_single,f_double)
 
-% ES_SEGRE_EPISTASIS Segre's epistasis measure
+% SEGRE_EPISTASIS Segre's epistasis measure
 %
-% epistasis = es_segre_epistasis(f_ref,f_single,f_double)
+% epistasis = segre_epistasis(f_ref,f_single,f_double)
 %
-% Input 
+% Input
 % f_ref    wildtype fitness (number)
 % f_single single perturbation fitnesses (vector)
 % f_double double perturbation fitnesses (matrix)

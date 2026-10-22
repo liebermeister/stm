@@ -1,9 +1,12 @@
-%METABOLIC_CORRELATIONS_GRAPHICS Graphics for metabolic correlations 
-% 
-% metabolic_correlations_graphics(network,R_list,C_list,corr_list,fignum)
-
-
 function metabolic_correlations_graphics(network,R_list,C_list,corr_list,fignum)
+
+%METABOLIC_CORRELATIONS_GRAPHICS Graphics for metabolic correlations
+%
+% metabolic_correlations_graphics(network,R_list,C_list,corr_list,fignum)
+%
+% R_list:    response coefficients    (n_samples x n_internal x nr)
+% C_list:    covariance matrices      (n_samples x n_internal x n_internal)
+% corr_list: correlation matrices     (n_samples x n_internal x n_internal)
 
 eval(default('fignum','1:3'));
 

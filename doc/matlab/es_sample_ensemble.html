@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of es_sample_ensemble</title>
+  <meta name="keywords" content="es_sample_ensemble">
+  <meta name="description" content="ES_SAMPLE_ENSEMBLE - Create model ensemble and collect values for an output function">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">matlab</a> &gt; es_sample_ensemble.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>es_sample_ensemble
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>ES_SAMPLE_ENSEMBLE - Create model ensemble and collect values for an output function</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [output, output_list] = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ES_SAMPLE_ENSEMBLE - Create model ensemble and collect values for an output function
+
+ [output, output_list] = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)
+
+ Run elasticity sampling repeatedly, compute every time an output function 
+ (any kind of matlab variable), and return a list of the output values.
+
+ This function also allows for posterior sampling (Metropolis-Monte Carlo algorithm)
+
+ There is no direct way to run the sampling in parallel for two scenarios
+ with the same random values used for saturation constants in both ensembles
+
+ Inputs (nm: # metabolites; nr: # reactions)
+   N         - Stoichiometric matrix (nm x nr)
+   W         - Allosteric regulation matrix (nr x nm)
+   ind_ext   - indices of external metabolites
+ 
+  For the inputs es_constraints and es_options, see es_default_options
+
+  output_function - Output function for which response coefficients are sampled (*1)
+  select_function - Function for filtering the sampled models (*2)
+  score_function  - Function for posterior probability sampling (*3)
+  function_args   - Arguments for output_function, select_function, score_function
+
+ Outputs
+  output_list     - Results as a list of matrices
+  output          - Same results as a tensor
+
+ Comments:
+
+ (1) The output function is called as output_function(result, function_args).
+     If its value is numeric, 'output' contains all values as a column vector
+     (for scalars), matrix (for row or column vectors), or tensor (for matrices).
+
+ (2) If a 'select_function' is provided, only samples that yield a non-zero value
+     of this function will be considered.
+
+ (3)  If a score function (a log likelihood) is provided, it is evaluated 
+      every time for each sample and the values are used for Metropolis sampling
+      instead of simple repeated sampling.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="es_sample_model.html" class="code" title="function [result, es_options, es_constraints] = es_sample_model(N, W, ind_ext, es_constraints, es_options)">es_sample_model</a>	ES_SAMPLE_MODEL - Sample all model parameters for a network</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../matlab/demo/demo_stm_glycolysis.html" class="code" title="">demo_stm_glycolysis</a>	demo_elasticity_sampling_glycolysis - Demo script for thermodynamically feasible elasticity sampling</li><li><a href="../matlab/demo/demo_stm_workflow.html" class="code" title="">demo_stm_workflow</a>	elasticity_sampling_workflow - Demo script</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Thu 22-Oct-2026 20:12:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

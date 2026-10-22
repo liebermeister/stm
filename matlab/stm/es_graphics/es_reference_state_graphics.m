@@ -1,20 +1,33 @@
 function es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
 
-% -------------------------------------------------------------
-% graphics for elasticity sampling reference states
+% ES_REFERENCE_STATE_GRAPHICS - Graphics for elasticity sampling reference states
+%
+% es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
+%
+% network:          network structure
+% es_options:       options used for elasticity sampling
+% result:           output of es_sample_model (or es_reference_state)
+% target_reaction:  name of target reaction for response coefficients
+%                   (if empty, the production of the external metabolite 'Biomass' is used)
+% es_filenames:     struct with fields 'psfile_dir' and 'psfile_base' (only needed for saving graphics)
+% network_CoHid:    network structure for graphics, possibly with hidden cofactors (optional)
+% network_CoSplit:  network structure for graphics, possibly with split cofactors (optional)
+% psfile_dir:       directory for graphics files (optional)
+%
+% If es_options.print_graphics = 1, the graphics are saved as .eps files
 
 eval(default('network_CoHid','network','network_CoSplit','[]'));
-if isempty(network_CoSplit),
+if isempty(network_CoSplit)
   network_CoSplit = network_CoHid;
 end
 
 eval(default('target_reaction','''Biomass production''','target_product','''Biomass''')); % 'Maintenance'
-if exist('es_filenames','var'),
+if exist('es_filenames','var')
   eval(default('psfile_dir','es_filenames.psfile_dir'));
 else
   eval(default('psfile_dir','[]'));
 end
-  
+
 N       = network.N;
 [nm,nr] = size(N);
 ind_ext = find(network.external);
@@ -24,11 +37,11 @@ p.print = es_options.print_graphics;  % use layout for printing
 % network
 figure(1); es_graphics(network,network_CoSplit,'names',struct('actprintnames',0,'FontSize',24));
 
-% figure(1000); clf; 
+% figure(1000); clf;
 %es_graphics(network,network_CoHid,'fluxes',struct('v',fluxes.v_mean),p);
 
 figure(2); clf; es_graphics(network,network_CoHid,'fluxes',struct('v',result.v),join_struct(p,struct('show_regulation',0,'arrowsize',0.05)));
-%figure(2); title(sprintf('Fluxes and net production rates')); 
+%figure(2); title(sprintf('Fluxes and net production rates'));
 
 % flux movies
 % figure(102); clf; M = es_graphics(network,network_CoHid,'flux_movie',struct('v',fluxes.best_v,'n_frames',6),p);
@@ -48,37 +61,37 @@ figure(10); clf; es_graphics(network,network_CoSplit,'metabolites',struct('c',re
 
 figure(11); clf; es_graphics(network,network_CoHid,'enzymes',struct('u',result.u .* result.KV),p);
 
-if length(target_reaction),
+if length(target_reaction)
   display(sprintf('Showing response and synergies w.r.t. target reaction %s',target_reaction));
   %% response coefficients for target reaction
   ind_target = find(strcmp(network.actions,target_reaction));
   if isempty(ind_target), error(sprintf('Unknown target reaction %s', target_reaction)); end
   rs_enz     = column(result.control.RJu_sc(ind_target,:));
-  rs_ext     = zeros(nm,1); 
+  rs_ext     = zeros(nm,1);
   rs_ext(ind_ext) = result.control.RJs_sc(ind_target,:);
+  rs_enz(ind_target,1) = nan;
   output = network.actions{ind_target};
-else,
+else
   %% response coefficients production of (external) target metabolite
   display(sprintf('Showing response and synergies w.r.t. target metabolite %s',target_product));
   ind_target    = find(strcmp(network.metabolites,target_product));
-  if network.external(ind_target)==0, error('Production of internal metabolite makes no sense'); end 
+  if network.external(ind_target)==0, error('Production of internal metabolite makes no sense'); end
   rs_enz = column(N(ind_target,:) * result.control.RJu_sc);
   rs_ext = zeros(nm,1); rs_ext(ind_ext) = N(ind_target,:) * result.control.RJs_sc;
-  output = [network.metabolites{ind_target} ' production']; 
+  output = [network.metabolites{ind_target} ' production'];
 end
 
-rs_enz(ind_target,1) = nan;
-figure(4); clf; 
+figure(4); clf;
 es_graphics(network,network_CoHid,'response_coefficients',struct('R',rs_enz,'v',result.J),p);
 
-figure(5); clf; 
+figure(5); clf;
 es_graphics(network,network_CoSplit,'response_coefficients_Sext',struct('R',rs_ext,'v',result.J),p);
 
 
 % -------------------------------------------------------------
 % save graphics
 
-if es_options.print_graphics,
+if es_options.print_graphics
   cd(psfile_dir);
   display(sprintf('Saving graphics to directory %s',psfile_dir));
   print( [ es_filenames.psfile_base '_network.eps'],   '-f1', '-depsc');
@@ -95,10 +108,10 @@ if es_options.print_graphics,
   %%  movie_save([ result_file '_fluxes'],M);
 end
 
-% figure(1); title(sprintf('Measured fluxes and external metabolites')); 
-figure(2); title(sprintf('Fluxes and net production rates')); 
+% figure(1); title(sprintf('Measured fluxes and external metabolites'));
+figure(2); title(sprintf('Fluxes and net production rates'));
 figure(3); title(sprintf('Chemical potentials'));
-figure(4); title(sprintf('Scaled resp coeff. (on output %s\n by enz)',escape_underscores(output))); 
+figure(4); title(sprintf('Scaled resp coeff. (on output %s\n by enz)',escape_underscores(output)));
 figure(5); title(sprintf('Scaled resp coeff. (on output %s\n ext metab)',escape_underscores(output)));
 figure(6); title(sprintf('Driving forces (in kJ/mol)'));
 figure(7); title(sprintf('Saturation values'));
@@ -111,7 +124,7 @@ figure(11); title(sprintf('log10 Vmax geometric means')); drawnow
 % -----------------------------------------------------------
 % distribution of elasticities
 
-% Cumulative distributions: 
+% Cumulative distributions:
 
 % distribution of elasticities (sorted values)
 % figure(100); plot(sort(result.elasticities.sc_E_c(result.elasticities.sc_E_c~=0)))

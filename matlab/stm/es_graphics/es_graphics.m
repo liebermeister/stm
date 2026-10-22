@@ -1,15 +1,23 @@
 function M = es_graphics(network, network_CoHid, graphics_type, data, p)
 
+% ES_GRAPHICS - Network graphics for elasticity sampling results
+%
 % M = es_graphics(network, network_CoHid, graphics_type, data, p)
 %
-% graphics_type: names, fluxes, flux_movie, ...
+% graphics_type: 'names', 'metabolites', 'metabolite_ratios', 'enzymes', 'enzyme_ratios',
+%                'fluxes', 'elasticities', 'flux_movie', 'thermodynamic_forces', 'dissipation',
+%                'chemical_potentials', 'response_coefficients', 'response_coefficients_Sext',
+%                'individual_metabolites', 'individual_fluxes', 'individual_enzymes'
+% data:          struct with the data to be shown (fields depend on graphics_type)
+% p:             graphics options (see netgraph_concentrations)
+% M:             movie (only for graphics_type 'flux_movie')
 
 eval(default('data','struct','p','struct'));
 
 p_default = struct('print',0,'show_regulation',0, 'metprintnames', 0);
 p         = join_struct(p_default, p);
 
-if p.print, 
+if p.print
   %network_CoHid.graphics_par.FontSize = 6;
   %network.graphics_par.FontSize       = 6;
 end
@@ -25,42 +33,42 @@ ind_metabolites_show = network_CoHid.graphics_par.metabolite_mapping(ii);
 
 gp = join_struct(struct('metstyle','fixed','actprintnames',0,'arrowstyle','fluxes','colormap',rb_colors,'colorbar',1,'split_names',0,'arrowcolor',[0.7, 0.7, 0.7],'show_regulation',p.show_regulation, 'FontSize', 8, 'colorbar_fontsize',20),p);
 
-if isfield(data,'cb_numbers'), 
-  gp.colorbar = 1; 
-  gp.colorbar_numbers = data.cb_numbers; 
-end 
+if isfield(data,'cb_numbers')
+  gp.colorbar = 1;
+  gp.colorbar_numbers = data.cb_numbers;
+end
 
 M = [];
 
-switch graphics_type,
-  
-  case 'names',
-    gp.metprintnames = 1; 
+switch graphics_type
+
+  case 'names'
+    gp.metprintnames = 1;
     gp.squaresize    = 0.5 * network_CoHid.graphics_par.squaresize;
-    gp.actprintnames = 0; 
-    gp.arrowvalues   = [];% ones(size(network.actions)); 
+    gp.actprintnames = 0;
+    gp.arrowvalues   = [];% ones(size(network.actions));
     gp.arrowstyle    = 'directions';
     gp.colorbar      = 0;
     gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,ones(size(network.metabolites)),[],1,gp);
 
-  case 'metabolites',
-    gp.metprintnames    = p.metprintnames; 
+  case 'metabolites'
+    gp.metprintnames    = p.metprintnames;
     gp.metvaluesmax     = log10(100);
     %gp.colorbar         = 0;
     gp.colorbar_numbers = log10([0.01,0.1,1,10,100]);
     gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,log10(data.c),[],1,gp);
 
-  case 'metabolite_ratios',
-    gp.metprintnames    = p.metprintnames; 
+  case 'metabolite_ratios'
+    gp.metprintnames    = p.metprintnames;
     gp.metvaluesmax     = log10(100);
     gp.colorbar_numbers = [0.01,0.1,1,10,100];
     gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,log10(data.c),[],1,gp);
-  
-  case 'enzymes',
-    gp.metprintnames    = p.metprintnames; 
+
+  case 'enzymes'
+    gp.metprintnames    = p.metprintnames;
     gp.showsign         = 0;
     gp.actvaluesmin     = log10(0.000001);
     gp.actvaluesmax     = log10(1);
@@ -69,9 +77,9 @@ switch graphics_type,
     gp.actstyle         = 'fixed';
     gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],log10(data.u),1, gp);
-  
-  case 'enzyme_ratios',
-    gp.metprintnames    = p.metprintnames; 
+
+  case 'enzyme_ratios'
+    gp.metprintnames    = p.metprintnames;
     gp.showsign         = 0;
     gp.actvaluesmax     = log10(100);
     gp.colorbar_numbers = [0.01,0.1,1,10,100];
@@ -80,9 +88,9 @@ switch graphics_type,
     gp.colorbar         = 1;
     gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],log10(data.u),1, gp);
-  
-  case 'fluxes',
-    gp.metprintnames   = p.metprintnames; 
+
+  case 'fluxes'
+    gp.metprintnames   = p.metprintnames;
     gp.arrowvalues     = data.v / max(abs(data.v));%max(abs(data.v(ind_reactions_show)));
     gp.arrowvalues(isnan(gp.arrowvalues))= 0;
     gp.single_arrow    = 1;
@@ -91,20 +99,20 @@ switch graphics_type,
     gp.colorbar        = 1;
     gp.arrowcolor      = [1 0 0];
     %% show SIGNS OF production rates
-    if isfield(data,'production_rates'),
+    if isfield(data,'production_rates')
       data.production_rates = sign(data.production_rates) .* double(abs(data.production_rates)>10^-8);
       max_prod_rate   = max(abs(data.production_rates(ind_metabolites_show)));
       gp.metvaluesmax = max(max_prod_rate, 10^-10);
       gp         = join_struct(gp, p);
       netgraph_concentrations(network_CoHid,data.production_rates,[],1,gp);%data.v
-    else,
+    else
       gp.colorbar = 0;
       gp         = join_struct(gp, p);
       netgraph_concentrations(network_CoHid,[],[],1,gp);%abs(data.v); %% -zero_to_nan(network.external)
     end
 
-  case 'elasticities',
-    gp.metprintnames  = p.metprintnames; 
+  case 'elasticities'
+    gp.metprintnames  = p.metprintnames;
     gp.squaresize  = 0.8 * network_CoHid.graphics_par.squaresize;
     gp.arrowvalues = sign(data.v);
     gp.arrowvaluesmax = 1; % max(abs(data.v(ind_reactions_show)));
@@ -118,15 +126,15 @@ switch graphics_type,
     gp.regulationvalues = data.elasticities;
     gp.regulationstyle = 'fixed';
     gp         = join_struct(gp, p);
-    netgraph_concentrations(network_CoHid,[],[],1,gp);    
+    netgraph_concentrations(network_CoHid,[],[],1,gp);
 
-  case 'flux_movie',
-    gp.metprintnames    = 1; 
+  case 'flux_movie'
+    gp.metprintnames    = 1;
     M = netgraph_flux_movie(network_CoHid,zero_to_nan(network.N*data.v,10^-5),data.v,1,data.n_frames);
-  
-  case 'thermodynamic_forces',
-    gp.metprintnames    = p.metprintnames; 
-    theta_directed = data.theta; 
+
+  case 'thermodynamic_forces'
+    gp.metprintnames    = p.metprintnames;
+    theta_directed = data.theta;
     theta_directed(data.v<0) = - theta_directed(data.v<0);
     theta_directed(data.v==0) = nan;
     gp.colorbar_numbers = [min(theta_directed) max(theta_directed)];
@@ -136,27 +144,27 @@ switch graphics_type,
     gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],theta_directed,1,gp);
 
-  case 'dissipation',
-    gp.metprintnames    = p.metprintnames; 
-    sigma = RT * data.theta .* data.v; 
+  case 'dissipation'
+    gp.metprintnames    = p.metprintnames;
+    sigma = RT * data.theta .* data.v;
     gp.colorbar_numbers = [min(sigma) max(sigma)];
     gp.arrowstyle       = 'none';
     %gp.colorbar         = 0;
     gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],sigma,1,gp);
 
-  case 'chemical_potentials',
-    gp.metprintnames    = p.metprintnames; 
-    gp.metvaluesmin = min(data.mu(ind_metabolites_show)); 
+  case 'chemical_potentials'
+    gp.metprintnames    = p.metprintnames;
+    gp.metvaluesmin = min(data.mu(ind_metabolites_show));
     gp.metvaluesmax = max(data.mu(ind_metabolites_show));
     gp.colorbar_numbers = [min(data.mu) max(data.mu)];
     %gp.colorbar         = 0;
     gp.showsign         = 0;
     gp         = join_struct(gp, p);
-    netgraph_concentrations(network_CoHid,data.mu,[],1,gp);    
-    
-  case 'response_coefficients',
-    gp.metprintnames    = p.metprintnames; 
+    netgraph_concentrations(network_CoHid,data.mu,[],1,gp);
+
+  case 'response_coefficients'
+    gp.metprintnames    = p.metprintnames;
     gp = struct('actvalues', data.R, 'actstyle','fixed','arrowvalues',data.v,'arrowcolor',[0.7,0.7,0.7], 'colorbar', 1, 'colormap',rb_colors);
     gp.arrowsize      = network_CoHid.graphics_par.arrowsize;
     gp.arrowvalues    = data.v / max(abs(data.v(ind_reactions_show)));
@@ -169,9 +177,9 @@ switch graphics_type,
     gp.colorbar_numbers = [-1 0 1];
     gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,[],data.R,1,gp);
-  
-  case 'response_coefficients_Sext',
-    gp.metprintnames  = p.metprintnames; 
+
+  case 'response_coefficients_Sext'
+    gp.metprintnames  = p.metprintnames;
     gp                = struct('metstyle','fixed','arrowcolor',[0.7,0.7,0.7], 'colorbar',1, 'colormap',rb_colors);
     gp.arrowsize      = network_CoHid.graphics_par.arrowsize;
     gp.arrowvalues    = data.v / max(abs(data.v(ind_reactions_show)));
@@ -182,68 +190,68 @@ switch graphics_type,
     gp.metvaluesmax = max(abs(data.R(ind_metabolites_show)));
     gp         = join_struct(gp, p);
     netgraph_concentrations(network_CoHid,zero_to_nan(data.R),[],1,gp);
-    
-  case 'individual_metabolites',
-    if isfield(data,'log_c'),
+
+  case 'individual_metabolites'
+    if isfield(data,'log_c')
       ind_data = find(sum(isfinite(data.log_c.mean),2));
       n_exp = size(data.log_c.mean,2);
-    else,
+    else
       ind_data = 1:size(network.N,1);
-      n_exp = size(data.model(1).c,2);      
+      n_exp = size(data.model(1).c,2);
     end
     [ni,nk] = subplot_n(length(ind_data));
-    for it = 1:length(ind_data),
+    for it = 1:length(ind_data)
       this_ind = ind_data(it);
-      subplot(ni,nk,it); 
+      subplot(ni,nk,it);
       hold on;
-      if isfield(data,'model'),
-        for it = 1: prod(size(data.model)),
-          plot(1:n_exp,log(data.model(it).c(this_ind,:))/log(10),'c-');
+      if isfield(data,'model')
+        for k = 1:numel(data.model)
+          plot(1:n_exp,log(data.model(k).c(this_ind,:))/log(10),'c-');
         end
       end
-      if isfield(data,'log_c'),
+      if isfield(data,'log_c')
         errorbar(1:n_exp,data.log_c.mean(this_ind,:)/log(10),data.log_c.std(this_ind,:)/log(10),'ro');
       end
       hold off
       title(network.metabolites{this_ind}); axis tight; %ylabel('concentration (log_{10} mM)'); %
     end
-    
-  case 'individual_fluxes',
+
+  case 'individual_fluxes'
     if isfield(data,'genes'), names = network.genes; unknown = find(strcmp(names,'nan')); names(unknown)= network.actions(unknown);
     else, names = network.actions; end
     ind_data = find(sum(isfinite(data.v.mean),2));
     n_exp = size(data.v.mean,2);
     [ni,nk] = subplot_n(length(ind_data));
-    for it = 1:length(ind_data),
+    for it = 1:length(ind_data)
       this_ind = ind_data(it);
       subplot(ni,nk,it);         hold on;
-      if isfield(data,'model'),
-        for it = 1: prod(size(data.model)),
-          plot(1:n_exp,data.model(it).v(this_ind,:),'c-');
+      if isfield(data,'model')
+        for k = 1:numel(data.model)
+          plot(1:n_exp,data.model(k).v(this_ind,:),'c-');
         end
       end
-      errorbar(1:n_exp,data.v.mean(this_ind,:),data.v.std(this_ind,:),'ro'); 
+      errorbar(1:n_exp,data.v.mean(this_ind,:),data.v.std(this_ind,:),'ro');
       hold off
-      title(names{this_ind}); ylabel('velocity (mM/s)'); axis tight; 
+      title(names{this_ind}); ylabel('velocity (mM/s)'); axis tight;
     end
-  
-  case 'individual_enzymes',
+
+  case 'individual_enzymes'
     if isfield(data,'genes'), names = network.genes; unknown = find(strcmp(names,'nan')); names(unknown)= network.actions(unknown);
     else, names = network.actions; end
     ind_data = find(sum(isfinite(data.log_u.mean),2));
     n_exp = size(data.log_u.mean,2);
     [ni,nk] = subplot_n(length(ind_data));
-    for it = 1:length(ind_data),
+    for it = 1:length(ind_data)
       this_ind = ind_data(it);
-      subplot(ni,nk,it); 
-        hold on;
-        if isfield(data,'model'),
-          for it = 1: prod(size(data.model)),
-            plot(1:n_exp,log(data.model(it).u(this_ind,:))/log(10),'c-');
-          end
+      subplot(ni,nk,it);
+      hold on;
+      if isfield(data,'model')
+        for k = 1:numel(data.model)
+          plot(1:n_exp,log(data.model(k).u(this_ind,:))/log(10),'c-');
         end
-        errorbar(1:n_exp,data.log_u.mean(this_ind,:)/log(10),data.log_u.std(this_ind,:)/log(10),'ro'); 
-        hold off
-        title(names{this_ind}); ylabel('enzyme concentration (log_{10} mM)'); axis tight;
+      end
+      errorbar(1:n_exp,data.log_u.mean(this_ind,:)/log(10),data.log_u.std(this_ind,:)/log(10),'ro');
+      hold off
+      title(names{this_ind}); ylabel('enzyme concentration (log_{10} mM)'); axis tight;
     end
 end

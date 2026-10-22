@@ -1,20 +1,26 @@
-function es_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir, R_target_u_sc,R_target_uu_sc,flag_analyse_synergy_cycles,n_cluster);
+function es_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir, R_target_u_sc,R_target_uu_sc,flag_analyse_synergy_cycles,n_cluster)
 
-% es_synergy_graphics(network, network_CoHid, result, es_filenames, result_file, target_reaction, print_style, psfile_dir, R_target_u_sc,R_target_uu_sc,flag_analyse_synergy_cycles,n_cluster);
+% ES_SYNERGY_GRAPHICS - Graphics for first- and second-order response coefficients
 %
-% Statistical analysis of first- and second-order response coefficients 
-% based a previous single elasticity sampling run
+% es_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir, R_target_u_sc, R_target_uu_sc, flag_analyse_synergy_cycles, n_cluster)
 %
-% - elasticity sampling of reaction fluxes and chemical potentials
+% Statistical analysis of first- and second-order response coefficients
+% based on a previous single elasticity sampling run
+%
 % - statistics over response coefficients
-% - compute epistastis measure
+% - synergy degrees, clustering of synergies, and cycles in the synergy network
 %
-% read data from [result_file] in directory [es_filenames.data_dir 'es_sampling/']
-% save graphics to directory 'psfile_dir'
+% network, network_CoHid: network structures (the second one for graphics)
+% result:                 output of es_sample_model (with second-order response coefficients)
+% es_filenames:           struct with field 'psfile_base' (only needed for saving graphics)
+% target_reaction:        name of the target reaction
+% psfile_dir:             if non-empty, graphics are saved to this directory
+% R_target_u_sc, R_target_uu_sc: (optional) first- and second-order response coefficients
+%                         to be used (instead of those in 'result')
 
 eval(default('R_target_u_sc','[]','R_target_uu_sc','[]','n_cluster','10','flag_analyse_synergy_cycles','1','psfile_dir','[]'));
 
-if length(psfile_dir),
+if length(psfile_dir)
   network_CoHid.graphics_par.FontSize = 6;
   network.graphics_par.FontSize       = 6;
 else
@@ -26,15 +32,6 @@ end
 network_CoHid.graphics_par = join_struct(struct('omitreactions',[],'omitmetabolites',[]),network_CoHid.graphics_par);
 
 
-% ------------------------------------------------------
-% load prepared results
-
-if isempty(network),
-  cd([es_filenames.es_dir]); 
-  load(result_file);            % load 'options', 'result'
-  load(es_filenames.network_file); % load 'network'
-end
-
 N       = network.N;
 W       = network.regulation_matrix;
 [nm,nr] = size(N);
@@ -42,14 +39,14 @@ ind_ext = find(network.external);
 
 
 % -------------------------------------------------------------
-% Extract influence (1st order scaled response coefficients) 
+% Extract influence (1st order scaled response coefficients)
 % and synergy (2nd order scaled response coefficients)
 %  here self-synergies are only set to zero, not to nan
 %  make sure they are omitted from statistics later on
 
-if isempty(R_target_u_sc),
+if isempty(R_target_u_sc)
   ind_target     = find(strcmp(target_reaction,network.actions));
-  if isfield(result.control,'RJu_sc'),
+  if isfield(result.control,'RJuu_sc')
     R_target_u_sc  = column(result.control.RJu_sc(ind_target,:));
     R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
   else
@@ -62,11 +59,11 @@ synergy   = R_target_uu_sc - diag(diag(R_target_uu_sc));
 
 
 % --------------------------------------------------------------
-% Thresholding (1 percent quantiles) and scaling 
+% Thresholding (1 percent quantiles) and scaling
 % WITHIN THE SUBNETWORK TO BE SHOWN -> 'synergy_thr'
 
 ind_show = network_CoHid.graphics_par.reaction_mapping;
-dum = synergy(ind_show,ind_show); 
+dum = synergy(ind_show,ind_show);
 dum = dum(find(triu(ones(size(dum,1)))));
 
 q_lo = quantile(dum,0.05);
@@ -74,17 +71,17 @@ q_hi = quantile(dum,0.95);
 
 synergy_thr = synergy;
 synergy_thr(find(double(synergy_thr>q_lo) .* double(synergy_thr<q_hi))) = 0;
-synergy_thr = synergy_thr/nanmax(abs(dum)); 
+synergy_thr = synergy_thr/max(abs(dum),[],'omitnan');
 synergy_thr = 0.5*(synergy_thr + synergy_thr');
 
 
 % -----------------------------------------------------------
 % display response coefficients (1st and 2nd order) on network
 
-gp = struct('actstyle','fixed','linecolor',[0 0 0],'arrowcolor',[.7 .7 .7],'colorbar',1,'text_offset',[.01,-.01],'colormap',rb_colors, 'actprintnames',0, 'metprintnames', 0, 'hold_on',1,'FontSize',network.graphics_par.FontSize); 
+gp = struct('actstyle','fixed','linecolor',[0 0 0],'arrowcolor',[.7 .7 .7],'colorbar',1,'text_offset',[.01,-.01],'colormap',rb_colors, 'actprintnames',0, 'metprintnames', 0, 'hold_on',1,'FontSize',network.graphics_par.FontSize);
 % 'squaresize',0.03, 'arrowsize',0.03,'arrowstyle', 'fluxes','arrowvalues',result.J, 'arrowvaluesmax',max(abs(result.J)),
 
-figure(101); clf; 
+figure(101); clf;
 gp.actvaluesmax  = max(abs(influence(network_CoHid.graphics_par.reaction_mapping)));
 gp.actprintnames = 0;
 netgraph_concentrations(network_CoHid,[], influence',1,gp);
@@ -92,15 +89,14 @@ netgraph_concentrations(network_CoHid,[], influence',1,gp);
 ind_omit = label_names(network_CoHid.graphics_par.omitreactions,network_CoHid.actions);
 ind_omit = ind_omit(find(ind_omit));
 synergy_thr_show = synergy_thr;
-synergy_thr_show(:,ind_show(ind_omit)) = nan; 
+synergy_thr_show(:,ind_show(ind_omit)) = nan;
 
-figure(102); clf; 
-synergy_network_plot(network_CoHid, zeros(size(network.actions)),synergy_thr_show, rb_colors, gp); 
-
+figure(102); clf;
+synergy_network_plot(network_CoHid, zeros(size(network.actions)),synergy_thr_show, rb_colors, gp);
 
 
 % --------------------------------------------------------------
-% synergy degree: number of synergies per enzyme; 
+% synergy degree: number of synergies per enzyme;
 % 98% quantile as threshold value, leading to a mean degree of about 0.02 * nr
 
 q_thr     = quantile(abs(synergy(:)),0.98);
@@ -119,7 +115,7 @@ total_negative_synergies = sum(sum(triu(synergy_sign<0)))
 
 % plot synergy degrees
 
-figure(103); clf; 
+figure(103); clf;
 gp.actvaluesmax = max(synergy_degree(network_CoHid.graphics_par.reaction_mapping));
 netgraph_concentrations(network_CoHid,[], synergy_degree,1,gp);
 
@@ -132,37 +128,37 @@ CV_mean            = 1/2*[CV+CV'];
 influence_products = column(influence) * column(influence)';
 
 % replace diagonal elements by nan: 'synergies_nan'
-synergies_nan = synergy; 
-synergies_nan(find(eye(size(synergies_nan)))) = nan; 
+synergies_nan = synergy;
+synergies_nan(find(eye(size(synergies_nan)))) = nan;
 
 % remove very small synergies
-synergies_nan(find(abs(synergies_nan)<10^-3))=nan; 
+synergies_nan(find(abs(synergies_nan)<10^-3))=nan;
 
 
 % ---------------------------------------------------------------
 % synergies versus individual influences
 
-ind_triu = find(triu(ones(size(synergies_nan,1)))); 
+ind_triu = find(triu(ones(size(synergies_nan,1))));
 
 figure(111); clf; set(gca,'FontSize',18)
 hist(synergies_nan(ind_triu), 200)
 xlabel('Synergy'); ylabel('Count number (close-up)');
 a = axis; axis([a(1) a(2), 0, sqrt(a(4))]);
 
-figure(1111); clf; set(gca,'FontSize',18); 
+figure(1111); clf; set(gca,'FontSize',18);
 influences = repmat(influence,length(influence),1);
 influences(find(eye(size(influences)))) = nan; % remove diagonal elements
-plot(influences(ind_triu),synergies_nan(ind_triu),'.','Color',[.7 .8 1],'MarkerSize',15);  hold on 
-axis_almost_tight; a = axis; 
-plot([a(1) a(2)],[0 0],'--k'); hold on; 
+plot(influences(ind_triu),synergies_nan(ind_triu),'.','Color',[.7 .8 1],'MarkerSize',15);  hold on
+axis_almost_tight; a = axis;
+plot([a(1) a(2)],[0 0],'--k'); hold on;
 plot([0 0],[a(3) a(4)],'--k'); hold on;
-errorbar(influence,nanmean(synergies_nan),nanstd(synergies_nan),'.','Color',[.2 .2 .8],'LineWidth',2); hold off
+errorbar(influence,mean(synergies_nan,'omitnan'),std(synergies_nan,'omitnan'),'.','Color',[.2 .2 .8],'LineWidth',2); hold off
 xlabel('Influence (1st order scaled control)'); ylabel('Synergy (2nd order scaled control)');
 a1 = nanquantile(influences(ind_triu),0.001);
 a2 = nanquantile(influences(ind_triu),0.999);
 a3 = nanquantile(synergies_nan(ind_triu),0.001);
 a4 = nanquantile(synergies_nan(ind_triu),0.999);
-if prod(double(isfinite([a1 a2 a3 a4]))),
+if prod(double(isfinite([a1 a2 a3 a4])))
   axis([a1 a2 a3 a4]);
 end
 
@@ -173,7 +169,7 @@ figure(112); clf;
 influence_products_nan = influence_products;
 influence_products_nan(abs(influence_products_nan)<10^-5) = nan;
 set(gca,'FontSize',18)
-plot(influence_products(ind_triu),synergies_nan(ind_triu),'.','Color',[.2 .2 0.8],'MarkerSize',15);  hold on 
+plot(influence_products(ind_triu),synergies_nan(ind_triu),'.','Color',[.2 .2 0.8],'MarkerSize',15);  hold on
 axis_almost_tight; a = axis;
 plot([a(1) a(2)],[0 0],'--k'); hold on; plot([0 0],[a(3) a(4)],'--k'); hold on;
 xlabel('Influence product'); ylabel('Synergy');
@@ -188,8 +184,8 @@ xlabel('Synergy normalised by influence product'); ylabel('Count number (close-u
 % synergies versus cross-CJ-values
 
 figure(113); clf; set(gca,'FontSize',18)
-plot(CV_mean(ind_triu),synergies_nan(ind_triu),'.','Color',[.7 .8 1],'MarkerSize',15);  hold on 
-%axis_almost_tight; 
+plot(CV_mean(ind_triu),synergies_nan(ind_triu),'.','Color',[.7 .8 1],'MarkerSize',15);  hold on
+%axis_almost_tight;
 axis tight
 a = axis;
 plot([a(1) a(2)],[0 0],'--k'); hold on; plot([0 0],[a(3) a(4)],'--k'); hold on;
@@ -204,23 +200,23 @@ xlabel('Synergy normalised by mean mutual flux control'); ylabel('Count number (
 % histogram of synergy degrees; correlation synergy degrees and viability
 
 n_reactions = length(network.actions)
-mean_synergy_degree = mean(synergy_degree) 
+mean_synergy_degree = mean(synergy_degree)
 
 figure(114); clf; set(gca,'FontSize',18);
 numbers = 0:15;
-bar(numbers, [ histc(synergy_degree_pos,numbers) histc(synergy_degree_neg,numbers)],'stacked'); 
-legend(sprintf('Positive, total: %s',total_positive_synergies),sprintf('Negative, total: %s',total_negative_synergies)); 
-xlabel('Synergy degree'); ylabel('Count number'); 
+bar(numbers, [ histc(synergy_degree_pos,numbers) histc(synergy_degree_neg,numbers)],'stacked');
+legend(sprintf('Positive, total: %d',total_positive_synergies),sprintf('Negative, total: %d',total_negative_synergies));
+xlabel('Synergy degree'); ylabel('Count number');
 
 
-figure(115); clf; 
+figure(115); clf;
 plot(influence,synergy_degree,'o'); axis tight; set(gca, 'Fontsize',18);
-ylabel('Synergy degree'); xlabel('First-order scaled control coefficient'); 
+ylabel('Synergy degree'); xlabel('First-order scaled control coefficient');
 
-% sign ratios; 
-figure(116); clf 
+% sign ratios;
+figure(116); clf
 numbers = -5:5;
-bar(numbers, histc(log2_sign_ratio(isfinite(log2_sign_ratio)),numbers)); 
+bar(numbers, histc(log2_sign_ratio(isfinite(log2_sign_ratio)),numbers));
 axis tight; set(gca,'FontSize',18);
 xlabel('Synergy sign ratio (log2 scale)'); ylabel('Count number');
 
@@ -228,15 +224,15 @@ xlabel('Synergy sign ratio (log2 scale)'); ylabel('Count number');
 % synergies between subsystems
 
 
-if isfield(network,'subsystems'),
+if isfield(network,'subsystems')
 
   subsystems     = network.subsystems;
   subsystem_list = unique(subsystems);
   ll             = label_names(subsystem_list,subsystems,'multiple');
   ng             = length(network.actions);
-  
-  for it = 1:length(subsystem_list),
-    for it2 = 1:length(subsystem_list),
+
+  for it = 1:length(subsystem_list)
+    for it2 = 1:length(subsystem_list)
       M = synergy(ll{it},ll{it2});
       frac_pos(it,it2) = sum(M(:)>0)/prod(size(M));
       frac_neg(it,it2) = sum(M(:)<0)/prod(size(M));
@@ -251,27 +247,27 @@ if isfield(network,'subsystems'),
 
   figure(10000); order_subsystems = sort_by_clustering(my_M); close(10000);
 
-  figure(202); clf; 
+  figure(202); clf;
   subplot('Position',[0.2 0.02 0.8 0.7]); set(gca,'Fontsize',6);
-  im(my_M(order_subsystems,order_subsystems),[],subsystem_list(order_subsystems),subsystem_list(order_subsystems)); 
+  im(my_M(order_subsystems,order_subsystems),[],subsystem_list(order_subsystems),subsystem_list(order_subsystems));
   colormap(rb_colors);
-  colorbar; 
+  colorbar;
   axis square; axis equal; axis tight; my_xticklabel
 
   dum = []; dd = 0;
-  for it = 1:length(ll),
+  for it = 1:length(ll)
     dum = [dum; ll{order_subsystems(it)}];
     dd  = [dd; dd(end) + length(ll{order_subsystems(it)})];
   end
-  
+
   figure(201); clf
-  im(asinh(synergy(dum,dum))); colormap(rb_colors); colorbar; hold on; 
-  for it = 1:length(ll),
+  im(asinh(synergy(dum,dum))); colormap(rb_colors); colorbar; hold on;
+  for it = 1:length(ll)
     line([0 ng],[dd(it),dd(it)],'Color','k');
     line([dd(it),dd(it)],[0 ng],'Color','k');
   end
   hold off; axis square; axis equal; axis tight
-  
+
 end
 
 % -----------------------------------------------------------------------
@@ -301,7 +297,7 @@ gp = struct('arrowstyle','none', 'linecolor',[0 0 0],'colorbar',0, 'text_offset'
 
 cluster_ind_mapped = nan*zeros(size(network.actions));
 cluster_ind_mapped(ind_fin) = cluster_indices;
-figure(301); clf; 
+figure(301); clf;
 netgraph_concentrations(network_CoHid,[], cluster_ind_mapped'-max(cluster_ind_mapped)/2,0,gp); hold off;
 set(gcf,'Color',[1 1 1]);
 
@@ -310,7 +306,7 @@ set(gcf,'Color',[1 1 1]);
 
 figure(302); clf;
 graph_circle_plot(asinh(synergy_thr(ind_fin,ind_fin)),rb_colors,cluster_indices);
-axis equal; axis off; 
+axis equal; axis off;
 set(gcf,'Color',[1 1 1]);
 
 
@@ -320,46 +316,46 @@ set(gcf,'Color',[1 1 1]);
 % even cycle lengths ->  positive signs overrepresented
 % (comparison to randomised synergy matrix)
 
-figure(303); clf; 
+figure(303); clf;
 
-if flag_analyse_synergy_cycles,
+if flag_analyse_synergy_cycles
 
-  synergy_neg = synergy_thr; 
+  synergy_neg = synergy_thr;
   synergy_neg(synergy_neg>0) = 0;
 
   n_rand = 100;
 
   [thr_n_cycles,thr_frac_pos,thr_mean_n_cycles,thr_std_n_cycles,thr_pvalue_n_cycles,thr_pvalue_frac_pos] = synergy_count_cycles(synergy_thr,n_rand);
   [neg_n_cycles,neg_frac_pos,neg_mean_n_cycles,neg_std_n_cycles,neg_pvalue_n_cycles] = synergy_count_cycles(synergy_neg,n_rand);
-  
-  figure(303); clf; 
+
+  figure(303); clf;
   subplot(3,1,1); set(gca,'Fontsize',12);
   plot(3:10,thr_n_cycles(3:10),'b*'); hold on;
   errorbar(3:10,thr_mean_n_cycles(3:10),thr_std_n_cycles(3:10),'r*'); hold off;
-  set(gca,'YScale','Log'); 
-  axis([2.5 10.5 1 10^5]); 
+  set(gca,'YScale','Log');
+  axis([2.5 10.5 1 10^5]);
   legend('Cycles from significant synergies','Randomized');
-  xlabel('Cycle length'); ylabel('# Cycles'); 
-  
+  xlabel('Cycle length'); ylabel('# Cycles');
+
   subplot(3,1,2); set(gca,'Fontsize',12);
-  plot(3:10,thr_pvalue_frac_pos(3:10),'b*-'); 
-  xlabel('Cycle length'); ylabel('P-value for cycles being positive'); 
-  
+  plot(3:10,thr_pvalue_frac_pos(3:10),'b*-');
+  xlabel('Cycle length'); ylabel('P-value for cycles being positive');
+
   subplot(3,1,3); set(gca,'Fontsize',12);
   plot(3:10,neg_n_cycles(3:10),'b*'); hold on;
   errorbar(3:10,neg_mean_n_cycles(3:10),neg_std_n_cycles(3:10),'r*'); hold off;
-  set(gca,'YScale','Log'); 
-  axis([2.5 10.5 1 10^3]); 
+  set(gca,'YScale','Log');
+  axis([2.5 10.5 1 10^3]);
   legend('Cycles from significant synergies <0','Randomized');
-  xlabel('Cycle length'); ylabel('# Cycles'); 
-  
+  xlabel('Cycle length'); ylabel('# Cycles');
+
 end
 
 % ------------------------------------------------------
 % print results
 
-if length(psfile_dir),
-  
+if length(psfile_dir)
+
   display(sprintf('Saving graphics to directory %s',psfile_dir))
   cd(psfile_dir);
   print([es_filenames.psfile_base '_synergies_RC_first.eps'    ], '-f101', '-depsc');
@@ -375,32 +371,32 @@ if length(psfile_dir),
   print([es_filenames.psfile_base '_synergies_influence_vs_synergy_degree.eps'], '-f115', '-depsc');
   print([es_filenames.psfile_base '_synergies_synergy_degree_pos_neg_ratio.eps'], '-f116', '-depsc');
 
-  if isfield(network,'subsystems'),
+  if isfield(network,'subsystems')
     print([es_filenames.psfile_base '_synergies_subsystems1.eps'], '-f201', '-depsc');
     print([es_filenames.psfile_base '_synergies_subsystems2.eps'], '-f202', '-depsc');
   end
-  
+
   print([es_filenames.psfile_base '_synergies_clusters.eps'      ], '-f301', '-depsc');
   print([es_filenames.psfile_base '_synergies_cluster_circle.eps'], '-f302', '-depsc');
-  if ~flag_analyse_synergy_cycles,
+  if ~flag_analyse_synergy_cycles
     figure(303)
   end
   print([es_filenames.psfile_base '_synergies_cycle_numbers.eps' ], '-f303', '-depsc');
-  
+
 end
 
 figure(101); title('Scaled 1st order resp. coefficients');
 figure(102); title('Scaled 2nd order resp. coefficients: fraction(positive)');
 figure(103); title('Synergy degrees');
 figure(111);  title('Synergies histogram');
-figure(1111); title('Influence vs synergy');      
-figure(112);  title('Synergy vs  influence product');             
-figure(1112); title('Synergy scaled by influence product');      
-figure(113);  title('Synergy vs mean CJ'); 
-figure(1113); title('Histogram: Synergy / mean CJ ');        
+figure(1111); title('Influence vs synergy');
+figure(112);  title('Synergy vs  influence product');
+figure(1112); title('Synergy scaled by influence product');
+figure(113);  title('Synergy vs mean CJ');
+figure(1113); title('Histogram: Synergy / mean CJ ');
 figure(114); title('Distribution of Synergy degrees'); axis tight
 figure(115); title('Influence vs Synergy degrees');
-figure(116); title('Histogram of synergy log2 sign ratio; result depends strongly on thresholding; here 75 quantile'); 
+figure(116); title('Histogram of synergy log2 sign ratio; result depends strongly on thresholding; here 75 quantile');
 figure(201); title('Modular Synergies (asinh scale)');
 figure(202); title('Fractions of synergy signs (pos-neg)/(pos+neg), Subsystems sorted by clustering');
 figure(301); title('Mapped clusters');
@@ -408,50 +404,3 @@ figure(302); title('Thresholded synergies (asinh scale) (Reactions without syner
 figure(303); subplot(3,1,1); title('Cycle numbers (thresholded synergy)');
 figure(303); subplot(3,1,2); title('Cycle numbers (aggravating synergy)');
 figure(303); subplot(3,1,3); title('P-value (number of positive cycles)');
-
-
-return
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% other clustering algorithms
-
-
-% ---------------------------------------------
-% compute ordering by eigenvalue decomposition and k-means
-
-neig   = 50;
-nclust = 10;
-
-[V,D]                = eig(synergy);
-d                    = diag(D);          
-[dum,order]          = sort(-abs(d));
-X                    = diag(sqrt(abs(d(order)))) * V(:,order(1:neig));
-sd                   = sign(d(order(1:neig)));
-[cluster_indices, c] = kmeans(X, nclust);
-cluster_synergies = c*diag(sd)*c';
-[cluster_indices,cluster_synergies] = sort_clusters(network,cluster_indices,cluster_synergies);
-
-
-% -----------------------------------------------------------------------
-% prism algorithm
-
-nclust = 15;
-
-[Z,Conflict,Direct] = prism(synergy_thr,.5,2,1);
-cluster_indices     = cluster(Z,'MaxClust',nclust);
-cluster_indices     = sort_clusters(network,cluster_indices);
-
-
-%% OTHER GRAPHICS
-% Cumulative distribution of synergy values
-
-% figure(101); clf
-% indices = find(triu(ones(size(synergy,1))));
-% plot(sort(synergy(indices)),[1:length(indices)]/length(indices));
-% %h = bar([-0.05:0.005:0.05],log10(n)); axis tight; 
-% %set(h,'FaceColor',[.9 .9 .9]);
-% xlabel('Scaled second response coefficients');
-% ylabel('Cumulative distribution');
-
-% add titles (after printing)

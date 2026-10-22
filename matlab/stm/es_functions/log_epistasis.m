@@ -1,10 +1,12 @@
-function epistasis = simple_epistasis(f_ref,f_single,f_double)
+function epistasis = log_epistasis(f_ref,f_single,f_double)
 
-% LOG_EPISTASIS Simple epistasis measure
+% LOG_EPISTASIS Log epistasis measure
 %
-% epistasis = simple_epistasis(f_ref,f_single,f_double)
+% epistasis = log_epistasis(f_ref,f_single,f_double)
 %
-% Input 
+% epistasis = log( w_double ./ (w_single * w_single') ), with relative fitnesses w = f/f_ref
+%
+% Input
 % f_ref    wildtype fitness (number)
 % f_single single perturbation fitnesses (vector)
 % f_double double perturbation fitnesses (matrix)
@@ -16,9 +18,9 @@ epsilon = 10^-8;
 
 w_single = f_single/f_ref;
 w_double = f_double/f_ref;
-w_single(abs(w_single)<10^-8)= 0;
-w_double(abs(w_double)<10^-8)= 0;
+w_single(abs(w_single)<epsilon)= 0;
+w_double(abs(w_double)<epsilon)= 0;
 
 w_ratio = w_double ./ [w_single * w_single'];
 w_ratio(w_double == [w_single * w_single']) = 1;
-epistasis = w_ratio-1;
+epistasis = log(w_ratio);

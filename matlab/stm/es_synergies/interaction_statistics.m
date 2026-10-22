@@ -4,18 +4,18 @@ function res = interaction_statistics(es_filenames, target_reaction, condition1,
 %
 % res = interaction_statistics(es_filenames, target_reaction, condition1, condition2, input_file1, input_file2, n_mc, n_per, fdr, fluxes_fixed)
 %
-% Run elasticity sampling repeatedly and compute statistics 
-% over the resulting influence values (1st order control coefficients) 
-% and interaction values (i.e. 2nd order control coefficients) 
-% 
+% Run elasticity sampling repeatedly and compute statistics
+% over the resulting influence values (1st order control coefficients)
+% and interaction values (i.e. 2nd order control coefficients)
+%
 % Output:
 % res.p_influence       p-values for influences
 % res.p_interaction     p-values for interactions
-% res.influence_sig     
-% res.influence_a_sig   
-% res.influence_b_sig   
-% res.interaction_sig   
-% res.interaction_a_sig 
+% res.influence_sig
+% res.influence_a_sig
+% res.influence_b_sig
+% res.interaction_sig
+% res.interaction_a_sig
 % res.interaction_b_sig
 
 
@@ -39,14 +39,14 @@ es_options.set_alpha_to_half  = 0;
 es_options.seed               = 0;
 es_options.epsilon_stationary = 0.001;
 
-if fluxes_fixed,
+if fluxes_fixed
   es_options.method_flux_sampling = 'accept_flux';
   es_constraints.v_fix = result.v;
 end
 
 % ---------------------------------------------
 
-for it = 1:n_mc,
+for it = 1:n_mc
   fprintf('MC sample %d/%d:',it,n_mc);
   result         = es_sample_model(N,W,ind_ext,es_constraints,es_options);
   R_target_u_sc  = result.control.RJu_sc(ind_target,:);
@@ -55,18 +55,18 @@ for it = 1:n_mc,
   interaction_list(:,:,it,1) = R_target_uu_sc - diag(diag(R_target_uu_sc));
 end
 
-cd(es_filenames.es_dir); 
+cd(es_filenames.es_dir);
 load(input_file2); % es_options, result; from script 'ycm_elasticity_sampling'
 es_options.set_alpha_to_half  = 0;
 es_options.seed               = 0;
 es_options.epsilon_stationary = 0.001;
 
-if fluxes_fixed,
+if fluxes_fixed
   es_options.method_flux_sampling = 'accept_flux';
   es_constraints.v_fix = result.v;
 end
 
-for it = 1:n_mc,
+for it = 1:n_mc
   fprintf('MC sample %d/%d:',it,n_mc);
   result         = es_sample_model(N,W,ind_ext,es_constraints,es_options);
   R_target_u_sc  = result.control.RJu_sc(ind_target,:);
@@ -77,7 +77,7 @@ end
 
 
 % --------------------------------------------------------------
-% Detect significant values and differences in the interaction matrices 
+% Detect significant values and differences in the interaction matrices
 % by a permutation test
 
 ind_intervention = 1:nr;

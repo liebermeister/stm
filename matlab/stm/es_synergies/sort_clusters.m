@@ -1,5 +1,9 @@
 function [new_cluster_indices,new_cluster_interactions] = sort_clusters(network,cluster_indices,cluster_interactions)
 
+% [new_cluster_indices,new_cluster_interactions] = sort_clusters(network,cluster_indices,cluster_interactions)
+%
+% Renumber reaction clusters by the mean vertical position of their reactions in the network graphics
+
 [nm,nr] = network_numbers(network);
 
 nc = max(cluster_indices);

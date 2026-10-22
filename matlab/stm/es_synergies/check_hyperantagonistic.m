@@ -40,18 +40,18 @@ if stop ==0,
   M = -M(relevant,:);
   a = -x(relevant)+10^-10;
 
-[solution,goal,status] = my_linear_programming(M,a,ones(size(M,2),1));
+% maximise sum(x) subject to M * x <= a
+[solution,~,exitflag] = lp_solve(-ones(size(M,2),1),M,a);
 
-solution(isnan(solution)) = 1;
-if strcmp(status,'optimal'),
+if exitflag == 1,
   if sum((M*solution <a)==0) ==0,
     display('Hyperantagonistic solution found');
     success = 1;
   else
-    solution = nan *solution;
+    solution = [nan; nan];
   end
 else,
-  solution = nan *solution;
+  solution = [nan; nan];
 end
 
 end

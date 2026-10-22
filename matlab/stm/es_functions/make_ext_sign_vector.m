@@ -1,8 +1,8 @@
-function [ext_sign_vector,v_sign_vector] = make_ext_sign_vector_vector(ext_sign,metabolites,ext_ind,v_signs,actions)
+function [ext_sign_vector,v_sign_vector] = make_ext_sign_vector(ext_sign,metabolites,ext_ind,v_signs,actions)
 
-%MAKE_EXT_SIGN_VECTOR_VECTOR - Helper function
+%MAKE_EXT_SIGN_VECTOR - Helper function
 %
-% [ext_sign_vector,v_sign_vector] = make_ext_sign_vector_vector(ext_sign,metabolites,ext_ind,v_signs,actions)
+% [ext_sign_vector,v_sign_vector] = make_ext_sign_vector(ext_sign,metabolites,ext_ind,v_signs,actions)
 
 nm              = length(metabolites);
 ext_sign_vector = nan*ones(nm,1);

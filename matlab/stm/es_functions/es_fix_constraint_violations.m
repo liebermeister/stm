@@ -38,9 +38,8 @@ if length(ind_violated),
 end
 
 % Fix wrong reaction affinities
-dmu_geometric_median = exp(nanmean(log(abs(dmu(find(dmu))))));
+dmu_geometric_median = exp(mean(log(abs(dmu(find(dmu)))),'omitnan'));
 dmu(ind_violated) = -sign(v(ind_violated)) .* dmu_geometric_median;
-plot(v,dmu,'.');
 
 display('Adjusting small and large reaction affinities');
 

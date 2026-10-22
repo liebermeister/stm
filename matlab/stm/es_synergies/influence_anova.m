@@ -15,6 +15,7 @@ function p = influence_anova(D, n_per, fdr, ind_intervention, verbose)
 % n_per:            sample number in permutation tests
 % fdr:              false discovery rate
 % ind_intervention: reaction indices to be selected for the analysis (optional)
+% verbose:          verbose output (optional)
 %
 % The results are returned in a structure 'p' with fields
 %
@@ -96,10 +97,10 @@ for r1 = 1:nr,
     this_mean_a = [];
     for it_perm = 1:n_per, 
       rand_indices = randperm(n_finite_a);
-      indices = finite_indices(rand_indices(1:2*n_sim));
-      this_mean(it_perm) = mean(Da(indices));
+      indices = finite_indices_a(rand_indices(1:n_sim));
+      this_mean_a(it_perm) = mean(Da(indices));
     end
-    p.p_value_mean_a(r1) =  pvalue_from_countnumber(p.mean_a(r1),this_mean);
+    p.p_value_mean_a(r1) =  pvalue_from_countnumber(p.mean_a(r1),this_mean_a);
     
     %% mean value for condition B
     %% p-value: background distribution sampled from condition A and B
@@ -108,10 +109,10 @@ for r1 = 1:nr,
     this_mean_b = [];
     for it_perm = 1:n_per, 
       rand_indices = randperm(n_finite_b);
-      indices = finite_indices(rand_indices(1:2*n_sim));
-      this_mean(it_perm) = mean(Db(indices));
+      indices = finite_indices_b(rand_indices(1:n_sim));
+      this_mean_b(it_perm) = mean(Db(indices));
     end
-    p.p_value_mean_b(r1) =  pvalue_from_countnumber(p.mean_b(r1),this_mean);
+    p.p_value_mean_b(r1) =  pvalue_from_countnumber(p.mean_b(r1),this_mean_b);
     
     %% difference between two conditions
     %% p-value: background distribution sampled from condition A and B

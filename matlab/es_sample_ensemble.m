@@ -30,18 +30,16 @@ function [output, output_list] = es_sample_ensemble(N, W, ind_ext, es_constraint
 %
 % Comments:
 %
-% (1) If the output function is numeric, output contains all values as a row vector
-%      (for scalars), matrix (for row or column vectors), or tensor (for matrices).
+% (1) The output function is called as output_function(result, function_args).
+%     If its value is numeric, 'output' contains all values as a column vector
+%     (for scalars), matrix (for row or column vectors), or tensor (for matrices).
 %
 % (2) If a 'select_function' is provided, only samples that yield a non-zero value
 %     of this function will be considered.
 %
-% (3)  If a score function (e.g., a log likelihood) is provided, it is evaluated 
+% (3)  If a score function (a log likelihood) is provided, it is evaluated 
 %      every time for each sample and the values are used for Metropolis sampling
 %      instead of simple repeated sampling.
-%
-
-% test script: test_es_sample_ensemble.m
 
 
 eval(default('select_function','[]','score_function','[]','function_args','[]'));
@@ -75,7 +73,7 @@ for it = 1:es_options.n_samples,
     my_score = feval(score_function,my_result,function_args);
     if [my_score > old_score] + [rand < exp(my_score - old_score)] 
       output_list{it} = my_output;
-      my_score = old_score;
+      old_score = my_score;
     else,
       output_list{it} = output_list{it-1};
     end
@@ -96,14 +94,8 @@ if isscalar(output_list{1}),
 else
 
   if isvector(output_list{1}),
-    if size(output_list{1},2) ==1,
-      for it = 1:length(output_list),
-        output(:,it) = output_list{it};
-      end
-    else
-      for it = 1:length(output_list),
-        output(:,it) = output_list{it};
-      end
+    for it = 1:length(output_list),
+      output(:,it) = output_list{it};
     end
   
   else % tensor

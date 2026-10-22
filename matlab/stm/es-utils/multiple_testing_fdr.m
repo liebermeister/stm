@@ -10,7 +10,7 @@ function significant = multiple_testing_fdr(all_p, false_discovery_rate)
 % all_p (vector or matrix) contains the p values for all tests
 %                          'nan' values are ignored
 
-p           = all_p(isfinite(all_p)); 
+p           = column(all_p(isfinite(all_p)));
 if sum(p)==0, error('All p values are zero'); end
 if length(p)==0, error('No finite p values found'); end
 n_tests     = length(p);

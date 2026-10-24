@@ -7,16 +7,16 @@ This repository contains Matlab functions for Structural thermokinetic modelling
 
 ## Installation
 
-Download or clone the repository and add the `matlab` folder, with its subfolders, to your Matlab path:
+Download or clone the repository and add the `stm` folder, with its subfolders, to your Matlab path:
 
 ```matlab
-addpath(genpath('/path/to/stm/matlab'));
+addpath(genpath('/path/to/stm/stm'));
 savepath;   % optional: keep the folders on the path in future sessions
 ```
 
 Then install the required packages (see below). To check which of them are installed, run `es_dependencies`.
 
-For getting started, run one of the demo scripts in the folder `matlab/demo`:
+For getting started, run one of the demo scripts in the folder `stm/demo`:
 
 - `demo_stm_glycolysis`: interactive demo (a model of glycolysis; press a key to continue after each step)
 - `demo_stm_noor_2016_modified`: model of E. coli central metabolism
@@ -45,20 +45,20 @@ Some functions require further packages:
 
 ## Contents
 
-- **`matlab`**: the main functions
+- **`stm`**: the main functions
   - `es_default_options`: default settings (structs `es_options` and `es_constraints`; type `help es_default_options`)
   - `es_sample_model`: sample a model (steady state and elasticities) for a given network
   - `es_sample_steady_state`, `es_sample_elasticities`: the two steps of `es_sample_model`
   - `es_sample_ensemble`, `es_compare_ensembles`: create model ensembles and compare them statistically
-- **`matlab/stm`**: more specific functions: graphics, prediction of perturbation effects,
+- **`stm/stm`**: more specific functions: graphics, prediction of perturbation effects,
   enzyme synergies, metabolic fluctuations, Bayesian (MCMC) sampling
-- **`matlab/demo`**: demo scripts
-- **`matlab/models/e_coli_ccm`**: scripts for building the E. coli model from the STM article
+- **`stm/demo`**: demo scripts
+- **`stm/models/e_coli_ccm`**: scripts for building the E. coli model from the STM article
 - **`resource-data`**: models and data (see the README files there)
 - **`tests`**: tests
 - **`doc`**: HTML documentation of all functions
 
-Each folder in `matlab` contains a `Contents.m` file with an overview (type, e.g., `help stm`).
+Each folder in `stm` contains a `Contents.m` file with an overview (type, e.g., `help stm`).
 
 ## E. coli model
 

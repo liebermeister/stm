@@ -1,4 +1,4 @@
-!!!SBtab Document='Model'								
+!!!SBtab SBtabVersion='1.2' Document='Model'								
 								
 !!SBtab TableID='Reaction' TableType='Reaction' TableName='Reaction'								
 !ID	!ReactionFormula	!Name	!NameForPlots	!Identifiers:kegg.reaction	!IsReversible	!Gene	!KineticLaw:Name	!KineticLaw:Formula

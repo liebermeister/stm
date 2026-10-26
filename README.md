@@ -29,8 +29,8 @@ and see the instructions at http://www.metabolic-economics.de/stm/workflow-matla
 - Matlab (tested with R2025b)
 - [Matlab utility functions](https://github.com/liebermeister/matlab-utils) (required)
 - [Metabolic Network Toolbox](https://github.com/liebermeister/metabolic-network-toolbox) (required)
-- Optimization Toolbox (for linear programs and `fsolve`). If IBM CPLEX is on the Matlab path, it is used
-  for linear programs instead of `linprog` (see `help lp_solve` in matlab-utils).
+- Optimization Toolbox (for linear programs and `fsolve`). Optionally, Gurobi can be used
+  for linear programs instead of `linprog` (see `help optim_solver` in matlab-utils).
 
 Some functions require further packages:
 

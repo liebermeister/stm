@@ -2,9 +2,9 @@
 
 clear; clearvars -global
 
-es_dependencies;
+stm_dependencies;
 
-model_dir = [es_BASEDIR '/../resource-data/models-other/demo_e_coli_glycolysis'];
+model_dir = [stm_BASEDIR '/../resource-data/models-other/demo_e_coli_glycolysis'];
 
 cd(model_dir);
 
@@ -91,7 +91,7 @@ clc
 
 es_constraints.v_fix = v;
 
-result = es_sample_model(N, W, ind_ext, es_constraints, es_options);
+result = stm_sample_model(N, W, ind_ext, es_constraints, es_options);
 
 % Press key to continue
 pause
@@ -141,7 +141,7 @@ clc
 
 es_options.kinetic_law = 'cs';
 
-output1 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
+output1 = stm_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
 
 % This was the first ensemble
 
@@ -153,7 +153,7 @@ clc
 
 es_options.kinetic_law = 'ms';
 
-output2 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
+output2 = stm_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
 
 % This was the second ensemble
 
@@ -169,7 +169,7 @@ false_discovery_rate = 0.05;
 
 % The result of the comparison are stored in a data structure res
 
-res = es_compare_ensembles(output1, output2, n_permutations, false_discovery_rate);
+res = stm_compare_ensembles(output1, output2, n_permutations, false_discovery_rate);
 
 % All variables are still in your workspace
 

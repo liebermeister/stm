@@ -14,11 +14,11 @@ clear; clearvars -global
 
 % Check whether all necessary m-files have been installed:
 
-es_dependencies;
+stm_dependencies;
 
 % Resource directory of the elasticity sampling package, in case it s needed
 
-resource_dir = [es_BASEDIR '/../resource-data/'];
+resource_dir = [stm_BASEDIR '/../resource-data/'];
 
 
 %-------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
 % For later use, we load some model-related data and map them onto the model
 
- resource_dir = [es_BASEDIR '../resource-data/data/'];
+ resource_dir = [stm_BASEDIR '../resource-data/data/'];
 
  data_files = {[resource_dir 'data-thermodynamic/E_coli_glycolysis_GFE.tsv'], ...
               [resource_dir 'data-thermodynamic/GFE.tsv'], ...
@@ -215,7 +215,7 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 % compute variables v, c, and dmu, and we insert them into the 'es_options' struct.
 % The functions for elasticity sampling also provide options for computing v, c, and dmu
 % directly, based on other types of information.
-% For further information, please type "help es_sample_steady_state"
+% For further information, please type "help stm_sample_steady_state"
 
 %-------------------------------------------------------------------------------
 % We insert the flux mode into 'es_constraints' and run elasticity sampling
@@ -261,10 +261,10 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 % ----------------------------------------------------------
 % Now, run elasticity sampling
 
- result = es_sample_model(N, W, ind_ext, es_constraints, es_options);
+ result = stm_sample_model(N, W, ind_ext, es_constraints, es_options);
 
 % Alternatively, the function can also be directly applied to the fields of 'network'
-% result = es_sample_model(network.N, network.regulation_matrix, find(network.external), es_constraints, es_options);
+% result = stm_sample_model(network.N, network.regulation_matrix, find(network.external), es_constraints, es_options);
 
 
 %-------------------------------------------------------------------------------
@@ -292,12 +292,12 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
 % Show graphics for reference state
 
- es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, [], psfile_dir);
+ stm_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, [], psfile_dir);
 
 % Show graphics for interaction effects (second order control analysis)
-% Note that this is not possible after es_sample_model has been run with the option es_options.flag_second_order = 0;
+% Note that this is not possible after stm_sample_model has been run with the option es_options.flag_second_order = 0;
 
- es_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir);
+ stm_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir);
 
 
 %-------------------------------------------------------------------------------
@@ -359,7 +359,7 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
  es_options.kinetic_law = 'cs';
 
- output1 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
+ output1 = stm_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
 
 % This was the first ensemble
 
@@ -368,7 +368,7 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
  es_options.kinetic_law = 'ms';
 
- output2 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
+ output2 = stm_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
 
 % This was the second ensemble
 
@@ -381,4 +381,4 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
 % The result of the comparison are stored in a data structure res
 
- res = es_compare_ensembles(output1, output2, n_permutations, false_discovery_rate);
+ res = stm_compare_ensembles(output1, output2, n_permutations, false_discovery_rate);

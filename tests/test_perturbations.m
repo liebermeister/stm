@@ -1,10 +1,10 @@
 % Tests for the prediction of perturbation effects
 
 setup_test_path;
-[N, W, ind_ext, v, es_options, es_constraints] = example_model;
+[N, W, ind_ext, v, stm_options, stm_constraints] = example_model;
 [nm, nr] = size(N);
-es_options.flag_second_order = 1;
-result = stm_sample_model(N, W, ind_ext, es_constraints, es_options);
+stm_options.flag_second_order = 1;
+result = stm_sample_model(N, W, ind_ext, stm_constraints, stm_options);
 s_ratio = ones(length(ind_ext), 1);
 u_ratio = [1.01 1 1 0.99 1]';
 r1 = stm_simulate_perturbation(N, W, ind_ext, u_ratio, s_ratio, result, 'logarithmic', 1);

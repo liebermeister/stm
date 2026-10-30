@@ -1,8 +1,8 @@
-function result = stm_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)
+function result = stm_sample_elasticities(N, W, ind_ext, stm_constraints, stm_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)
 
 % STM_SAMPLE_ELASTICITIES - Elasticity phase
 %
-% result = stm_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)
+% result = stm_sample_elasticities(N, W, ind_ext, stm_constraints, stm_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A)
 %
 % Elasticity sampling: run elasticity sampling phase and MCA phase
 %
@@ -23,22 +23,22 @@ function result = stm_sample_elasticities(N, W, ind_ext, es_constraints, es_opti
 %   zeta      - zeta vector computed from reaction affinities
 %   A         - Vector of reaction affinities (thermodynamic driving forces)
 %
-% For the inputs 'es_constraints' and 'es_options', see 'es_default_options'
+% For the inputs 'stm_constraints' and 'stm_options', see 'stm_default_options'
 %
-% Fields in 'es_constraints' and 'es_options' relevant to this function:
+% Fields in 'stm_constraints' and 'stm_options' relevant to this function:
 %
-%   es_constraints.beta_M_fix     - predefined beta values (only used if non-zero)
-%   es_constraints.beta_A_fix     - predefined beta values (only used if non-zero)
-%   es_constraints.beta_I_fix     - predefined beta values (only used if non-zero)
-%   es_options.kinetic_law        - Rate law {'cs','ms', ...}
-%   es_options.h                  - vector of Hill exponents (one for each reaction)
-%   es_options.no_equilibrium     - flag: assume no equilibrium for inactive reactions
-%   es_options.KV_prior_mean      - .. and KV value to be used in this case
-%   es_options.flag_test          - Run tests? (Boolean)
-%   es_options.flag_second_order  - Compute second-order elasticities? (Boolean)
-%   es_options.zv                 - Flux weights for 2nd order resp. coeff output function
-%   es_options.zc                 - Conc. weights for 2nd order resp. coeff output function
-%   es_options.limit_elasticities_in_multireactions - normalise elasticities in reactions with
+%   stm_constraints.beta_M_fix     - predefined beta values (only used if non-zero)
+%   stm_constraints.beta_A_fix     - predefined beta values (only used if non-zero)
+%   stm_constraints.beta_I_fix     - predefined beta values (only used if non-zero)
+%   stm_options.kinetic_law        - Rate law {'cs','ms', ...}
+%   stm_options.h                  - vector of Hill exponents (one for each reaction)
+%   stm_options.no_equilibrium     - flag: assume no equilibrium for inactive reactions
+%   stm_options.KV_prior_mean      - .. and KV value to be used in this case
+%   stm_options.flag_test          - Run tests? (Boolean)
+%   stm_options.flag_second_order  - Compute second-order elasticities? (Boolean)
+%   stm_options.zv                 - Flux weights for 2nd order resp. coeff output function
+%   stm_options.zc                 - Conc. weights for 2nd order resp. coeff output function
+%   stm_options.limit_elasticities_in_multireactions - normalise elasticities in reactions with
 %                                   more than 6 reactants (e.g. biomass reaction)?
 %
 % All output data are stored in a structure 'result' with fields:
@@ -77,7 +77,7 @@ end
 
 [nm,nr] = size(N);
 
-[alpha_A, alpha_I, alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options,es_constraints);
+[alpha_A, alpha_I, alpha_M] = sample_saturation_parameters(N,W,ind_ext,stm_options,stm_constraints);
 
 [beta_A,gamma_A] = alpha_to_betagamma(alpha_A);
 [beta_I,gamma_I] = alpha_to_betagamma(alpha_I);
@@ -97,19 +97,19 @@ KI(W>=0)  = 0;
 
 KM_full     = full(KM); KM_full(KM_full==0) = 1;
 this_KV     = ones(nr,1);
-v_pre       = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,this_KV,Keq,es_options.h);
+v_pre       = modular_velocities(stm_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,this_KV,Keq,stm_options.h);
 ind_off     = find([v_pre==0].*[A~=0]);
 ind_off_A   = find([v_pre==0].*[A==0]);
 
 % default values for options that may be missing in older option structs
-es_options = join_struct(struct('no_equilibrium',1,'limit_elasticities_in_multireactions',1),es_options);
+stm_options = join_struct(struct('no_equilibrium',1,'limit_elasticities_in_multireactions',1),stm_options);
 
-if es_options.no_equilibrium
+if stm_options.no_equilibrium
   if length(ind_off),  display('Vanishing rates: setting enzyme values = 0'); end
   u(ind_off)     = 0;
   v_pre(ind_off) = 1;
   KV          = J./v_pre;
-  KV(ind_off) = es_options.KV_prior_mean;
+  KV(ind_off) = stm_options.KV_prior_mean;
 else
   if length(ind_off),  display('Vanishing rates: setting KV values = 0'); end
   v_pre(ind_off) = 1;
@@ -126,7 +126,7 @@ KV(isnan(KV)) = median(KV,'omitnan');
 if sum(KV<0), error('Problem with flux directions'); end
 
 % compute reaction velocities
-[v, v_plus, v_minus] = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,es_options.h);
+[v, v_plus, v_minus] = modular_velocities(stm_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,stm_options.h);
 if sum(isnan(v))
   error('infeasible reaction rates');
 end
@@ -136,12 +136,12 @@ end
 % ----------------------------------------------------------------
 % Tests
 
-if es_options.flag_test
-  [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int] = make_structure_matrices(N,W,ind_ext,es_options.h);
+if stm_options.flag_test
+  [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int] = make_structure_matrices(N,W,ind_ext,stm_options.h);
   dc_td             = N_int * J
   if length(c0)
     def_keq_mismatch  = [log(Keq) - N' * log(c0)]
-    v_eq = modular_velocities(es_options.kinetic_law,N,W,ind_ext,u,c0,KA,KI,KM,KV,Keq,es_options.h)
+    v_eq = modular_velocities(stm_options.kinetic_law,N,W,ind_ext,u,c0,KA,KI,KM,KV,Keq,stm_options.h)
     max(abs( def_keq_mismatch))
     max(abs( v_eq  ))
   end
@@ -159,9 +159,9 @@ end
 v_plus_fallback  = ones(size(v));
 v_minus_fallback = ones(size(v));
 
-E = compute_modular_elasticities(es_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, v_plus_fallback, v_minus_fallback, es_options.flag_second_order);
+E = compute_modular_elasticities(stm_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, stm_options.h, v_plus_fallback, v_minus_fallback, stm_options.flag_second_order);
 
-if es_options.limit_elasticities_in_multireactions
+if stm_options.limit_elasticities_in_multireactions
   % normalise the elasticities in each multi-reaction (eg biomass reaction) to a sum of absolute values of 1
   ind_multi_reactions = find(sum(N'~=0)>6);
   Ec_scaled_multi = E.sc_E_c(ind_multi_reactions,:);
@@ -205,7 +205,7 @@ end
 % -------------------------------------------------------------
 % second order
 
-if es_options.flag_second_order * [length(es_options.zc) + length(es_options.zv) == 0]
+if stm_options.flag_second_order * [length(stm_options.zc) + length(stm_options.zv) == 0]
 
   %% compute full second-order response matrices
 
@@ -262,10 +262,10 @@ else
 
   %% Second order effects on specified target function
   %% (some linear function of concentrations and fluxes)
-  if [length(es_options.zc) + length(es_options.zv)]
+  if [length(stm_options.zc) + length(stm_options.zv)]
     [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(...
-        es_options.zc, es_options.zv, es_options.kinetic_law, N, W, ...
-        ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, es_options.h, ...
+        stm_options.zc, stm_options.zv, stm_options.kinetic_law, N, W, ...
+        ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, stm_options.h, ...
         v_plus_fallback, v_minus_fallback, CS, CJ);
   end
 
@@ -283,7 +283,7 @@ eigmax = max(real(eig(M)));
 
 control.stable = [eigmax <= 0];
 
-if es_options.verbose
+if stm_options.verbose
   if control.stable
     display('The metabolic state is stable.');
   else
@@ -331,7 +331,7 @@ result.K                  = K;
 % -------------------------------------------------------------
 % kinetic parameters ready to use
 
-result.kinetics.type = es_options.kinetic_law;
+result.kinetics.type = stm_options.kinetic_law;
 result.kinetics.u    = result.u;
 result.kinetics.c    = result.c;
 result.kinetics.KA   = result.KA;
@@ -339,4 +339,4 @@ result.kinetics.KI   = result.KI;
 result.kinetics.KM   = result.KM;
 result.kinetics.KV   = result.KV;
 result.kinetics.Keq  = result.Keq;
-result.kinetics.h    = es_options.h;
+result.kinetics.h    = stm_options.h;

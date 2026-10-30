@@ -33,7 +33,7 @@ assert(isequal(sort(E_rnd(triu(true(3),1))), [1 2 3]'));
 
 %% stm_constraints_set
 network = network_construct([-1 0; 1 -1; 0 1], [1 1]', [1 3]');
-[~, c] = es_default_options(network);
+[~, c] = stm_default_options(network);
 c = stm_constraints_set(c, network, 'v_fix', network.actions(2), 3, 'v_sign', network.actions(1), 1, 'ext_signs', network.metabolites(3), -1);
 assert(c.v_fix(2) == 3 && isnan(c.v_fix(1)) && c.v_sign(1) == 1 && c.ext_signs(3) == -1);
 

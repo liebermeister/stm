@@ -1,8 +1,8 @@
-function [output, output_list] = stm_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)
+function [output, output_list] = stm_sample_ensemble(N, W, ind_ext, stm_constraints, stm_options, output_function, select_function, score_function, function_args)
 
 % STM_SAMPLE_ENSEMBLE - Create model ensemble and collect values for an output function
 %
-% [output, output_list] = stm_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function, select_function, score_function, function_args)
+% [output, output_list] = stm_sample_ensemble(N, W, ind_ext, stm_constraints, stm_options, output_function, select_function, score_function, function_args)
 %
 % Run elasticity sampling repeatedly, compute every time an output function
 % (any kind of matlab variable), and return a list of the output values.
@@ -17,7 +17,7 @@ function [output, output_list] = stm_sample_ensemble(N, W, ind_ext, es_constrain
 %   W         - Allosteric regulation matrix (nr x nm)
 %   ind_ext   - indices of external metabolites
 %
-%  For the inputs es_constraints and es_options, see es_default_options
+%  For the inputs stm_constraints and stm_options, see stm_default_options
 %
 %  output_function - Output function for which response coefficients are sampled (*1)
 %  select_function - Function for filtering the sampled models (*2)
@@ -44,7 +44,7 @@ function [output, output_list] = stm_sample_ensemble(N, W, ind_ext, es_constrain
 
 eval(default('select_function','[]','score_function','[]','function_args','[]'));
 
-if es_options.set_alpha_to_half
+if stm_options.set_alpha_to_half
   warning('Attempted ensemble sampling with fixed saturation values');
 end
 
@@ -53,16 +53,16 @@ end
 
 old_score = -inf;
 
-es_options.seed = nan;
+stm_options.seed = nan;
 
-for it = 1:es_options.n_samples
-  display(sprintf('\nSample %d/%d',it,es_options.n_samples));
-  my_result = stm_sample_model(N,W,ind_ext,es_constraints,es_options);
+for it = 1:stm_options.n_samples
+  display(sprintf('\nSample %d/%d',it,stm_options.n_samples));
+  my_result = stm_sample_model(N,W,ind_ext,stm_constraints,stm_options);
   if ~isempty(select_function)
     accept = feval(select_function,my_result,function_args);
     while ~accept
       display(' Invalid sample; drawing another sample');
-      my_result = stm_sample_model(N,W,ind_ext,es_constraints,es_options);
+      my_result = stm_sample_model(N,W,ind_ext,stm_constraints,stm_options);
       accept = feval(select_function,my_result,function_args);
     end
   end

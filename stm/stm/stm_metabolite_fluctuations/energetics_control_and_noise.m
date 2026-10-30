@@ -1,8 +1,8 @@
-function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, c, v, mu, omega_list, tau_list, omega_fast, omega_slow, psfile_dir, basename, es_options, es_constraints, volume)
+function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network,network_CoHid, c, v, mu, omega_list, tau_list, omega_fast, omega_slow, psfile_dir, basename, stm_options, stm_constraints, volume)
 
 %ENERGETICS_CONTROL_AND_NOISE - Analyse control coefficients and noise levels (assuming uniform white noise in each reaction!)
 %
-%[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network, network_CoHid, c, v, mu, omega_list, tau_list, omega_fast, omega_slow, psfile_dir, basename, es_options, es_constraints, volume)
+%[Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz, Sigma_j_specific_1Hertz] = energetics_control_and_noise(network, network_CoHid, c, v, mu, omega_list, tau_list, omega_fast, omega_slow, psfile_dir, basename, stm_options, stm_constraints, volume)
 %
 % omega_list:             list of circular frequencies (increasing)
 % tau_list:               list of time scales for smoothed variances (default 10.^[-2:0.1:4])
@@ -23,7 +23,7 @@ function [Sigma_c, Sigma_j, Sigma_c_list, Sigma_j_list, Sigma_c_specific_1Hertz,
 % with prefactor 1 for the transformation omega -> t and prefactor 1/2pi for the
 % transformation t -> omega
 
-eval(default('es_options','[]', 'es_constraints','[]','volume','1'));
+eval(default('stm_options','[]', 'stm_constraints','[]','volume','1'));
 
 if isempty(tau_list),   tau_list   = 10.^[-2:0.1:4];  end
 if isempty(omega_slow), omega_slow = omega_list(1);   end
@@ -35,24 +35,24 @@ if isempty(omega_fast), omega_fast = omega_list(end); end
 
 % prepare elasticity sampling
 
-if isempty(es_options),         es_options = struct; end
-if isempty(es_constraints), es_constraints = struct; end
+if isempty(stm_options),         stm_options = struct; end
+if isempty(stm_constraints), stm_constraints = struct; end
 
-[es_def_options, es_def_constraints] = es_default_options(network);
+[es_def_options, es_def_constraints] = stm_default_options(network);
 
 % default: simple choice -> keq = 1
 es_def_options.seed              = nan;
 es_def_constraints.log_c_fix     = 1/RT * es_def_constraints.mu_fix;
 es_def_options.set_alpha_to_half = 1; % set enzymes to half-saturation
 
-es_options            = join_struct(es_def_options,es_options);
-es_constraints        = join_struct(es_def_constraints,es_constraints);
-es_constraints.mu_fix = mu;
-es_constraints.v_fix  = v;
-es_options.flag_second_order = 0;
+stm_options            = join_struct(es_def_options,stm_options);
+stm_constraints        = join_struct(es_def_constraints,stm_constraints);
+stm_constraints.mu_fix = mu;
+stm_constraints.v_fix  = v;
+stm_options.flag_second_order = 0;
 % run elasticity sampling
 
-result = stm_sample_model(network.N,network.regulation_matrix,find(network.external),es_constraints,es_options);
+result = stm_sample_model(network.N,network.regulation_matrix,find(network.external),stm_constraints,stm_options);
 
 % v_molnumbers contains the reaction rates measured in molecules/s
 % whereas previous rates must be amounts/time, i.e. mol/s
@@ -164,7 +164,7 @@ xlabel('Frequency [1/s]'); ylabel('Spectral density [(mol/s)^2 s]');
 %legend(escape_underscores(network.actions),'Fontsize',6,'Location','EastOutside');
 
 
-%figure(4); plot(es_constraints.log_c_fix,'-*');
+%figure(4); plot(stm_constraints.log_c_fix,'-*');
 
 dum = nan*ones(nm,1);
 

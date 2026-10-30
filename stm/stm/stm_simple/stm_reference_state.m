@@ -1,8 +1,8 @@
-function [result, fluxes, es_options, es_constraints] = stm_reference_state(network, es_options, es_constraints)
+function [result, fluxes, stm_options, stm_constraints] = stm_reference_state(network, stm_options, stm_constraints)
 
 %STM_REFERENCE_STATE - Elasticity sampling
 %
-% [result, fluxes, es_options, es_constraints] = stm_reference_state(network, es_options, es_constraints)
+% [result, fluxes, stm_options, stm_constraints] = stm_reference_state(network, stm_options, stm_constraints)
 %
 % Construct a reference state and compute the elasticities,
 % assuming half-saturation (i.e., saturation values alpha = 0.5)
@@ -12,7 +12,7 @@ function [result, fluxes, es_options, es_constraints] = stm_reference_state(netw
 eval(default('epsilon_stationary','10^-5','method_flux_sampling','''sample_and_discard'''));
 
 es_options_default = struct('ind_ignore',[]);
-es_options         = join_struct(es_options_default, es_options);
+stm_options         = join_struct(es_options_default, stm_options);
 
 
 % ------------------------------------------------------------
@@ -25,19 +25,19 @@ ind_ext = find(network.external);
 
 
 % --------------------------------------------------------------
-% set standard es_options and sample model
+% set standard stm_options and sample model
 
-es_options.verbose             = 1;
-es_options.set_alpha_to_half   = 1;
-es_options.seed                = 0;
-es_options.epsilon_stationary  = epsilon_stationary;
+stm_options.verbose             = 1;
+stm_options.set_alpha_to_half   = 1;
+stm_options.seed                = 0;
+stm_options.epsilon_stationary  = epsilon_stationary;
 
-result = stm_sample_model(N, W, ind_ext, es_constraints, es_options);
+result = stm_sample_model(N, W, ind_ext, stm_constraints, stm_options);
 
-% correct = es_check_flux_constraints(result.v,N,ind_ext,es_constraints,1,epsilon_stationary,es_options.cycles)
+% correct = mnt_check_flux_constraints(result.v,N,ind_ext,stm_constraints,1,epsilon_stationary,stm_options.cycles)
 
 % --------------------------------------------------------------
 
-fluxes.v_mean   = es_constraints.v_mean;
+fluxes.v_mean   = stm_constraints.v_mean;
 fluxes.sample_v = result.v;
 fluxes.best_v   = result.v;

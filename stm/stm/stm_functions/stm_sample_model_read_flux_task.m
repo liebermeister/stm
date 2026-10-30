@@ -1,8 +1,8 @@
-function [result, es_options, es_constraints] = stm_sample_model_read_flux_task(N,W,ind_ext,es_constraints,es_options,filename)
+function [result, stm_options, stm_constraints] = stm_sample_model_read_flux_task(N,W,ind_ext,stm_constraints,stm_options,filename)
 
 %STM_SAMPLE_MODEL_READ_FLUX_TASK - Sample model with thermodynamic calculations
 %
-% result = stm_sample_model_read_flux_task(N, W, ind_ext, es_constraints, es_options, filename)
+% result = stm_sample_model_read_flux_task(N, W, ind_ext, stm_constraints, stm_options, filename)
 %
 % Same as stm_sample_model, but the steady state (concentrations, fluxes, Gibbs free energies)
 % is read from a .mat file (containing a struct 'model'), computed by external software
@@ -14,14 +14,14 @@ function [result, es_options, es_constraints] = stm_sample_model_read_flux_task(
 % ----------------------------------------------------------------
 % Initialise
 
-es_options.flag_test = 0;
+stm_options.flag_test = 0;
 
-if ~isnan(es_options.seed), rng(es_options.seed); end
+if ~isnan(stm_options.seed), rng(stm_options.seed); end
 
-if  max(max(abs(N))) > es_options.limit_cooperativity
+if  max(max(abs(N))) > stm_options.limit_cooperativity
   display('Large stoichiometric coefficients encountered. Compensating them by small reaction cooperativities');
-  ind_compensate = find(max(abs(N)) > es_options.limit_cooperativity);
-  es_options.h(ind_compensate) = es_options.limit_cooperativity./max(abs(N(:,ind_compensate)));
+  ind_compensate = find(max(abs(N)) > stm_options.limit_cooperativity);
+  stm_options.h(ind_compensate) = stm_options.limit_cooperativity./max(abs(N(:,ind_compensate)));
 end
 
 % ----------------------------------------------------------------
@@ -31,7 +31,7 @@ load(filename); % contains struct 'model'
 
 [nm,nr] = size(N);
 K    = sparse(null(full(N(setdiff(1:nm,ind_ext),:)),'r'));
-u    = exp(es_constraints.log_u_mean + es_constraints.log_u_std .* randn(nr,1));
+u    = exp(stm_constraints.log_u_mean + stm_constraints.log_u_std .* randn(nr,1));
 c    = model.predicted_conc;
 A    = -model.predicted_rxn_gibbs;
 mu0  = model.predicted_met_gibbs;
@@ -40,9 +40,9 @@ Kma  = exp(model.S' * log(c));
 c0   = exp(-mu0/RT);  % likely to be numerically intractable;
 J    = model.predicted_flux;
 Keq  = exp(A/RT) .* Kma;
-zeta = exp(es_options.h.*A/RT);
+zeta = exp(stm_options.h.*A/RT);
 
 % ----------------------------------------------------------------
 % Kinetics phase: sample alpha, values and compute beta and gamma values
 
-result = stm_sample_elasticities(N, W, ind_ext, es_constraints, es_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A);
+result = stm_sample_elasticities(N, W, ind_ext, stm_constraints, stm_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A);

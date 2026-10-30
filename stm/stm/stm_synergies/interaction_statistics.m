@@ -20,8 +20,8 @@ function res = interaction_statistics(es_filenames, target_reaction, condition1,
 
 
 % ---------------------------------------------
-% result files contain data structures 'es_options', 'es_constraints', 'result'
-% predefined flux distribution is contained in 'es_constraints.vfix'
+% result files contain data structures 'stm_options', 'stm_constraints', 'result'
+% predefined flux distribution is contained in 'stm_constraints.vfix'
 
 load(es_filenames.network_file);
 
@@ -35,20 +35,20 @@ ind_target = find(strcmp(target_reaction, network.actions));
 % ---------------------------------------------
 
 cd(es_filenames.es_dir); load(input_file1);
-es_options.set_alpha_to_half  = 0;
-es_options.seed               = 0;
-es_options.epsilon_stationary = 0.001;
+stm_options.set_alpha_to_half  = 0;
+stm_options.seed               = 0;
+stm_options.epsilon_stationary = 0.001;
 
 if fluxes_fixed
-  es_options.method_flux_sampling = 'accept_flux';
-  es_constraints.v_fix = result.v;
+  stm_options.method_flux_sampling = 'accept_flux';
+  stm_constraints.v_fix = result.v;
 end
 
 % ---------------------------------------------
 
 for it = 1:n_mc
   fprintf('MC sample %d/%d:',it,n_mc);
-  result         = stm_sample_model(N,W,ind_ext,es_constraints,es_options);
+  result         = stm_sample_model(N,W,ind_ext,stm_constraints,stm_options);
   R_target_u_sc  = result.control.RJu_sc(ind_target,:);
   R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
   influence_list(:,it,1)     = R_target_u_sc;
@@ -56,19 +56,19 @@ for it = 1:n_mc
 end
 
 cd(es_filenames.es_dir);
-load(input_file2); % es_options, result; from script 'ycm_elasticity_sampling'
-es_options.set_alpha_to_half  = 0;
-es_options.seed               = 0;
-es_options.epsilon_stationary = 0.001;
+load(input_file2); % stm_options, result; from script 'ycm_elasticity_sampling'
+stm_options.set_alpha_to_half  = 0;
+stm_options.seed               = 0;
+stm_options.epsilon_stationary = 0.001;
 
 if fluxes_fixed
-  es_options.method_flux_sampling = 'accept_flux';
-  es_constraints.v_fix = result.v;
+  stm_options.method_flux_sampling = 'accept_flux';
+  stm_constraints.v_fix = result.v;
 end
 
 for it = 1:n_mc
   fprintf('MC sample %d/%d:',it,n_mc);
-  result         = stm_sample_model(N,W,ind_ext,es_constraints,es_options);
+  result         = stm_sample_model(N,W,ind_ext,stm_constraints,stm_options);
   R_target_u_sc  = result.control.RJu_sc(ind_target,:);
   R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
   influence_list(:,it,2)     = R_target_u_sc;

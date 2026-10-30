@@ -71,6 +71,10 @@ function result = es_sample_elasticities(N, W, ind_ext, es_constraints, es_optio
 % ----------------------------------------------------------------
 % sample alpha, values and compute beta and gamma values
 
+if exist('dependencies_check_once','file')
+  dependencies_check_once('es_dependencies', true);
+end
+
 [nm,nr] = size(N);
 
 [alpha_A, alpha_I, alpha_M] = sample_saturation_parameters(N,W,ind_ext,es_options,es_constraints);

@@ -6,9 +6,9 @@
 clear; clearvars -global
 
 % check correct installation of elasticity sampling code
-es_dependencies;
+stm_dependencies;
 
-model_dir = [es_BASEDIR '/../resource-data/models-other/model_noor_2016_modified'];
+model_dir = [stm_BASEDIR '/../resource-data/models-other/model_noor_2016_modified'];
 
 cd(model_dir);
 
@@ -73,7 +73,7 @@ es_options.kinetic_law       = 'cs';
 es_options.flag_second_order = 1;
 es_options.print_graphics    = 0;
 
-[result, fluxes, es_options, es_constraints] = es_reference_state(network, es_options, es_constraints);
+[result, fluxes, es_options, es_constraints] = stm_reference_state(network, es_options, es_constraints);
 
 
 % ---------------------------------------
@@ -86,4 +86,4 @@ es_options.print_graphics    = 0;
 target_reaction    = 'Overflow';
 
 ca;
-es_reference_state_graphics(network, es_options, result, target_reaction);
+stm_reference_state_graphics(network, es_options, result, target_reaction);

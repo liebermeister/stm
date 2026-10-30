@@ -5,11 +5,11 @@
 %
 % Main functions
 %   es_default_options     - Create structures 'es_options' and 'es_constraints' with default parameters
-%   es_sample_steady_state - Generate or sample a reference state for a network
-%   es_sample_elasticities - Sample elasticities and control properties for a network (with given reference state)
-%   es_sample_model        - Sample all model parameters (wrapper for 'es_sample_steady_state' and 'es_sample_elasticities')
-%   es_sample_ensemble     - Create model ensemble and collect values for an output variable
-%   es_compare_ensembles   - Compare the output variables for two model ensembles
+%   stm_sample_steady_state - Generate or sample a reference state for a network
+%   stm_sample_elasticities - Sample elasticities and control properties for a network (with given reference state)
+%   stm_sample_model        - Sample all model parameters (wrapper for 'stm_sample_steady_state' and 'stm_sample_elasticities')
+%   stm_sample_ensemble     - Create model ensemble and collect values for an output variable
+%   stm_compare_ensembles   - Compare the output variables for two model ensembles
 %
 %   Options for all functions are stored in matlab structs 'es_options' and 'es_constraints'.
 %
@@ -23,7 +23,7 @@
 %   Matlab utility functions  (https://github.com/liebermeister/matlab-utils)
 %   Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox)
 %
-% To check which packages are installed, run 'es_dependencies'
+% To check which packages are installed, run 'stm_dependencies'
 %
 % Copyright (C) 2011-2026
 % Wolfram Liebermeister  <wolfram.liebermeister@gmail.com>

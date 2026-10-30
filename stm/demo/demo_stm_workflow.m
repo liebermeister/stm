@@ -14,11 +14,11 @@ clear; clearvars -global
 
 % Check whether all necessary m-files have been installed:
 
-es_dependencies;
+stm_dependencies;
 
 % Resource directory of the elasticity sampling package, in case it s needed
 
-resource_dir = [es_BASEDIR '/../resource-data/'];
+resource_dir = [stm_BASEDIR '/../resource-data/'];
 
 
 %-------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
 % For later use, we load some model-related data and map them onto the model
 
- resource_dir = [es_BASEDIR '../resource-data/data/'];
+ resource_dir = [stm_BASEDIR '../resource-data/data/'];
 
  data_files = {[resource_dir 'data-thermodynamic/E_coli_glycolysis_GFE.tsv'], ...
               [resource_dir 'data-thermodynamic/GFE.tsv'], ...
@@ -201,31 +201,31 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
 %-------------------------------------------------------------------------------
 % User options for elasticity sampling are stored in two matlab structs,
-% 'es_options' and 'es_constraints'.
-% 'es_options' contains general settings for the calculation workflow,
-% 'es_constraints' contains numerical details about the model.
-% To learn more about these structs, try 'help es_default_options'
+% 'stm_options' and 'stm_constraints'.
+% 'stm_options' contains general settings for the calculation workflow,
+% 'stm_constraints' contains numerical details about the model.
+% To learn more about these structs, try 'help stm_default_options'
 
 % Default settings can be obtained as follows:
 
- [es_options, es_constraints] = es_default_options(N);
+ [stm_options, stm_constraints] = stm_default_options(N);
 
 %-------------------------------------------------------------------------------
 % Here we assume that the reference state is already defined by the previously
-% compute variables v, c, and dmu, and we insert them into the 'es_options' struct.
+% compute variables v, c, and dmu, and we insert them into the 'stm_options' struct.
 % The functions for elasticity sampling also provide options for computing v, c, and dmu
 % directly, based on other types of information.
-% For further information, please type "help es_sample_steady_state"
+% For further information, please type "help stm_sample_steady_state"
 
 %-------------------------------------------------------------------------------
-% We insert the flux mode into 'es_constraints' and run elasticity sampling
+% We insert the flux mode into 'stm_constraints' and run elasticity sampling
 % All output is stored in the data structure 'result'
 
- es_options.sampling_method   = 'accept_flux';
- es_constraints.v_fix         = v;
- es_constraints.log_c_fix     = log(c);
- es_constraints.dmu_fix       = -A;
- es_constraints.dmu_limit_min = pb_options.A_min;
+ stm_options.sampling_method   = 'accept_flux';
+ stm_constraints.v_fix         = v;
+ stm_constraints.log_c_fix     = log(c);
+ stm_constraints.dmu_fix       = -A;
+ stm_constraints.dmu_limit_min = pb_options.A_min;
 
 % If desired: use known (or assumed) KM values to obtain saturation values
  if 1
@@ -233,12 +233,12 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
   estimated_KM_values(find(isfinite(model_data.KM.median))) = model_data.KM.median(find(isfinite(model_data.KM.median)));
   [alpha_M,beta_M] = k_to_alpha(estimated_KM_values,c);
   if 0
-    es_constraints.beta_M_fix = beta_M;
+    stm_constraints.beta_M_fix = beta_M;
   else
     %% Alternatively, if desired: sample beta-distributed saturation values
-    es_options.set_alpha_nonuniform = 1;
-    es_constraints.alpha_M_mean = beta_M;
-    es_constraints.alpha_M_std  = 0.1 * beta_M;
+    stm_options.set_alpha_nonuniform = 1;
+    stm_constraints.alpha_M_mean = beta_M;
+    stm_constraints.alpha_M_std  = 0.1 * beta_M;
   end
  end
 
@@ -246,7 +246,7 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 %  - either all second order coefficients are computed (which can take long for large models:
 
  if 0
-  es_options.flag_second_order = 1;
+  stm_options.flag_second_order = 1;
  end
 
 %  - or second order coefficients are computed only for one output function (a linear function
@@ -254,17 +254,17 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 %    for fluxes, namely, a coefficient of 1 for our target reaction (previously defined), and 0 otherwise
 
  if 1
-  es_options.zv                = zeros(size(network.actions)); % define target function for second order coefficients
-  es_options.zv(label_names(target_reaction, network.actions))  = 1;
+  stm_options.zv                = zeros(size(network.actions)); % define target function for second order coefficients
+  stm_options.zv(label_names(target_reaction, network.actions))  = 1;
  end
 
 % ----------------------------------------------------------
 % Now, run elasticity sampling
 
- result = es_sample_model(N, W, ind_ext, es_constraints, es_options);
+ result = stm_sample_model(N, W, ind_ext, stm_constraints, stm_options);
 
 % Alternatively, the function can also be directly applied to the fields of 'network'
-% result = es_sample_model(network.N, network.regulation_matrix, find(network.external), es_constraints, es_options);
+% result = stm_sample_model(network.N, network.regulation_matrix, find(network.external), stm_constraints, stm_options);
 
 
 %-------------------------------------------------------------------------------
@@ -273,13 +273,13 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
 % Show graphics without saving .eps files
  if 1
-  es_options.print_graphics = 0;
+  stm_options.print_graphics = 0;
   psfile_dir = [];
  end
 
 % Show graphics with saving .eps files
  if 0
-  es_options.print_graphics = 1;
+  stm_options.print_graphics = 1;
   psfile_dir = MY_PSFILE_DIRECTORY; % Please insert your directory path
  end
 
@@ -292,12 +292,12 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
 % Show graphics for reference state
 
- es_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, [], psfile_dir);
+ stm_reference_state_graphics(network, stm_options, result, target_reaction, es_filenames, network_CoHid, [], psfile_dir);
 
 % Show graphics for interaction effects (second order control analysis)
-% Note that this is not possible after es_sample_model has been run with the option es_options.flag_second_order = 0;
+% Note that this is not possible after stm_sample_model has been run with the option stm_options.flag_second_order = 0;
 
- es_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir);
+ stm_synergy_graphics(network, network_CoHid, result, es_filenames, target_reaction, psfile_dir);
 
 
 %-------------------------------------------------------------------------------
@@ -333,7 +333,7 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 % OR: Export the model (including rate laws) to a .mat file
 
  if 0
-  save(MY_MAT_EXPORT_FILE_NAME,'network','result','v','c','es_options','es_constraints', 'target_reaction');
+  save(MY_MAT_EXPORT_FILE_NAME,'network','result','v','c','stm_options','stm_constraints', 'target_reaction');
  end
 
 %-------------------------------------------------------------------------------
@@ -344,8 +344,8 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 %-------------------------------------------------------------------------------
 % Now we try multiple elasticity sampling runs. We first modify the settings
 
- es_options.n_samples         = 10;
- es_options.set_alpha_to_half = 0;
+ stm_options.n_samples         = 10;
+ stm_options.set_alpha_to_half = 0;
 
 % We will sample the interactive effects of enzyme pairs on a specific output function.
 % As an output function, we choose the sum of squares of all flux control coefficients.
@@ -357,18 +357,18 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 %-------------------------------------------------------------------------------
 % First ensemble: common saturable modular rate law ('cs')
 
- es_options.kinetic_law = 'cs';
+ stm_options.kinetic_law = 'cs';
 
- output1 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
+ output1 = stm_sample_ensemble(N, W, ind_ext, stm_constraints, stm_options, output_function);
 
 % This was the first ensemble
 
 %-------------------------------------------------------------------------------
 % Second ensemble:  simultaneous binding modular rate law ('ms')
 
- es_options.kinetic_law = 'ms';
+ stm_options.kinetic_law = 'ms';
 
- output2 = es_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
+ output2 = stm_sample_ensemble(N, W, ind_ext, stm_constraints, stm_options, output_function);
 
 % This was the second ensemble
 
@@ -381,4 +381,4 @@ resource_dir = [es_BASEDIR '/../resource-data/'];
 
 % The result of the comparison are stored in a data structure res
 
- res = es_compare_ensembles(output1, output2, n_permutations, false_discovery_rate);
+ res = stm_compare_ensembles(output1, output2, n_permutations, false_discovery_rate);

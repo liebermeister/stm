@@ -8,7 +8,7 @@ clear;
 save_files = 0;
 
 model_name              = 'e_coli_noor_2016_glucose';
-DATA_DIR                = [es_BASEDIR  '/../resource-data/models-article/Escherichia_coli_ccm/original_model/'];
+DATA_DIR                = [stm_BASEDIR  '/../resource-data/models-article/Escherichia_coli_ccm/original_model/'];
  kinetic_data_file       = [DATA_DIR 'e_coli_noor_2016_kinetic_data_modified.tsv'];
 
 % deprecated:
@@ -18,7 +18,7 @@ DATA_DIR                = [es_BASEDIR  '/../resource-data/models-article/Escheri
  model_file              = [ DATA_DIR 'other/e_coli_noor_2016_plus_overflow.tsv'];
  balanced_parameter_file = [ DATA_DIR 'other/e_coli_noor_2016_plus_overflow_balanced_kinetics.tsv'];
 
- prior_file = [es_BASEDIR  '../resource-data/data/data-general/cmb_prior.tsv'];
+ prior_file = [stm_BASEDIR  '../resource-data/data/data-general/cmb_prior.tsv'];
 
  pb_options                = parameter_balancing_options;
  pb_options.use_sbml_ids   = 0;

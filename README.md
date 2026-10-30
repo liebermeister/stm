@@ -14,7 +14,7 @@ addpath(genpath('/path/to/stm/stm'));
 savepath;   % optional: keep the folders on the path in future sessions
 ```
 
-Then install the required packages (see below). To check which of them are installed, run `es_dependencies`.
+Then install the required packages (see below). To check which of them are installed, run `stm_dependencies`.
 
 For getting started, run one of the demo scripts in the folder `stm/demo`:
 
@@ -37,19 +37,19 @@ Some functions require further packages:
 | Package | Needed for |
 |---------|------------|
 | [SBtab for Matlab](https://github.com/liebermeister/sbtab-matlab) | reading models and data from SBtab files (demos, E. coli model) |
-| [libSBML](https://sbml.org/software/libsbml/) (Matlab interface) | SBML import and export (`demo_stm_glycolysis`, `es_sbml_to_model`) |
-| [Tensor Toolbox](https://www.tensortoolbox.org) | second-order elasticities and response coefficients (`es_options.flag_second_order = 1`) |
+| [libSBML](https://sbml.org/software/libsbml/) (Matlab interface) | SBML import and export (`demo_stm_glycolysis`, `stm_sbml_to_model`) |
+| [Tensor Toolbox](https://www.tensortoolbox.org) | second-order elasticities and response coefficients (`stm_options.flag_second_order = 1`) |
 | [efmtool](https://csb.ethz.ch/tools/software/efmtool.html) | removing thermodynamically infeasible cycles from flux distributions |
 | [Parameter balancing](https://github.com/liebermeister/parameter-balancing-matlab) | `demo_stm_workflow` and the scripts for building the E. coli model |
-| Statistics and Machine Learning Toolbox | synergy graphics and clustering, beta-distributed saturation values (`es_options.set_alpha_nonuniform = 1`) |
+| Statistics and Machine Learning Toolbox | synergy graphics and clustering, beta-distributed saturation values (`stm_options.set_alpha_nonuniform = 1`) |
 
 ## Contents
 
 - **`stm`**: the main functions
-  - `es_default_options`: default settings (structs `es_options` and `es_constraints`; type `help es_default_options`)
-  - `es_sample_model`: sample a model (steady state and elasticities) for a given network
-  - `es_sample_steady_state`, `es_sample_elasticities`: the two steps of `es_sample_model`
-  - `es_sample_ensemble`, `es_compare_ensembles`: create model ensembles and compare them statistically
+  - `stm_default_options`: default settings (structs `stm_options` and `stm_constraints`; type `help stm_default_options`)
+  - `stm_sample_model`: sample a model (steady state and elasticities) for a given network
+  - `stm_sample_steady_state`, `stm_sample_elasticities`: the two steps of `stm_sample_model`
+  - `stm_sample_ensemble`, `stm_compare_ensembles`: create model ensembles and compare them statistically
 - **`stm/stm`**: more specific functions: graphics, prediction of perturbation effects,
   enzyme synergies, metabolic fluctuations, Bayesian (MCMC) sampling
 - **`stm/demo`**: demo scripts

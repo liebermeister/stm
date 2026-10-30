@@ -31,16 +31,16 @@ E_rnd = randomize_synergies(E);
 assert(isequal(E_rnd, E_rnd') && all(diag(E_rnd) == 0));
 assert(isequal(sort(E_rnd(triu(true(3),1))), [1 2 3]'));
 
-%% es_constraints_set
+%% stm_constraints_set
 network = network_construct([-1 0; 1 -1; 0 1], [1 1]', [1 3]');
-[~, c] = es_default_options(network);
-c = es_constraints_set(c, network, 'v_fix', network.actions(2), 3, 'v_sign', network.actions(1), 1, 'ext_signs', network.metabolites(3), -1);
+[~, c] = stm_default_options(network);
+c = stm_constraints_set(c, network, 'v_fix', network.actions(2), 3, 'v_sign', network.actions(1), 1, 'ext_signs', network.metabolites(3), -1);
 assert(c.v_fix(2) == 3 && isnan(c.v_fix(1)) && c.v_sign(1) == 1 && c.ext_signs(3) == -1);
 
-%% es_mcmc_prior_likelihood_sampling: samples follow the likelihood
+%% stm_mcmc_prior_likelihood_sampling: samples follow the likelihood
 rng(1);
 prior      = @(p) struct('x', rand);
 likelihood = @(s, p) exp(-(s.x - 0.8)^2 / 0.005);
-[sample, ~, rate] = es_mcmc_prior_likelihood_sampling(prior, [], likelihood, [], 300, 20, {'x'});
+[sample, ~, rate] = stm_mcmc_prior_likelihood_sampling(prior, [], likelihood, [], 300, 20, {'x'});
 x = cellfun(@(s) s.x, sample);
 assert(abs(mean(x) - 0.8) < 0.05 && rate > 0 && rate < 1);

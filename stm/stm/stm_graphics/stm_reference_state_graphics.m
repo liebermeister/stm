@@ -1,11 +1,11 @@
-function stm_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
+function stm_reference_state_graphics(network, stm_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
 
 % STM_REFERENCE_STATE_GRAPHICS - Graphics for elasticity sampling reference states
 %
-% stm_reference_state_graphics(network, es_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
+% stm_reference_state_graphics(network, stm_options, result, target_reaction, es_filenames, network_CoHid, network_CoSplit, psfile_dir)
 %
 % network:          network structure
-% es_options:       options used for elasticity sampling
+% stm_options:       options used for elasticity sampling
 % result:           output of stm_sample_model (or stm_reference_state)
 % target_reaction:  name of target reaction for response coefficients
 %                   (if empty, the production of the external metabolite 'Biomass' is used)
@@ -14,7 +14,7 @@ function stm_reference_state_graphics(network, es_options, result, target_reacti
 % network_CoSplit:  network structure for graphics, possibly with split cofactors (optional)
 % psfile_dir:       directory for graphics files (optional)
 %
-% If es_options.print_graphics = 1, the graphics are saved as .eps files
+% If stm_options.print_graphics = 1, the graphics are saved as .eps files
 
 eval(default('network_CoHid','network','network_CoSplit','[]'));
 if isempty(network_CoSplit)
@@ -32,7 +32,7 @@ N       = network.N;
 [nm,nr] = size(N);
 ind_ext = find(network.external);
 
-p.print = es_options.print_graphics;  % use layout for printing
+p.print = stm_options.print_graphics;  % use layout for printing
 
 % network
 figure(1); stm_graphics(network,network_CoSplit,'names',struct('actprintnames',0,'FontSize',24));
@@ -91,7 +91,7 @@ stm_graphics(network,network_CoSplit,'response_coefficients_Sext',struct('R',rs_
 % -------------------------------------------------------------
 % save graphics
 
-if es_options.print_graphics
+if stm_options.print_graphics
   cd(psfile_dir);
   display(sprintf('Saving graphics to directory %s',psfile_dir));
   print( [ es_filenames.psfile_base '_network.eps'],   '-f1', '-depsc');

@@ -1,14 +1,14 @@
-function c = stm_constraints_set(es_constraints,network,varargin)
+function c = stm_constraints_set(stm_constraints,network,varargin)
 
-% STM_CONSTRAINTS_SET Convenience function to define es_constraints
+% STM_CONSTRAINTS_SET Convenience function to define stm_constraints
 %
-% c = stm_constraints_set(es_constraints,network,type1,names1,values1,type2,names2,values2,...)
+% c = stm_constraints_set(stm_constraints,network,type1,names1,values1,type2,names2,values2,...)
 %
 % type:   'v_min', 'v_max', 'v_sign', 'v_fix' (for reactions) or 'ext_signs' (for metabolites)
 % names:  list of reaction or metabolite names
 % values: vector of values
 
-c = es_constraints;
+c = stm_constraints;
 
 for it = 1:floor(length(varargin)/3)
   type   = varargin{it*3-2};

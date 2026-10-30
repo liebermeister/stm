@@ -38,7 +38,7 @@ network       = netgraph_make_graph(network);
 c = ones(nm,1);  % metabolite concentrations
 u = ones(nr,1);  % enzyme concentrations
 
-[options, constraints] = es_default_options(network);
+[options, constraints] = stm_default_options(network);
 
 options.kinetic_law       = 'cs';
 options.sampling_method   = 'v and mu';

@@ -20,20 +20,20 @@ function result = stm_model_to_sampling(network, network_CoHid, v, target_reacti
 
 eval(default('psfile_dir','''''','graphics_file',''''''));
 
-[es_options, es_constraints] = es_default_options(network);
+[stm_options, stm_constraints] = stm_default_options(network);
 
-es_options.ind_ignore      = ind_ignore;
-es_options.sampling_method = 'accept_flux';
-es_options.print_graphics  = print_graphics;
-es_constraints.v_mean      = v;
+stm_options.ind_ignore      = ind_ignore;
+stm_options.sampling_method = 'accept_flux';
+stm_options.print_graphics  = print_graphics;
+stm_constraints.v_mean      = v;
 
 filenames.psfile_dir  = psfile_dir;
 filenames.psfile_base = graphics_file;
 
 if ~print_graphics, psfile_dir = []; end
 
-[result, fluxes, es_options, es_constraints] = stm_reference_state(network, es_options, es_constraints);
+[result, fluxes, stm_options, stm_constraints] = stm_reference_state(network, stm_options, stm_constraints);
 
-stm_reference_state_graphics(network, es_options, result, target_reaction, filenames, network_CoHid, [], psfile_dir);
+stm_reference_state_graphics(network, stm_options, result, target_reaction, filenames, network_CoHid, [], psfile_dir);
 
 stm_synergy_graphics(network, network_CoHid, result, filenames, target_reaction, psfile_dir);

@@ -71,27 +71,27 @@ pause
 clc
 %-------------------------------------------------------------------------------
 % User options for elasticity sampling are stored in two matlab structs,
-% 'es_options' and 'es_constraints'.
+% 'stm_options' and 'stm_constraints'.
 
-% 'es_options' contains general settings for the calculation workflow,
-% 'es_constraints' contains numerical details about the model.
+% 'stm_options' contains general settings for the calculation workflow,
+% 'stm_constraints' contains numerical details about the model.
 
 % Default settings can be obtained as follows:
 
-[es_options, es_constraints] = es_default_options(N);
+[stm_options, stm_constraints] = stm_default_options(N);
 
-% To learn more about these structs, try 'help es_default_options'
+% To learn more about these structs, try 'help stm_default_options'
 
 % Now press key to continue
 pause
 clc
 %-------------------------------------------------------------------------------
-% After inserting the flux mode into 'es_constraints', we run elasticity sampling
+% After inserting the flux mode into 'stm_constraints', we run elasticity sampling
 % All output will be stored in a data structure 'result'
 
-es_constraints.v_fix = v;
+stm_constraints.v_fix = v;
 
-result = stm_sample_model(N, W, ind_ext, es_constraints, es_options);
+result = stm_sample_model(N, W, ind_ext, stm_constraints, stm_options);
 
 % Press key to continue
 pause
@@ -122,9 +122,9 @@ clc
 %-------------------------------------------------------------------------------
 % Now we try multiple elasticity sampling runs. We first modify the settings
 
-es_options.n_samples         = 10;
+stm_options.n_samples         = 10;
 
-es_options.set_alpha_to_half = 0;
+stm_options.set_alpha_to_half = 0;
 
 % We will sample the interactive effects of enzyme pairs on a specific output function.
 % As an output function, we choose the sum of squares of all flux control coefficients.
@@ -139,9 +139,9 @@ clc
 %-------------------------------------------------------------------------------
 % First ensemble: common saturable modular rate law ('cs')
 
-es_options.kinetic_law = 'cs';
+stm_options.kinetic_law = 'cs';
 
-output1 = stm_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
+output1 = stm_sample_ensemble(N, W, ind_ext, stm_constraints, stm_options, output_function);
 
 % This was the first ensemble
 
@@ -151,9 +151,9 @@ clc
 %-------------------------------------------------------------------------------
 % Second ensemble:  simultaneous binding modular rate law ('ms')
 
-es_options.kinetic_law = 'ms';
+stm_options.kinetic_law = 'ms';
 
-output2 = stm_sample_ensemble(N, W, ind_ext, es_constraints, es_options, output_function);
+output2 = stm_sample_ensemble(N, W, ind_ext, stm_constraints, stm_options, output_function);
 
 % This was the second ensemble
 

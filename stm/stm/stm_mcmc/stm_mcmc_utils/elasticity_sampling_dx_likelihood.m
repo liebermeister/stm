@@ -6,7 +6,7 @@ function likelihood = elasticity_sampling_dx_likelihood(result,p)
 % enzyme expression (in delta_E) matches the experimental metabolite
 % and flux changes (in delta_S and delta_J).
 %
-% result: output of stm_sample_model (computed with es_options.flag_second_order = 1)
+% result: output of stm_sample_model (computed with stm_options.flag_second_order = 1)
 % p:      parameters, see elasticity_sampling_dx_likelihood_pars
 %
 % delta_E: matrix of relative enzyme changes (dE/E)

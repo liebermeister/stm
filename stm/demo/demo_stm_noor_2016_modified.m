@@ -47,33 +47,33 @@ W = network.regulation_matrix;  % allosteric regulation matrix
 
 %-------------------------------------------------------------------------------
 % User options for elasticity sampling are stored in two matlab structs,
-% 'es_options' and 'es_constraints'.
+% 'stm_options' and 'stm_constraints'.
 
-% 'es_options' contains general settings for the calculation workflow,
-% 'es_constraints' contains numerical details about the model.
+% 'stm_options' contains general settings for the calculation workflow,
+% 'stm_constraints' contains numerical details about the model.
 
-[es_options, es_constraints] = es_default_options(N);
+[stm_options, stm_constraints] = stm_default_options(N);
 
 
 %-------------------------------------------------------------------------------
-% After inserting the flux mode into 'es_constraints', we run elasticity sampling
+% After inserting the flux mode into 'stm_constraints', we run elasticity sampling
 % All output will be stored in a data structure 'result'
 
 % Set fixed fluxes, concentrations, and equilibrium constants
 
-es_constraints.v_fix         = v;
-es_constraints.log_c_fix     = log(c);
-es_constraints.Keq_fix       = network.kinetics.Keq;
+stm_constraints.v_fix         = v;
+stm_constraints.log_c_fix     = log(c);
+stm_constraints.Keq_fix       = network.kinetics.Keq;
 
-es_constraints.dmu_limit_min = 0.05;
+stm_constraints.dmu_limit_min = 0.05;
 
-es_options.ind_ignore        = [];
-es_options.sampling_method   = 'v from data';
-es_options.kinetic_law       = 'cs';
-es_options.flag_second_order = 1;
-es_options.print_graphics    = 0;
+stm_options.ind_ignore        = [];
+stm_options.sampling_method   = 'v from data';
+stm_options.kinetic_law       = 'cs';
+stm_options.flag_second_order = 1;
+stm_options.print_graphics    = 0;
 
-[result, fluxes, es_options, es_constraints] = stm_reference_state(network, es_options, es_constraints);
+[result, fluxes, stm_options, stm_constraints] = stm_reference_state(network, stm_options, stm_constraints);
 
 
 % ---------------------------------------
@@ -86,4 +86,4 @@ es_options.print_graphics    = 0;
 target_reaction    = 'Overflow';
 
 ca;
-stm_reference_state_graphics(network, es_options, result, target_reaction);
+stm_reference_state_graphics(network, stm_options, result, target_reaction);

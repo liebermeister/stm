@@ -6,6 +6,7 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 
 First numbered version.
 
+- HTML documentation removed from the repository (it can be regenerated with m2html)
 - Version function `stm_version`; `stm_dependencies` checks the required versions
 - Fixed demo scripts and `stm_default_options`, tests and README
 - `stm_default_options` removed: the identical function in the Metabolic Network Toolbox is used

@@ -163,7 +163,7 @@ E = compute_modular_elasticities(stm_options.kinetic_law, N, W, ind_ext, alpha_A
 
 if stm_options.limit_elasticities_in_multireactions
   % normalise the elasticities in each multi-reaction (eg biomass reaction) to a sum of absolute values of 1
-  ind_multi_reactions = find(sum(N'~=0)>6);
+  ind_multi_reactions = find(sum(N~=0)>6);
   Ec_scaled_multi = E.sc_E_c(ind_multi_reactions,:);
   E.sc_E_c(ind_multi_reactions,:) = diag(1./sum(abs(Ec_scaled_multi)')) * Ec_scaled_multi;
   E.un_E_c = diag(v) * E.sc_E_c * diag(1./c);

@@ -12,6 +12,8 @@ function [output, output_list] = stm_sample_ensemble(N, W, ind_ext, stm_constrai
 % There is no direct way to run the sampling in parallel for two scenarios
 % with the same random values used for saturation constants in both ensembles
 %
+% Models with unstable states are discarded and sampled again
+%
 % Inputs (nm: # metabolites; nr: # reactions)
 %   N         - Stoichiometric matrix (nm x nr)
 %   W         - Allosteric regulation matrix (nr x nm)
@@ -54,15 +56,18 @@ end
 old_score = -inf;
 
 stm_options.seed = nan;
+n_discarded      = 0;
 
 for it = 1:stm_options.n_samples
   display(sprintf('\nSample %d/%d',it,stm_options.n_samples));
-  my_result = stm_sample_model(N,W,ind_ext,stm_constraints,stm_options);
+  [my_result, n_new] = stm_sample_stable_model(N,W,ind_ext,stm_constraints,stm_options);
+  n_discarded = n_discarded + n_new;
   if ~isempty(select_function)
     accept = feval(select_function,my_result,function_args);
     while ~accept
       display(' Invalid sample; drawing another sample');
-      my_result = stm_sample_model(N,W,ind_ext,stm_constraints,stm_options);
+      [my_result, n_new] = stm_sample_stable_model(N,W,ind_ext,stm_constraints,stm_options);
+      n_discarded = n_discarded + n_new;
       accept = feval(select_function,my_result,function_args);
     end
   end
@@ -78,6 +83,10 @@ for it = 1:stm_options.n_samples
       output_list{it} = output_list{it-1};
     end
   end
+end
+
+if n_discarded
+  display(sprintf('Discarded %d models with unstable states',n_discarded));
 end
 
 % -----------------------------------------------

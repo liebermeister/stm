@@ -156,10 +156,12 @@ end
 % ---------------------------------------------------------------
 % significance
 
-p.mean_total_significant   = multiple_testing_fdr(p.p_value_mean_total,fdr)   - multiple_testing_fdr(1-p.p_value_mean_total  ,fdr);
-p.mean_a_significant = multiple_testing_fdr(p.p_value_mean_a,fdr) - multiple_testing_fdr(1-p.p_value_mean_a,fdr);
-p.mean_b_significant = multiple_testing_fdr(p.p_value_mean_b,fdr) - multiple_testing_fdr(1-p.p_value_mean_b,fdr);
-p.mean_delta_significant  = multiple_testing_fdr(p.p_value_mean_delta,fdr)  - multiple_testing_fdr(1-p.p_value_mean_delta,fdr);
+fdr_check_permutations(p.p_value_mean_delta,n_per,fdr);
+
+p.mean_total_significant = fdr_two_sided(p.p_value_mean_total,fdr);
+p.mean_a_significant     = fdr_two_sided(p.p_value_mean_a,fdr);
+p.mean_b_significant     = fdr_two_sided(p.p_value_mean_b,fdr);
+p.mean_delta_significant = fdr_two_sided(p.p_value_mean_delta,fdr);
 
 p.mean_total_significant(find(tril(ones(nr))))   = nan;
 p.mean_a_significant(find(tril(ones(nr)))) = nan;

@@ -10,7 +10,7 @@ parameters.KM      = result.KM;
 parameters.KV      = result.KV;
 parameters.Keq = result.Keq;
 
-p.network.kinetics =  set_kinetics(p.network,'ms',parameters);
+p.network.kinetics =  set_kinetics(p.network,result.kinetics.type,parameters);
 
 [t,c] = network_integrate(p.network,p.c_init,max(p.data.t));
 

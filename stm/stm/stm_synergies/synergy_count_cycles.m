@@ -2,7 +2,12 @@ function [n_cycles,frac_pos,mean_n_cycles,std_n_cycles,pvalue_n_cycles,pvalue_fr
 
 % [n_cycles,frac_pos,mean_n_cycles,std_n_cycles,pvalue_n_cycles,pvalue_frac_cycles] = synergy_count_cycles(E,n_rand)
 %
-% Count the cycles (of lengths 3 to 10) in a signed network
+% Count cycles (of lengths 3 to 10) in a signed network
+%
+% Only cycles with monotonically increasing node numbers (except for the closing edge) are counted:
+% all cycles of length 3, but only some of the longer cycles (for example, 1 of the 3 cycles of
+% length 4 in a complete graph with 4 nodes). So the numbers are useful for comparing a network with
+% randomised versions of it, but they are not the numbers of cycles
 %
 % E:      epistasis matrix (symmetric)
 % n_rand: number of randomised matrices for computing p-values (optional)

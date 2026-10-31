@@ -49,6 +49,12 @@ if ~isequal(size(output1),size(output2))
   error('function arguments output1 and output2 must have the same size');
 end
 
+% outputs of scalar functions (column vectors from stm_sample_ensemble) are treated as one variable
+if iscolumn(output1)
+  output1 = output1';
+  output2 = output2';
+end
+
 switch length(size(output1))
 
   case 2

@@ -1,4 +1,4 @@
-% elasticity_sampling_workflow - Demo script
+% demo_stm_workflow - Demo script
 %
 % Demo script for thermodynamically feasible elasticity sampling
 %

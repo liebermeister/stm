@@ -120,7 +120,7 @@ switch expansion
   case ('non-logarithmic')
 
     % exclude negative concentrations
-    d_c(r.c_init + d_c<0) = -r.c_init(r.c_init + d_c<0);
+    d_c = max(d_c,-r.c_init);
     r.c_ratio  = 1 + d_c./r.c_init;
     r.c_new    = r.c_init + d_c;
     r.v_ratio  = 1 + d_v./r.v_init;

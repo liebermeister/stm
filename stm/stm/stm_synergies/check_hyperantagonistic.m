@@ -35,7 +35,7 @@ end
 
 if stop ==0
   M = [1 0; 0 1; -1 0; 0 -1; faa, 2*fab; 2* fab, fbb];
-  x = [a_range(1); b_range(1);-a_range(2);-b_range(2);fa;fb];
+  x = [a_range(1); b_range(1);-a_range(2);-b_range(2);2*fa;2*fb];
   relevant = find(isfinite(x));
   M = -M(relevant,:);
   a = -x(relevant)+10^-10;

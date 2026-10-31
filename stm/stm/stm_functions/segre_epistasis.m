@@ -26,6 +26,9 @@ w_ratio = w_double ./ [w_single * w_single'];
 w_ratio(find(is_neutral)) = 1;
 w_milder = max( repmat(w_single,1,length(w_single)), repmat(w_single,1,length(w_single))');
 
-epistasis = is_aggravating .* (w_ratio - 1) + is_buffering .* ( [w_ratio - 1] ./ [1./w_milder - 1]);
+buffering_value = [w_ratio - 1] ./ [1./w_milder - 1];
 
-epistasis = epistasis - diag(diag(epistasis));
+epistasis = zeros(size(w_ratio));
+epistasis(is_aggravating) = w_ratio(is_aggravating) - 1;
+epistasis(is_buffering)   = buffering_value(is_buffering);
+epistasis(1:size(epistasis,1)+1:end) = 0;

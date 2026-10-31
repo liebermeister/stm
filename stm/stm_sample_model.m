@@ -37,6 +37,11 @@ stm_options.flag_test = 0;
 
 if ~isnan(stm_options.seed), rng(stm_options.seed); end
 
+% the following functions must not seed the generator again: otherwise, different
+% model variables would be built from identical random numbers (and thus be correlated)
+stm_options_no_seed = stm_options;
+stm_options_no_seed.seed = nan;
+
 
 % ----------------------------------------------------------------
 % Check reaction sum formulae for large stoichoimetric coefficients
@@ -50,9 +55,10 @@ M_max = stm_options.limit_cooperativity;
 if  max(max(abs(N))) > M_max
   display(' * Large stoichiometric coefficients encountered. Compensating them by small');
   display('   reaction cooperativities h; predefined reaction affinities and equilibrium');
-  display('   constants are adjusted');
+  display('   constants are not changed');
   ind = find(max(abs(N)) > M_max);
   stm_options.h(ind) = M_max./max(abs(N(:,ind)));
+  stm_options_no_seed.h = stm_options.h;
   %stm_constraints.dmu_fix(ind) = stm_constraints.dmu_fix(ind) ./ stm_options.h(ind);
   %stm_constraints.Keq_fix(ind) = stm_constraints.Keq_fix(ind) .^ stm_options.h(ind);
 end
@@ -61,10 +67,10 @@ end
 % ----------------------------------------------------------------
 % Steady-state phase: sample feasible steady quantities
 
-[c0, c, u, J, Keq, mu, K, Kma, zeta, A] = stm_sample_steady_state(N, W, ind_ext, stm_constraints, stm_options);
+[c0, c, u, J, Keq, mu, K, Kma, zeta, A] = stm_sample_steady_state(N, W, ind_ext, stm_constraints, stm_options_no_seed);
 
 
 % ----------------------------------------------------------------
 % Kinetics phase: sample saturation values compute all the rest
 
-result = stm_sample_elasticities(N, W, ind_ext, stm_constraints, stm_options, c0, c, u, J, Keq, mu, K, Kma, zeta, A);
+result = stm_sample_elasticities(N, W, ind_ext, stm_constraints, stm_options_no_seed, c0, c, u, J, Keq, mu, K, Kma, zeta, A);

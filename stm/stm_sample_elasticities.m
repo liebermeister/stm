@@ -27,13 +27,18 @@ function result = stm_sample_elasticities(N, W, ind_ext, stm_constraints, stm_op
 %
 % Fields in 'stm_constraints' and 'stm_options' relevant to this function:
 %
-%   stm_constraints.beta_M_fix     - predefined beta values (only used if non-zero)
-%   stm_constraints.beta_A_fix     - predefined beta values (only used if non-zero)
-%   stm_constraints.beta_I_fix     - predefined beta values (only used if non-zero)
+%   stm_constraints.beta_M_fix     - predefined beta values (only used if finite)
+%   stm_constraints.beta_A_fix     - predefined beta values (only used if finite)
+%   stm_constraints.beta_I_fix     - predefined beta values (only used if finite)
 %   stm_options.kinetic_law        - Rate law {'cs','ms', ...}
 %   stm_options.h                  - vector of Hill exponents (one for each reaction)
-%   stm_options.no_equilibrium     - flag: assume no equilibrium for inactive reactions
-%   stm_options.KV_prior_mean      - .. and KV value to be used in this case
+%   stm_options.no_equilibrium     - inactive reactions with non-zero force: set enzyme level = 0 (if true)
+%                                    or velocity constant KV = 0 (if false)
+%   stm_options.KV_prior_mean      - KV value to be used in the first case
+%   stm_options.flag_control       - compute control and response coefficients?
+%                                    (default 1; if 0, result.control.stable is empty)
+%
+% In unstable states, result.control.stable = 0 and control and response coefficients are nan
 %   stm_options.flag_test          - Run tests? (Boolean)
 %   stm_options.flag_second_order  - Compute second-order elasticities? (Boolean)
 %   stm_options.zv                 - Flux weights for 2nd order resp. coeff output function
@@ -95,32 +100,29 @@ KI(W>=0)  = 0;
 
 % compute KV (given sampled u and comparison between J and preliminary v
 
-KM_full     = full(KM); KM_full(KM_full==0) = 1;
 this_KV     = ones(nr,1);
 v_pre       = modular_velocities(stm_options.kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,this_KV,Keq,stm_options.h);
-ind_off     = find([v_pre==0].*[A~=0]);
-ind_off_A   = find([v_pre==0].*[A==0]);
+ind_off     = find([J==0].*[A~=0]); % inactive, although there is a thermodynamic force
+ind_off_A   = find([J==0].*[A==0]); % inactive, at equilibrium
 
 % default values for options that may be missing in older option structs
 stm_options = join_struct(struct('no_equilibrium',1,'limit_elasticities_in_multireactions',1),stm_options);
 
 if stm_options.no_equilibrium
   if length(ind_off),  display('Vanishing rates: setting enzyme values = 0'); end
-  u(ind_off)     = 0;
-  v_pre(ind_off) = 1;
+  u(ind_off)  = 0;
   KV          = J./v_pre;
   KV(ind_off) = stm_options.KV_prior_mean;
 else
   if length(ind_off),  display('Vanishing rates: setting KV values = 0'); end
-  v_pre(ind_off) = 1;
   KV          = J./v_pre;
   KV(ind_off) = 0;
 end
 
 % arbitrary choice (since nothing is known...)
 
-u(ind_off_A)  = median(u,'omitnan');
-KV(ind_off_A) = median(KV,'omitnan');
+u(ind_off_A)  = median(u(u>0),'omitnan');
+KV(ind_off_A) = median(KV(KV>0),'omitnan');
 KV(isnan(KV)) = median(KV,'omitnan');
 
 if sum(KV<0), error('Problem with flux directions'); end
@@ -130,8 +132,9 @@ if sum(KV<0), error('Problem with flux directions'); end
 if sum(isnan(v))
   error('infeasible reaction rates');
 end
+v(J==0) = 0; % remove numerical noise in equilibrium reactions
 
-[Kplus,Kminus]       = ms_compute_Kcat(N,KM,KV,Keq);
+[Kplus,Kminus]       = ms_compute_Kcat(N,KM,KV,Keq,stm_options.h);
 
 % ----------------------------------------------------------------
 % Tests
@@ -156,19 +159,28 @@ end
 %  o scaled elasticities (single reaction directions) only require alpha values
 %  o unscaled and total elasticities also require velocities and concentrations
 
-v_plus_fallback  = ones(size(v));
-v_minus_fallback = ones(size(v));
+v_plus_fallback  = v_plus;
+v_minus_fallback = v_minus;
 
-E = compute_modular_elasticities(stm_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, stm_options.h, v_plus_fallback, v_minus_fallback, stm_options.flag_second_order);
+% switched-off enzymes (u=0) carry no flux; their elasticities E_u are set to zero
+u_nonzero = u; u_nonzero(u==0) = 1;
 
-if stm_options.limit_elasticities_in_multireactions
+E = compute_modular_elasticities(stm_options.kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u_nonzero, c, stm_options.h, v_plus_fallback, v_minus_fallback, stm_options.flag_second_order);
+
+ind_multi_reactions = find(sum(N~=0)>6);
+
+if stm_options.limit_elasticities_in_multireactions && ~isempty(ind_multi_reactions)
   % normalise the elasticities in each multi-reaction (eg biomass reaction) to a sum of absolute values of 1
-  ind_multi_reactions = find(sum(N~=0)>6);
   Ec_scaled_multi = E.sc_E_c(ind_multi_reactions,:);
-  E.sc_E_c(ind_multi_reactions,:) = diag(1./sum(abs(Ec_scaled_multi)')) * Ec_scaled_multi;
-  E.un_E_c = diag(v) * E.sc_E_c * diag(1./c);
-  E.sc_E_cc(ind_multi_reactions,:,:) = 0;
-  E.un_E_cc(ind_multi_reactions,:,:) = 0;
+  sum_abs = full(sum(abs(Ec_scaled_multi),2));
+  sum_abs(sum_abs==0) = 1;
+  E.sc_E_c(ind_multi_reactions,:) = diag(1./sum_abs) * Ec_scaled_multi;
+  E.un_E_c(ind_multi_reactions,:) = diag(v(ind_multi_reactions)) * E.sc_E_c(ind_multi_reactions,:) * diag(1./c);
+  if stm_options.flag_second_order
+    E.sc_E_cc = sptensor_remove_rows(E.sc_E_cc,ind_multi_reactions);
+    E.un_E_cc = sptensor_remove_rows(E.un_E_cc,ind_multi_reactions);
+    E.un_E_cu = sptensor_set_mixed_rows(sptensor_remove_rows(E.un_E_cu,ind_multi_reactions),E.un_E_c,u_nonzero,ind_multi_reactions);
+  end
 end
 
 if any(~isfinite(E.un_E_c(:))) || any(~isfinite(E.un_E_u(:)))
@@ -188,24 +200,36 @@ Ep   = [Eu Es];
 
 external  = zeros(nm,1); external(ind_ext) = 1;
 
+if ~isfield(stm_options,'flag_control'), stm_options.flag_control = 1; end
+
+if ~stm_options.flag_control
+
+  control = struct('stable',[]);
+  CS      = [];
+  CJ      = [];
+
+else
+
 if prod(size(N)) > 10^4  % compute approximation of NR_int and L_int
-  epsilon_nullspace = 10^-20;
   N_int = N(find(external==0),:);
   %%[U,S,V]  = svds(sparse(N_int),100);
   [U,S,V]  = svd(full(N_int));
+  epsilon_nullspace = max(size(N_int)) * eps(max(abs(diag(S)))); % numerical rank
   ii =  find(abs(diag(S))>epsilon_nullspace);
   L_int  = U(:,ii) * S(ii,ii);
   NR_int = V(:,ii)';
-  [CJ, CS, L_int, NR_int, M, M_adj] = control_coefficients(N, Ec, external, [], NR_int, L_int);
+  [CJ, CS, L_int, NR_int, M, M_adj, ~, stable] = control_coefficients(N, Ec, external, [], NR_int, L_int, [], [], 'nan');
 else
-  [CJ, CS, L_int, NR_int, M, M_adj] = control_coefficients(N, Ec, external);
+  [CJ, CS, L_int, NR_int, M, M_adj, ~, stable] = control_coefficients(N, Ec, external, [], [], [], [], [], 'nan');
 end
 
 
 % -------------------------------------------------------------
 % second order
 
-if stm_options.flag_second_order * [length(stm_options.zc) + length(stm_options.zv) == 0]
+% in unstable states, CS and CJ are nan and only first-order coefficients (also nan) are computed
+
+if stm_options.flag_second_order * [length(stm_options.zc) + length(stm_options.zv) == 0] * stable
 
   %% compute full second-order response matrices
 
@@ -262,7 +286,7 @@ else
 
   %% Second order effects on specified target function
   %% (some linear function of concentrations and fluxes)
-  if [length(stm_options.zc) + length(stm_options.zv)]
+  if [length(stm_options.zc) + length(stm_options.zv)] * stable
     [control.Rtarget_sc_u, control.Rtarget_sc_uu] = compute_modular_response_second(...
         stm_options.zc, stm_options.zv, stm_options.kinetic_law, N, W, ...
         ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, stm_options.h, ...
@@ -279,9 +303,7 @@ end
 control.M     = M;
 control.M_adj = M_adj;
 
-eigmax = max(real(eig(M)));
-
-control.stable = [eigmax <= 0];
+control.stable = stable;
 
 if stm_options.verbose
   if control.stable
@@ -290,6 +312,8 @@ if stm_options.verbose
     display('WARNING: The metabolic state is unstable.');
   end
 end
+
+end % stm_options.flag_control
 
 % -------------------------------------------------------------
 % write all results to data structure 'result'
@@ -340,3 +364,27 @@ result.kinetics.KM   = result.KM;
 result.kinetics.KV   = result.KV;
 result.kinetics.Keq  = result.Keq;
 result.kinetics.h    = stm_options.h;
+
+% -------------------------------------------------------------
+
+function T = sptensor_remove_rows(T,ind)
+
+% set all elements in the rows (first dimension) ind of a sparse tensor to zero
+
+keep = find(~ismember(T.subs(:,1),ind));
+T    = sptensor(T.subs(keep,:),T.vals(keep),size(T));
+
+% -------------------------------------------------------------
+
+function T = sptensor_set_mixed_rows(T,Ec,u,ind)
+
+% mixed second-order elasticities of reactions ind: T(i,:,i) = Ec(i,:) / u(i)
+
+subs = T.subs;
+vals = T.vals;
+for i = ind(:)'
+  j    = find(Ec(i,:))';
+  subs = [subs; repmat(i,length(j),1), j, repmat(i,length(j),1)];
+  vals = [vals; full(Ec(i,j))' / u(i)];
+end
+T = sptensor(subs,vals,size(T));

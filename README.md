@@ -38,7 +38,7 @@ Some functions require further packages:
 |---------|------------|
 | [SBtab for Matlab](https://github.com/liebermeister/sbtab-matlab) | reading models and data from SBtab files (demos, E. coli model) |
 | [libSBML](https://sbml.org/software/libsbml/) (Matlab interface) | SBML import and export (`demo_stm_glycolysis`, `stm_sbml_to_model`) |
-| [Tensor Toolbox](https://www.tensortoolbox.org) | second-order elasticities and response coefficients (`stm_options.flag_second_order = 1`) |
+| [Tensor Toolbox](https://www.tensortoolbox.org) | second-order elasticities and response coefficients (`stm_options.flag_second_order = 1`, the default) |
 | [efmtool](https://csb.ethz.ch/tools/software/efmtool.html) | removing thermodynamically infeasible cycles from flux distributions |
 | [Parameter balancing](https://github.com/liebermeister/parameter-balancing-matlab) | `demo_stm_workflow` and the scripts for building the E. coli model |
 | Statistics and Machine Learning Toolbox | synergy graphics and clustering, beta-distributed saturation values (`stm_options.set_alpha_nonuniform = 1`) |
@@ -70,6 +70,18 @@ From the repository folder, run
 ```matlab
 results = runtests('tests')
 ```
+
+## Erratum
+
+Errors found in a code review in October 2026 have been corrected in this repository, and no erratum was sent to the journal. The corrections can change results obtained with earlier versions, including results in published work. Earlier versions are available as git tags.
+
+- **Thermodynamic forces were not sampled uniformly.** With the sampling method 'v and mu', reaction Gibbs free energies were picked from a few vertices of the feasible polytope. They are now sampled uniformly (`stm_options.mu_sampling_method = 'hit-and-run'`); the old procedure is available as `'extreme_points'`. The default limit `dmu_limit` was lowered from 100 to 50 kJ/mol. Uniform sampling gives typical forces of about half this limit. To use another limit, set `stm_constraints.dmu_min` and `dmu_max` as well, because they are initialised from the default. Ensemble statistics change.
+- **Smoothed variances were too large by a factor of pi** (`spectral_density_to_smooth_variance`). This scales the variances of metabolite fluctuations; their relative values do not change.
+- **The false discovery rate was about twice the nominal value** (`multiple_testing_fdr`), and the two one-sided tests in `influence_anova` and `interaction_anova` doubled the number of tests. Lists of significant interactions may have been too long.
+- **Cooperativities were ignored in turnover rates.** Models with `h ~= 1` (used automatically for large stoichiometric coefficients) were thermodynamically inconsistent when evaluated by `modular_velocities`; the rate laws in `result.kinetics` did not vanish at equilibrium.
+- **Fixed random seeds correlated model variables.** With a numerical `stm_options.seed`, variables sampled in different functions were built from identical random numbers. `interaction_statistics` used a fixed seed for every model, so the samples of an ensemble were identical.
+- **Inactive reactions** (v = 0): with `no_equilibrium`, the enzyme was not switched off correctly, and elasticities of reactions at equilibrium were wrong.
+- **Control coefficients of unstable states** were previously returned with values around 10^10. `control_coefficients` now gives an error or, in the STM functions, nan values with `result.control.stable = 0`. Ensembles contain stable models only.
 
 ## Versions
 

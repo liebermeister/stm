@@ -3,7 +3,7 @@ function [ris, es_result_list] = stm_discover_perturbation_sample(N,W,ext_ind,co
 %STM_DISCOVER_PERTURBATION_SAMPLE
 %
 % [ris, es_result_list] = stm_discover_perturbation_sample(N,W,ext_ind,constraints,...
-%  options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_sigma_prior)
+%  options,c_ratio,v_ratio,expansion,expansion_order,nrun,u_sigma_prior,s_known_sigma_prior,s_unknown_sigma_prior)
 %
 % Compute the most likely perturbation of enzyme expression (u) and external metabolites (s)
 % that would give rise to a given differential profile of balanced concentrations c and fluxes j
@@ -23,7 +23,7 @@ function [ris, es_result_list] = stm_discover_perturbation_sample(N,W,ext_ind,co
 % ris:            contains statistics over predicted effects
 % es_result_list: contains the results of all sampling runs
 
-eval(default('expansion','''non-logarithmic''','expansion_order','2','nrun','1'));
+eval(default('expansion','''non-logarithmic''','expansion_order','2','nrun','1','u_sigma_prior','1','s_known_sigma_prior','1','s_unknown_sigma_prior','1'));
 
 [nm,nr] = size(N);
 
@@ -43,7 +43,7 @@ for it = 1:nrun
 
   display(sprintf('Monte Carlo run %d',it));
 
-  this_es_result      = stm_sample_model(N,W,ext_ind,constraints,options);
+  this_es_result      = stm_sample_stable_model(N,W,ext_ind,constraints,options);
 
   [u_ratio, s_ratio, pred_effect] = stm_discover_perturbation(...
       N,W,ext_ind,c_ratio,v_ratio,this_es_result,expansion,expansion_order,...

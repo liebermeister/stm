@@ -17,7 +17,7 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = stm_sample_steady_state(N, W,
 %   c0        - Vector of chemical equilibrium concentrations (optional)
 %   c         - Vector of concentrations
 %   u         - Vector of enzyme levels
-%   J         - Flux vector
+%   v         - Flux vector
 %   Keq       - Vector of equilibrium constants
 %   mu        - Vector of chemical potentials
 %   K         - Kernel matrix
@@ -37,7 +37,7 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = stm_sample_steady_state(N, W,
 %     'sample_and_discard':  sample flux values from the distribution defined by
 %                            stm_constraints.v_mean, stm_constraints.v_std, and stm_constraints.v_sign
 %                            and omit unfeasible cycles
-%     'v and mu',            sample flux values using sample_feasible_v.m
+%     'v and mu'             sample flux values using sample_feasible_v.m
 %     'v from data':         sample flux values from the distribution defined by
 %                            stm_constraints.v_mean, stm_constraints.v_std, and stm_constraints.v_sign
 %
@@ -53,12 +53,14 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = stm_sample_steady_state(N, W,
 %
 %  Fields in 'stm_constraints' and 'stm_options' relevant to this function:
 %    stm_options.seed               - Random seed used
-%    stm_options.sampling_methods   - Alternative sampling procedures
+%    stm_options.sampling_method    - Alternative sampling procedures
 %                                    'v from data'
 %                                    'v and mu'
-%                                    'c0 and c'
 %                                    'sample_and_discard'
 %                                    'accept_flux'
+%    stm_options.mu_sampling_method - How to choose reaction Gibbs free energies if they are not predefined:
+%                                    'hit-and-run'    (default) uniform sampling from the feasible polytope
+%                                    'extreme_points' vertices of the polytope along the coordinate axes
 %    stm_constraints.v_fix          - Predefined fluxes (vector, NaNs are ignored)
 %    stm_constraints.v_min          - Lower flux bounds (vector, NaNs are ignored)
 %    stm_constraints.v_max          - Upper flux bounds (vector, NaNs are ignored)
@@ -74,9 +76,6 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = stm_sample_steady_state(N, W,
 %
 %     'v and mu'             stm_constraints.mu_fix
 %
-%     'c0 and c'             stm_constraints.log_c0
-%                            stm_constraints.log_c0_std
-%
 %     'sample_and_discard'   stm_options.ind_ignore
 %
 %   For some methods, additionally required:
@@ -90,6 +89,12 @@ function [c0, c, u, v, Keq, mu, K, Kma, zeta, A] = stm_sample_steady_state(N, W,
 if ~isnan(stm_options.seed)
   rng(stm_options.seed);
 end
+
+% the generator must be seeded only once: otherwise, the random numbers used
+% for different model variables would be identical and the variables correlated
+stm_options.seed = nan;
+
+stm_options = join_struct(struct('mu_sampling_method','hit-and-run'),stm_options);
 
 [nm,nr] = size(N);
 
@@ -142,8 +147,8 @@ if all_v_given
 else
 
   v = [];
-  stm_constraints.v_min(stm_constraints.v_sign ==  1) = 0;
-  stm_constraints.v_max(stm_constraints.v_sign == -1) = 0;
+  stm_constraints.v_min(stm_constraints.v_sign ==  1) = max(stm_constraints.v_min(stm_constraints.v_sign ==  1),0);
+  stm_constraints.v_max(stm_constraints.v_sign == -1) = min(stm_constraints.v_max(stm_constraints.v_sign == -1),0);
 
   switch stm_options.sampling_method
 
@@ -196,16 +201,14 @@ else
 end
 
 % mass action ratios
-Kma = exp(N' * log(c));
-
-% safety fix
-Kma(Kma<10^-10) = 10^-10;
+log_Kma = N' * log(c);
+Kma     = exp(log_Kma);
 
 if all_keq_given
 
   display(' Using given equilibrium constants');
   Keq  = stm_constraints.Keq_fix;
-  A    = RT * log(Keq ./ Kma);
+  A    = RT * (log(Keq) - log_Kma);
   zeta = exp(stm_options.h .* A/RT);
 
 elseif all_mu_given
@@ -214,14 +217,14 @@ elseif all_mu_given
   mu   = stm_constraints.mu_fix;
   A    = - N' * mu;
   zeta = exp(stm_options.h .* A/RT);
-  Keq  = exp(A/RT) .* Kma;
+  Keq  = exp(A/RT + log_Kma);
 
 elseif all_dmu_given
 
   display(' Using given chemical potential differences');
   A    = - stm_constraints.dmu_fix;
   zeta = exp(stm_options.h .* A/RT);
-  Keq  = exp(A/RT) .* Kma;
+  Keq  = exp(A/RT + log_Kma);
 
   %% safety fix
   %% Keq(Keq>10^50) = 10^50;
@@ -234,7 +237,7 @@ elseif all_dmu_given
   if isempty(stm_constraints.mu_eqconstraint)
     mu = -pinv(full(N'))*A;
   else
-    mu = pinv([-full(N'); stm_constraints.mu_eqconstraint.matrix'])*[-A; stm_constraints.mu_eqconstraint.vector];
+    mu = pinv([-full(N'); stm_constraints.mu_eqconstraint.matrix'])*[A; stm_constraints.mu_eqconstraint.vector];
   end
 
   display(' * Computing mu from A by pseudoinverse (in stm_sample_steady_state)');
@@ -242,11 +245,10 @@ elseif all_dmu_given
 else
 
   %% sample mu
-  if stm_options.verbose, display(' Computing extreme feasible mu vectors ..'); end
-  [mu_list, feasible] = sample_feasible_mu(N, ind_ext, v, stm_constraints, stm_options);
+  if stm_options.verbose, display(sprintf(' Computing feasible mu vectors (method: %s) ..',stm_options.mu_sampling_method)); end
+  [mu_list, feasible] = sample_feasible_mu(N, ind_ext, v, stm_constraints, stm_options, stm_options.mu_sampling_method, 1);
   if stm_options.verbose, display(' .. done'); end
   if ~feasible, error('Unfeasible flux distribution'); end
-  display('  Choosing chemical potentials mu randomly from extreme points of the allowed region');
   mu     = mu_list(:,ceil(rand*size(mu_list,2)));
   log_c  = log(c);
   log_c0 = log_c - mu/RT;
@@ -268,8 +270,9 @@ if find([v~=0] .* [abs(A) < stm_constraints.dmu_limit_min])
   error(sprintf('Overly small reaction affinity %f encountered', A(ind) .* sign(v(ind))));
 end
 
+% dmu_limit restricts sampled forces, so larger values can only stem from given data; they are accepted
 if find([v~=0].*[abs(A) > [1+10^-5]*stm_constraints.dmu_limit])
-  error(sprintf('Overly large reaction affinity %f encountered', max(abs(A))));
+  warning(sprintf('Given data imply a reaction affinity of %f, above dmu_limit = %f', max(abs(A)), stm_constraints.dmu_limit));
 end
 
 

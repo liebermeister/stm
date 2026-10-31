@@ -34,7 +34,7 @@ eval(default('expansion','''non-logarithmic''','expansion_order','2','nrun','1')
 for it = 1:nrun
   display(sprintf('Monte Carlo run %d/%d',it,nrun));
   options.seed        = it;
-  es_result_list{it}  = stm_sample_model(N,W,ind_ext,constraints,options);
+  es_result_list{it}  = stm_sample_stable_model(N,W,ind_ext,constraints,options);
   r                   = stm_simulate_perturbation(N,W,ind_ext,u_ratio,s_ratio,es_result_list{it},expansion,expansion_order);
   res.c(:,it)         = es_result_list{it}.c;
   res.v(:,it)         = es_result_list{it}.v;
@@ -48,24 +48,24 @@ end
 % -------------------------------------------------
 % statistics over the sampling results
 
-flag_multiple_samples = double(size(u_ratio,2)>1);
+% res.c and res.v: one column per run; other fields: third dimension = runs
 
-res.c_mean = mean(res.c,2+flag_multiple_samples);
-res.v_mean = mean(res.v,2+flag_multiple_samples);
+res.c_mean = mean(res.c,2);
+res.v_mean = mean(res.v,2);
 
 if nrun > 1
-  res.c_std  = std(res.c,0,2+flag_multiple_samples);
-  res.v_std  = std(res.v,0,2+flag_multiple_samples);
+  res.c_std  = std(res.c,0,2);
+  res.v_std  = std(res.v,0,2);
 else
   res.c_std  = nan * res.c_mean;
   res.v_std  = nan * res.v_mean;
 end
 
-res.delta_c_mean = squeeze(mean(res.delta_c,  3+flag_multiple_samples));
-res.delta_c_std  = squeeze( std(res.delta_c,0,3+flag_multiple_samples));
-res.delta_v_mean = squeeze(mean(res.delta_v,  3+flag_multiple_samples));
-res.delta_v_std  = squeeze( std(res.delta_v,0,3+flag_multiple_samples));
-res.c_ratio_mean = squeeze(mean(res.c_ratio,  3+flag_multiple_samples));
-res.c_ratio_std  = squeeze( std(res.c_ratio,0,3+flag_multiple_samples));
-res.v_ratio_mean = squeeze(mean(res.v_ratio,  3+flag_multiple_samples));
-res.v_ratio_std  = squeeze( std(res.v_ratio,0,3+flag_multiple_samples));
+res.delta_c_mean = mean(res.delta_c,  3);
+res.delta_c_std  =  std(res.delta_c,0,3);
+res.delta_v_mean = mean(res.delta_v,  3);
+res.delta_v_std  =  std(res.delta_v,0,3);
+res.c_ratio_mean = mean(res.c_ratio,  3);
+res.c_ratio_std  =  std(res.c_ratio,0,3);
+res.v_ratio_mean = mean(res.v_ratio,  3);
+res.v_ratio_std  =  std(res.v_ratio,0,3);

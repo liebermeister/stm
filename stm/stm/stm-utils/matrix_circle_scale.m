@@ -2,8 +2,8 @@ function matrix_circle_scale(X_values,X_sizes,rownames,colnames,colormap,fontsiz
 
 % matrix_circle_scale(X_values,X_sizes,rownames,colnames,colormap,fontsize)
 %
-% plot values of matrix as dots: absolute values are shown
-% by area, sign by colour (+: colour; -: white)
+% plot values of matrix as dots: X_sizes are shown by area (default: equal sizes),
+% X_values by colour
 %
 % X_values are assumed to be between -1 and 1; if there are bigger
 % absolute values, all values are normalised to the maximal absolute value
@@ -18,8 +18,8 @@ if ~exist('fontsize','var'), fontsize = 10; end
 if isempty(X_sizes), X_sizes = ones(size(X_values)); end
 
 cm = eval(colormap);
-X_sizes = fliplr(X_sizes');
-nX = 0.5/max(max(abs(X_sizes)));
+X_sizes = sqrt(abs(fliplr(X_sizes')));  % area proportional to absolute value
+nX = 0.5/max(max(X_sizes));
 X_values = fliplr(X_values');
 
 % normalise to maximum absolute value
@@ -28,7 +28,6 @@ if max(abs(X_values(:)))>1
   X_values = X_values/max(abs(X_values(:)));
 end
 
-X_sizes  = sqrt(abs(X_values));
 X_values = 0.5 * [X_values + max(abs(X_values(:)))];
 
 for it1=1:size(X_sizes,1)
@@ -41,7 +40,7 @@ for it1=1:size(X_sizes,1)
 end
 
 hold off;
-axis([0.5 size(X_sizes,2) + 0.5 0.5  size(X_sizes,1)+0.5])
+axis([0.5 size(X_sizes,1) + 0.5 0.5  size(X_sizes,2)+0.5])
 
 if isempty(rownames), set(gca,'YTick',[]);
 else, set(gca,'YTick',1:size(X_sizes,2)); set(gca,'YTickLabel',flipud(rownames),'Fontsize',fontsize);

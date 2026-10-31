@@ -56,7 +56,6 @@ Some functions require further packages:
 - **`stm/models/e_coli_ccm`**: scripts for building the E. coli model from the STM article
 - **`resource-data`**: models and data (see the README files there)
 - **`tests`**: tests
-- **`doc`**: HTML documentation of all functions
 
 Each folder in `stm` contains a `Contents.m` file with an overview (type, e.g., `help stm`).
 

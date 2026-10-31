@@ -36,11 +36,11 @@ ind_target = find(strcmp(target_reaction, network.actions));
 
 cd(es_filenames.es_dir); load(input_file1);
 stm_options.set_alpha_to_half  = 0;
-stm_options.seed               = 0;
+stm_options.seed               = nan; % a fixed seed would make all samples identical
 stm_options.epsilon_stationary = 0.001;
 
 if fluxes_fixed
-  stm_options.method_flux_sampling = 'accept_flux';
+  stm_options.sampling_method = 'accept_flux';
   stm_constraints.v_fix = result.v;
 end
 
@@ -48,7 +48,7 @@ end
 
 for it = 1:n_mc
   fprintf('MC sample %d/%d:',it,n_mc);
-  result         = stm_sample_model(N,W,ind_ext,stm_constraints,stm_options);
+  result         = stm_sample_stable_model(N,W,ind_ext,stm_constraints,stm_options);
   R_target_u_sc  = result.control.RJu_sc(ind_target,:);
   R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
   influence_list(:,it,1)     = R_target_u_sc;
@@ -58,17 +58,17 @@ end
 cd(es_filenames.es_dir);
 load(input_file2); % stm_options, result; from script 'ycm_elasticity_sampling'
 stm_options.set_alpha_to_half  = 0;
-stm_options.seed               = 0;
+stm_options.seed               = nan; % a fixed seed would make all samples identical
 stm_options.epsilon_stationary = 0.001;
 
 if fluxes_fixed
-  stm_options.method_flux_sampling = 'accept_flux';
+  stm_options.sampling_method = 'accept_flux';
   stm_constraints.v_fix = result.v;
 end
 
 for it = 1:n_mc
   fprintf('MC sample %d/%d:',it,n_mc);
-  result         = stm_sample_model(N,W,ind_ext,stm_constraints,stm_options);
+  result         = stm_sample_stable_model(N,W,ind_ext,stm_constraints,stm_options);
   R_target_u_sc  = result.control.RJu_sc(ind_target,:);
   R_target_uu_sc = squeeze(result.control.RJuu_sc(ind_target,:,:));
   influence_list(:,it,2)     = R_target_u_sc;

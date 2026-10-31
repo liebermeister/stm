@@ -5,6 +5,11 @@ function V = spectral_density_to_smooth_variance(omega_list,S_list,tau_list)
 % Variances of fluctuations after smoothing with Gaussian kernels of widths tau
 % (computed from spectral densities)
 %
+% Spectral densities are assumed to be defined as S(omega) = R(omega) * R(omega)' as in
+% energetics_control_and_noise, that is, for white noise with a spectral density of 1.
+% The variance (for delta-correlated white noise, see article supplement) is
+%  V = 1/(2 pi) * integral_{-infinity}^{infinity} S(omega) domega = 1/pi * integral_0^{infinity} S(omega) domega
+%
 % Format of S_list:
 %  Rows: elements
 %  Columns: frequencies (given in omega_list, increasing)
@@ -41,6 +46,6 @@ for it = 1:length(tau_list)
   S_smoothed_average = 1/2 * [S_smoothed(2:end)+S_smoothed(1:end-1)];
   d_omega_list_aug = omega_list_aug(2:end)-omega_list_aug(1:end-1);
 
-  V(1,it) = sum(S_smoothed_average.*d_omega_list_aug);
+  V(1,it) = 1/pi * sum(S_smoothed_average.*d_omega_list_aug);
 
 end

@@ -40,9 +40,9 @@ if isempty(stm_constraints), stm_constraints = struct; end
 
 [es_def_options, es_def_constraints] = stm_default_options(network);
 
-% default: simple choice -> keq = 1
+% default: use the given concentrations
 es_def_options.seed              = nan;
-es_def_constraints.log_c_fix     = 1/RT * es_def_constraints.mu_fix;
+es_def_constraints.log_c_fix     = log(c);
 es_def_options.set_alpha_to_half = 1; % set enzymes to half-saturation
 
 stm_options            = join_struct(es_def_options,stm_options);

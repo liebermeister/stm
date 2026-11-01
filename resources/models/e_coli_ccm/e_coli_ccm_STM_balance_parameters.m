@@ -1,6 +1,6 @@
 % -------------------------------------------------
 % Determine balanced parameter set for E coli model and save to file
-% /resource-data/escherichia_coli/data-kinetic/e_coli_balanced_parameters.tsv
+% /resources/escherichia_coli/data-kinetic/e_coli_balanced_parameters.tsv
 % -------------------------------------------------
 
 clear;
@@ -8,7 +8,7 @@ clear;
 save_files = 0;
 
 model_name              = 'e_coli_noor_2016_glucose';
-DATA_DIR                = [stm_BASEDIR  '/../resource-data/models-article/Escherichia_coli_ccm/original_model/'];
+DATA_DIR                = [stm_BASEDIR  '/../resources/models-article/Escherichia_coli_ccm/original_model/'];
  kinetic_data_file       = [DATA_DIR 'e_coli_noor_2016_kinetic_data_modified.tsv'];
 
 % deprecated:
@@ -18,7 +18,7 @@ DATA_DIR                = [stm_BASEDIR  '/../resource-data/models-article/Escher
  model_file              = [ DATA_DIR 'other/e_coli_noor_2016_plus_overflow.tsv'];
  balanced_parameter_file = [ DATA_DIR 'other/e_coli_noor_2016_plus_overflow_balanced_kinetics.tsv'];
 
- prior_file = [stm_BASEDIR  '../resource-data/data/data-general/mb_prior.tsv'];
+ prior_file = [stm_BASEDIR  '../resources/data/data-general/mb_prior.tsv'];
 
  pb_options                = parameter_balancing_options;
  pb_options.use_sbml_ids   = 0;

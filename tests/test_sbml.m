@@ -1,7 +1,7 @@
 % Tests for building a model from an SBML file (requires libSBML)
 
 setup_test_path;
-sbml_file = fullfile(fileparts(mfilename('fullpath')), '..', 'resource-data', 'models-article', ...
+sbml_file = fullfile(fileparts(mfilename('fullpath')), '..', 'resources', 'models-article', ...
                      'Example_Linear_Pathway', 'Example_Linear_Pathway_model.xml');
 
 %% stm_sbml_to_model

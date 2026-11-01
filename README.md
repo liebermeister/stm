@@ -53,15 +53,15 @@ Some functions require further packages:
 - **`stm/stm`**: more specific functions: graphics, prediction of perturbation effects,
   enzyme synergies, metabolic fluctuations, Bayesian (MCMC) sampling
 - **`stm/demo`**: demo scripts
-- **`stm/models/e_coli_ccm`**: scripts for building the E. coli model from the STM article
-- **`resource-data`**: models and data (see the README files there)
+- **`resources/models/e_coli_ccm`**: scripts for building the E. coli model from the STM article
+- **`resources`**: models and data (see the README files there)
 - **`tests`**: tests
 
 Each folder in `stm` contains a `Contents.m` file with an overview (type, e.g., `help stm`).
 
 ## E. coli model
 
-The E. coli central metabolism model, the running example in the article, can be found in the folder `resource-data/models-article/Escherichia_coli_ccm/`. Details about the model and model construction are given there.
+The E. coli central metabolism model, the running example in the article, can be found in the folder `resources/models-article/Escherichia_coli_ccm/`. Details about the model and model construction are given there.
 
 ## Tests
 

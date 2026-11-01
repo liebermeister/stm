@@ -4,7 +4,7 @@ clear; clearvars -global
 
 stm_dependencies;
 
-model_dir = [stm_BASEDIR '/../resource-data/models-other/demo_e_coli_glycolysis'];
+model_dir = [stm_BASEDIR '/../resources/models-other/demo_e_coli_glycolysis'];
 
 cd(model_dir);
 

@@ -38,7 +38,7 @@ mydir           = [stm_BASEDIR  '/../resource-data/models-article/Escherichia_co
  file_options.columns_mean         = {'Value'};
  file_options.columns_std          = [];
  file_options.load_quantity_table  = 1;
- file_options.prior_file           = [stm_BASEDIR  '../resource-data/data/data-general/cmb_prior.tsv'];
+ file_options.prior_file           = [stm_BASEDIR  '../resource-data/data/data-general/mb_prior.tsv'];
 
  result  = sbtab_load_network_model_and_data({network_model_file, kinetic_data_file, state_data_file},file_options);
 

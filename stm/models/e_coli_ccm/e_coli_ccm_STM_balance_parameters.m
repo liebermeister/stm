@@ -18,7 +18,7 @@ DATA_DIR                = [stm_BASEDIR  '/../resource-data/models-article/Escher
  model_file              = [ DATA_DIR 'other/e_coli_noor_2016_plus_overflow.tsv'];
  balanced_parameter_file = [ DATA_DIR 'other/e_coli_noor_2016_plus_overflow_balanced_kinetics.tsv'];
 
- prior_file = [stm_BASEDIR  '../resource-data/data/data-general/cmb_prior.tsv'];
+ prior_file = [stm_BASEDIR  '../resource-data/data/data-general/mb_prior.tsv'];
 
  pb_options                = parameter_balancing_options;
  pb_options.use_sbml_ids   = 0;

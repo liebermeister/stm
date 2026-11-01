@@ -1,1 +1,1 @@
-% cmb_prior.tsv is a copy from the model balancing repository, folder "resources/data/data-prior" (2022-01-18)
+% mb_prior.tsv is a copy from the model balancing repository, folder "resources/data/data-prior" (2022-01-18)

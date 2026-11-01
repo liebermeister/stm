@@ -17,7 +17,7 @@
 %   More specific functions, including functions for graphical output, can be found in the subfolder 'stm'
 %
 % Models
-%   Matlab code for generating the E. coli ccm model (from the STM article) can be found in the repository folder 'resources/models/e_coli_ccm'
+%   Matlab code for generating the E. coli ccm model (from the STM article) can be found in the repository folder 'resources/models-article/Escherichia_coli_ccm/scripts'
 %
 % Required packages (see README.md for details)
 %   Matlab utility functions  (https://github.com/liebermeister/matlab-utils)

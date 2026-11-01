@@ -7,7 +7,7 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 Requires the current development versions of matlab-utils (`multiple_testing_fdr`, new `verbose` argument of `convex_sampling_hit_and_run`) and of the Metabolic Network Toolbox (`stm_options.mu_sampling_method`). See "Erratum" in `README.md` for changes that affect results.
 
 - Thermodynamic forces are sampled uniformly from the feasible polytope (`stm_options.mu_sampling_method = 'hit-and-run'`); the previous selection of polytope vertices is available as `'extreme_points'`
-- Scripts for building the E. coli model moved from `stm/models/e_coli_ccm` to `resources/models/e_coli_ccm`
+- Scripts for building the E. coli model moved from `stm/models/e_coli_ccm` to `resources/models-article/Escherichia_coli_ccm/scripts`
 - `multiple_testing_fdr` moved to matlab-utils and corrected; new function `fdr_two_sided`
 - Cooperativities `h` are used when computing turnover rates; fixed sign error with `mu_eqconstraint`; no clipping of small mass-action ratios; fluxes given by `v_min` above zero are respected
 - A seed sets the random number generator only once, so different model variables are no longer built from identical random numbers; `interaction_statistics` no longer draws identical samples

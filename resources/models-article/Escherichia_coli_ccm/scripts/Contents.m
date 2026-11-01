@@ -1,6 +1,6 @@
 % E. coli ccm model
 
-% Data and model files can be found in the repository folder resources/models-article/Escherichia_coli_ccm
+% Data and model files can be found in the parent folder (resources/models-article/Escherichia_coli_ccm)
 
 % To generate the model from scratch, run
 %   e_coli_ccm_STM_balance_parameters.m

@@ -23,7 +23,9 @@ DATA_DIR                = [stm_BASEDIR  '/../resources/models-article/Escherichi
  pb_options                = parameter_balancing_options;
  pb_options.use_sbml_ids   = 0;
  pb_options.use_kegg_ids   = 1;
- balanced_parameters_SBtab = parameter_balancing(model_file, balanced_parameter_file, kinetic_data_file, prior_file, [], model_name, pb_options);
+ balanced_parameters_SBtab = parameter_balancing(model_file, [], kinetic_data_file, prior_file, [], model_name, pb_options);
+% careful: this would overwrite existing files
+% balanced_parameters_SBtab = parameter_balancing(model_file, balanced_parameter_file, kinetic_data_file, prior_file, [], model_name, pb_options);
 
  if save_files
   print([DATA_DIR '/e_coli_balanced_parameters_fig_1.eps'],'-f1','-depsc');

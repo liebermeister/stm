@@ -53,7 +53,7 @@ Some functions require further packages:
 - **`stm/stm`**: more specific functions: graphics, prediction of perturbation effects,
   enzyme synergies, metabolic fluctuations, Bayesian (MCMC) sampling
 - **`stm/demo`**: demo scripts
-- **`resources/models/e_coli_ccm`**: scripts for building the E. coli model from the STM article
+- **`resources/models-article/Escherichia_coli_ccm/scripts`**: scripts for building the E. coli model from the STM article
 - **`resources`**: models and data (see the README files there)
 - **`tests`**: tests
 

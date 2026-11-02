@@ -16,7 +16,7 @@
 %   To apply STM to one of your models, you may start from this script
 %   and modify it to adapt it to your needs.
 %
-% All scripts use data from the 'resource-data' directory in the main directory.
+% All scripts use data from the 'resources' directory in the main directory.
 % General numerical data are given in the subdirectory "data",
 % model-specific data are given in the subdirectories "models-article" and "models-other".
 %

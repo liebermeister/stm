@@ -18,7 +18,7 @@ stm_dependencies;
 
 % Resource directory of the elasticity sampling package, in case it s needed
 
-resource_dir = [stm_BASEDIR '/../resource-data/'];
+resource_dir = [stm_BASEDIR '/../resources/'];
 
 
 %-------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ resource_dir = [stm_BASEDIR '/../resource-data/'];
 
 % For later use, we load some model-related data and map them onto the model
 
- resource_dir = [stm_BASEDIR '../resource-data/data/'];
+ resource_dir = [stm_BASEDIR '../resources/data/'];
 
  data_files = {[resource_dir 'data-thermodynamic/E_coli_glycolysis_GFE.tsv'], ...
               [resource_dir 'data-thermodynamic/GFE.tsv'], ...

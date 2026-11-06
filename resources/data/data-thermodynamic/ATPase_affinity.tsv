@@ -1,4 +1,4 @@
-!!SBtab TableType='Quantity'							
+!!SBtab TableID='Quantity' SBtabVersion='1.1' TableType='Quantity'							
 !QuantityType	!SBML:reaction:id	!SBML:species:id	!Mean	!Std	!Min	!Max	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound
 reaction affinity	ATPase		50	2	40	60	kJ/mol	R00086	
 reaction affinity	Triose phosphate isomerase		0	2	-2	2	kJ/mol	R01015	

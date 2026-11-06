@@ -1,4 +1,4 @@
-!!SBtab TableID='Flux' TableType='Quantity' Organism='Escherichia coli'
+!!SBtab SBtabVersion='1.1' TableID='Flux' TableType='Quantity' Organism='Escherichia coli'
 !QuantityType	!Reaction	!Value	!Unit
 rate of reaction	PTS	1	mM/s
 rate of reaction	PGI	1	mM/s

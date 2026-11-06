@@ -1,4 +1,4 @@
-!!SBtab TableType='Reaction' Version='0.1' Level='1.0'			
+!!SBtab TableID='Reaction' SBtabVersion='1.1' TableType='Reaction' Version='0.1' Level='1.0'			
 !Reaction	!Enzyme	!Gene	!Identifiers:kegg.reaction	!SumFormula
 PTS	PTS system		R00299	Phosphoenolpyruvate + D_Glucose <=> Pyruvate + D_Glucose_6_phosphate
 PGI	Phosphoglucose isomerase	pgi	R00771	D_Glucose_6_phosphate <=> D_Fructose_6_phosphate

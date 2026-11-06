@@ -1,4 +1,4 @@
-!!SBtab TableType='Position' TableID='Position'				
+!!SBtab SBtabVersion='1.1' TableType='Position' TableID='Position'				
 !PositionX	!PositionY	!Element	!IsFixed	!IsInvisible
 0.43848017	0.11817308	_S__Malate	0	0
 0.37855864	0.30176246	Acetyl_CoA	0	0

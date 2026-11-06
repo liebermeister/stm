@@ -1,4 +1,4 @@
-!!SBtab TableType='Compound'
+!!SBtab TableID='Compound' SBtabVersion='1.1' TableType='Compound'
 !Compound	!Identifiers:kegg.compound	!External
 2_Phospho_D_glycerate	C00631	0
 3_Phospho_D_glycerate	C00197	0

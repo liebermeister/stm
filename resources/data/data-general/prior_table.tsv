@@ -1,5 +1,5 @@
-!!SBtab SBtabVersion='1.1' TableID='Quantity info' TableType='QuantityInfo'
-!QuantityType	!Symbol	!Unit	!Constant	!RelatedElement	!Scaling	!Dependence	!PriorMedian	!PriorStd	!LowerBound	!UpperBound	!ErrorStd	!SBMLElement 	!Abbreviation	!MatrixInfo
+!!SBtab SBtabVersion='1.1' TableID='QuantityInfo' TableType='QuantityInfo'
+!QuantityType	!Symbol	!Unit	!Constant	!RelatedElement	!Scaling	!Dependence	!PriorMedian	!PriorStd	!LowerBound	!UpperBound	!ErrorStd	!SBMLElement	!Abbreviation	!MatrixInfo
 standard chemical potential	mu0	kJ/mol	Thermodynamic	Species	Original	Basic	-880	1500	-3000	2000	10	Global parameter 	scp	[I_species, 0, 0, 0, 0, 0, 0]
 standard Gibbs free energy of reaction	dmu0	kJ/mol	Thermodynamic	Reaction	Original	Derived	0	1500	-1000	1000	10	Global parameter 	dscp	[Nt, 0, 0, 0, 0, 0, 0]
 catalytic rate constant geometric mean	KV	1/s	Kinetic	Reaction	Logarithmic	Basic	10	1	0.0000001	1000	0.5	Local parameter	kcrg	[0, I_reaction, 0, 0, 0, 0, 0]

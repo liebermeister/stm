@@ -1,0 +1,17 @@
+!!SBtab TableID='structural_thermokinetic_modelling_Definition' TableType='Definition' SBtabVersion='1.1' TableName='Extension definitions table of structural-thermokinetic-modelling'
+% Table types and columns used by this package that are not in the SBtab 1.1 definitions table.
+% It extends the default definitions, e.g. sbtab_document_set_definitions(d, 'structural-thermokinetic-modelling_Definition.tsv')
+% (Matlab) or: sbtab validator FILE -d -y structural-thermokinetic-modelling_Definition.tsv (Python).
+!Name	!Type	!Parent	!isShortname	!Format	!Description
+InitialConcentration	Column	Compound	False	Float	Initial concentration (e.g. for simulations)
+NameForPlots	Column	Compound	False	String	Short name shown in plots
+Option	Column	Config	True	String	Name of the option (instead of !ID)
+IsFixed	Column	Position	False	Integer	Fixed position in network layouts (0: not fixed)
+IsInvisible	Column	Position	False	Integer	1: element is not shown in network plots
+Lower	Column	Quantity	False	Float	Lower bound
+Mode	Column	Quantity	False	Float	Mode of the (posterior) distribution
+Organism:KEGGnumber	Column	Quantity	False	String	KEGG number of the organism
+Reference	Column	Quantity	False	String	Literature reference or data source
+Upper	Column	Quantity	False	Float	Upper bound
+MetabolicRegulation	Column	Reaction	False	String	Allosteric regulation, e.g. '+ ADP - NADH' (activators: +, inhibitors: -)
+NameForPlots	Column	Reaction	False	String	Short name shown in plots

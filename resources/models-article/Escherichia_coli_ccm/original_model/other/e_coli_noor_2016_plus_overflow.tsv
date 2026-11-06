@@ -1,4 +1,4 @@
-!!SBtab TableID='Reaction' TableType='Reaction' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.0'						
+!!SBtab TableID='Reaction' TableType='Reaction' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.2'						
 !ID	!ReactionFormula	!Identifiers:kegg.reaction	!IsReversible	!Gene	!NameForPlots	
 PTS_RPTSsy	D_Glucose + Phosphoenolpyruvate <=> Pyruvate + D_Glucose_6_phosphate	RPTSsy	True	PTS	pts	
 PGI_R02740	D_Glucose_6_phosphate <=> D_Fructose_6_phosphate	R02740	True	PGI	pgi	
@@ -31,7 +31,7 @@ MDH_R00342	_S__Malate + NADplus <=> NADH + Oxaloacetate	R00342	True	MDH	mdh
 PPC_R00345	Orthophosphate + Oxaloacetate <=> CO2 + Phosphoenolpyruvate	R00345	True	PPC	ppc	
 Overflow	Acetyl_CoA <=> CoA + Ext1	Overflow	True	Ovf	ovf	
 						
-!!SBtab TableID='Compound' TableType='Compound' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.0'						
+!!SBtab TableID='Compound' TableType='Compound' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.2'						
 !ID	!Name	!Identifiers:kegg.compound	!IsConstant	!NameForPlots		
 _S__Malate	(S)-Malate	C00149	False	(S)-Malate		
 Acetyl_CoA	Acetyl-CoA	C00024	False	Acetyl-CoA		
@@ -75,7 +75,7 @@ Succinate	Succinate	C00042	False	Succinate
 Sedoheptulose_7_phosphate	Sedoheptulose 7-phosphate	C05382	False	Sedoheptulose 7-phosphate		
 Ext1	Ext1		True	Ext1		
 
-!!SBtab TableID='EnzymeRegulation' TableType='Regulation'
+!!SBtab SBtabVersion='1.2' TableID='EnzymeRegulation' TableType='Regulation'
 !RegulationType	!Identifiers:kegg.reaction	!Reaction	!Identifiers:kegg.compound	!Compound
 activation	R04779	PFK_R04779	C00008	ADP
 activation	R04780	FBP_R00762	C00074	Phosphoenolpyruvate
@@ -89,7 +89,7 @@ inhibition	R04780	FBP_R00762	C00074	Phosphoenolpyruvate
 inhibition	R00351	CSN_R00351	C00004	NADH
 inhibition	R00351	CSN_R00351	C00026	_2_Oxoglutarate
 
-!!SBtab TableID='Parameter' TableType='Quantity' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.0'						
+!!SBtab TableID='Parameter' TableType='Quantity' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.2'						
 !QuantityType	!Reaction	!Compound	!Value	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound
 equilibrium constant	PTS_RPTSsy		57262184	dimensionless	RPTSsy	
 equilibrium constant	PGI_R02740		0.36350845	dimensionless	R02740	
@@ -390,7 +390,7 @@ protein molecular mass	MDH_R00342		32337	Da	R00342
 protein molecular mass	PPC_R00345		198120	Da	R00345	
 protein molecular mass	Overflow		198120	Da	Overflow	
 %						
-!!SBtab TableID='Position' TableType='Position' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.0'						
+!!SBtab TableID='Position' TableType='Position' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.2'						
 !Element	!PositionX	!PositionY				
 _S__Malate	0.32772	0.095058				
 Acetyl_CoA	0.359426	0.22902				
@@ -463,7 +463,7 @@ MDH_R00342	0.33416	0.140744
 PPC_R00345	0.40095304	0.50690003				
 Overflow	0.5	0.5
 %						
-!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='Flux' TableType='Quantity' Unit='mM/s' SBtabVersion='1.0'						
+!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='Flux' TableType='Quantity' Unit='mM/s' SBtabVersion='1.2'						
 !QuantityType	!Reaction	!Reaction:Identifiers:kegg.reaction	!Value			
 rate of reaction	PTS_RPTSsy	RPTSsy	0.5691			
 rate of reaction	PGI_R02740	R02740	0.385			
@@ -496,7 +496,7 @@ rate of reaction	MDH_R00342	R00342	0.0602
 rate of reaction	PPC_R00345	R00345	-0.2114			
 rate of reaction	Overflow	Overflow	nan			
 %						
-!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='ConcentrationConstraint' TableType='Quantity' Unit='mM' SBtabVersion='1.0'						
+!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='ConcentrationConstraint' TableType='Quantity' Unit='mM' SBtabVersion='1.2'						
 !QuantityType	!Compound	!Compound:Identifiers:kegg.compound	!Min	!Max		
 concentration	_S__Malate	C00149	0.001	10		
 concentration	Acetyl_CoA	C00024	0.001	10		
@@ -540,7 +540,7 @@ concentration	Succinate	C00042	0.001	10
 concentration	Sedoheptulose_7_phosphate	C05382	0.001	10		
 concentration	Ext1		0.001	10		
 %						
-!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='EnzymeCostWeight' TableType='Quantity' Unit='ArbitraryUnits' SBtabVersion='1.0'						
+!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='EnzymeCostWeight' TableType='Quantity' Unit='ArbitraryUnits' SBtabVersion='1.2'						
 !QuantityType	!Reaction	!Reaction:Identifiers:kegg.reaction	!Value			
 enzyme cost weight	PTS_RPTSsy	RPTSsy	1.2491113			
 enzyme cost weight	PGI_R02740	R02740	1.2955694			

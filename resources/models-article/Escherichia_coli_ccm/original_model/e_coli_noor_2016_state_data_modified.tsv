@@ -1,4 +1,4 @@
-!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='Concentration' TableType='Quantity' Unit='mM' SBtabVersion='1.0'
+!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='Concentration' TableType='Quantity' Unit='mM' SBtabVersion='1.1'
 % like file e_coli_noor_2016_data_modified.tsv, but without the Parameter table
 !QuantityType	!Reaction	!Compound	!Value	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound
 concentration		_S__Malate	1.6853424			C00149
@@ -42,7 +42,7 @@ concentration		_2_Phospho_D_glycerate	NaN			C00631
 concentration		Succinate	1.1853254			C00042
 concentration		Sedoheptulose_7_phosphate	NaN			C05382
 						
-!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='EnzymeConcentration' TableType='Quantity' Unit='mM' SBtabVersion='1.0'						
+!!SBtab DocumentName='E. coli central carbon metabolism - unbalanced kinetic data' TableID='EnzymeConcentration' TableType='Quantity' Unit='mM' SBtabVersion='1.1'						
 !QuantityType	!Reaction	!Compound	!Value	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound
 concentration of enzyme	PTS_RPTSsy		0.022041994		RPTSsy	
 concentration of enzyme	PGI_R02740		0.0076401396		R02740	

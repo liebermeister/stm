@@ -4,6 +4,10 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 
 ## Not released yet
 
+- Model files in `resources/models-article/Escherichia_coli_ccm/original_model`: Regulation tables with TableID `Regulation` (was `EnzymeRegulation`) and columns `!Regulator`, `!Target` (were `!Compound`, `!Reaction`; the regulator columns now come first) and new columns `!RegulatorType`, `!TargetType` (`metabolite`, `enzyme`), as in SBtab 1.2 (requires the current development version of the Metabolic Network Toolbox; older versions ignore the regulation)
+- Model files: column `!MetabolicRegulation` of Reaction tables renamed to `!KineticRegulation` (SBtab 1.1 and 1.2; requires the current development version of the Metabolic Network Toolbox, older versions ignore the regulation); the column was removed from `structural-thermokinetic-modelling_Definition.tsv`
+- `stm_default_options` moved from the Metabolic Network Toolbox to STM (`stm/stm_default_options.m`); name, arguments and outputs are unchanged. The general flux and thermodynamic defaults come from the new mnt function `flux_constraints_default_options` (Config file `flux-constraints_Config.tsv` in mnt); the STM-specific default values are read from the SBtab Config file `stm/structural-thermokinetic-modelling_Config.tsv`. Needs a Metabolic Network Toolbox with `flux_constraints_default_options` (later than 1.3.0); the dependency check gives an error otherwise
+- New file `stm/structural-thermokinetic-modelling_ToolInputOutput.tsv` (SBtab 1.2 table type ToolInputOutput) describing the input tables of STM (for information only; not used by the code)
 Requires the current development versions of matlab-utils (`multiple_testing_fdr`, new `verbose` argument of `convex_sampling_hit_and_run`) and of the Metabolic Network Toolbox (`stm_options.mu_sampling_method`). See "Erratum" in `README.md` for changes that affect results.
 
 - Thermodynamic forces are sampled uniformly from the feasible polytope (`stm_options.mu_sampling_method = 'hit-and-run'`); the previous selection of polytope vertices is available as `'extreme_points'`

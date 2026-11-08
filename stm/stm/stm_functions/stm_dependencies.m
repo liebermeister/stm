@@ -20,6 +20,10 @@ if exist('package_version_check','file')
   package_version_check('The Metabolic Network Toolbox', 'mnt_version', '1.3.0');
 end
 
+if ~exist('flux_constraints_default_options','file')
+  error('Please update the Metabolic Network Toolbox (https://github.com/liebermeister/metabolic-network-toolbox): STM needs the function flux_constraints_default_options (versions later than 1.3.0)');
+end
+
 % check the packages used by the Metabolic Network Toolbox
 % (matlab-utils, SBtab, libSBML, Tensor Toolbox, efmtool)
 mnt_dependencies(only_required)

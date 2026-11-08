@@ -1,0 +1,46 @@
+!!SBtab TableID='ConfigureSTM' TableType='Config' SBtabVersion='1.2' Method='structural-thermokinetic-modeling' TableName='Default options of Structural Thermokinetic Modeling (STM) (Matlab)'
+% Default options of the Matlab implementation, assembled from stm_default_options.m (stm).
+% Empty values: option is empty by default ([] in Matlab); vector-valued options are
+% described in the column !Description. Flags: 1 (true) or 0 (false).
+% STM options are stored in two Matlab structs, 'stm_options' and 'stm_constraints' (prefixes of the IDs).
+% These are the STM-specific options; stm_default_options also contains the general flux and thermodynamic
+% options and constraints of the Metabolic Network Toolbox (table ConfigureFluxConstraints; Matlab function
+% flux_constraints_default_options), with prefixes 'stm_options' and 'stm_constraints' instead of 'options' and 'constraints'.
+% For vectors and matrices (nr: number of reactions; nm: number of metabolites), the value given is used for all elements.
+!ID	!Value	!Description
+stm_options.sampling_method	v and mu	Strategy for steady-state sampling: 'v from data', 'v and mu', 'sample_and_discard', 'accept_flux'
+stm_options.mu_sampling_method	hit-and-run	Sampling of reaction Gibbs free energies (with 'v and mu'): 'hit-and-run' or 'extreme_points'
+stm_options.sampling_cycle_correction	0	Correct sampled fluxes for thermodynamic cycles
+stm_options.n_samples	10	Number of samples (model ensemble)
+stm_options.flux_units	dimensionless	Flux units: 'dimensionless', 'mM/s', 'mol/s'
+stm_options.set_alpha_to_half	1	Set all saturation values to 0.5 instead of random sampling
+stm_options.set_alpha_nonuniform	0	Draw saturation values from beta distributions
+stm_options.kinetic_law	cs	Type of modular rate law (e.g. 'cs', 'ms')
+stm_options.KV_prior_mean	1	kV value substituted in inactive reactions
+stm_options.h	1	Reaction cooperativities (vector, nr x 1)
+stm_options.limit_cooperativity	2	Threshold value for reaction cooperativity
+stm_options.zc		Metabolite derivative of the objective function
+stm_options.zv		Flux derivative of the objective function
+stm_options.limit_elasticities_in_multireactions	1	Normalize scaled elasticities in multireactions (e.g. biomass reaction) to a sum of absolute values of 1
+stm_options.flag_second_order	1	Compute second-order elasticities and response coefficients
+stm_options.flag_control	1	Compute control and response coefficients
+stm_options.n_max_unstable	100	Maximal number of unsuccessful attempts to sample a stable model
+stm_options.no_equilibrium	1	If rates vanish, assume that zero enzyme levels are the reason
+stm_options.graphics_flag	1	Show graphics
+stm_options.print_graphics	0	Save graphics to files
+stm_options.flag_test	0	Run tests
+stm_constraints.log_u_mean	0	Natural logarithm of enzyme level data (vector, nr x 1)
+stm_constraints.log_u_std	0	Error bars of ln enzyme level data (vector, nr x 1)
+stm_constraints.log_c0_mean	0	ln equilibrium metabolite level data (vector, nm x 1)
+stm_constraints.log_c0_std	0	Error bars of ln equilibrium metabolite level data (vector, nm x 1)
+stm_constraints.beta_M_fix	NaN	Predefined saturation values beta_M (matrix, nr x nm)
+stm_constraints.beta_A_fix	NaN	Predefined saturation values beta_A (matrix, nr x nm)
+stm_constraints.beta_I_fix	NaN	Predefined saturation values beta_I (matrix, nr x nm)
+stm_constraints.alpha_min	0.05	Minimum value for uniform sampling of saturation values alpha
+stm_constraints.alpha_max	0.95	Maximum value for uniform sampling of saturation values alpha
+stm_constraints.alpha_A_mean		Mean values for alpha_A (matrix, nr x nm; only for beta distributions)
+stm_constraints.alpha_A_std		Standard deviations for alpha_A (matrix, nr x nm; only for beta distributions)
+stm_constraints.alpha_I_mean		Mean values for alpha_I (matrix, nr x nm; only for beta distributions)
+stm_constraints.alpha_I_std		Standard deviations for alpha_I (matrix, nr x nm; only for beta distributions)
+stm_constraints.alpha_M_mean		Mean values for alpha_M (matrix, nr x nm; only for beta distributions)
+stm_constraints.alpha_M_std		Standard deviations for alpha_M (matrix, nr x nm; only for beta distributions)

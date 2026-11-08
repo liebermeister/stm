@@ -1,0 +1,14 @@
+!!SBtab TableID='ToolInputOutput' TableType='ToolInputOutput' SBtabVersion='1.2' Method='structural-thermokinetic-modeling' TableName='Input and output tables of Structural Thermokinetic Modeling (STM)'
+% Matlab: models are read by sbtab_to_network or sbtab_network_state_load (Metabolic Network Toolbox);
+% STM results are Matlab structs (export of results to SBtab is not implemented).
+% Rows guessed from the Matlab code and the example files of the package.
+!RequiredIn	!RequiredTable	!TableID	!File	!IsOptional	!RequiredColumns	!Comment
+Input	Reaction	Reaction	model file	False	ID, ReactionFormula, KineticRegulation	Network model (alternatively given as SBML file)
+Input	Compound	Compound	model file	False	ID, IsConstant	External metabolites: IsConstant
+Input	Position	Position	model file	True	Element, PositionX, PositionY	Network layout for graphics
+Input	Quantity	Flux	model state file or flux data file	True	Reaction, Value	Reference fluxes
+Input	Quantity	MetaboliteConcentration	model state file	True	Compound, Value	Reference metabolite concentrations
+Input	Quantity	Parameter	model state file	True	QuantityType, Reaction, Compound, Value, Unit	Kinetic constants
+Input	Quantity	ReactionGibbsFreeEnergy	model state file	True	Reaction, Value	Reaction Gibbs free energies
+Input	Quantity	EquilibriumConstant	model state file	True	Reaction, Value	Equilibrium constants
+Input	Quantity		kinetic data file	True	QuantityType, Reaction, Compound, Mean, Std, Unit	Kinetic data (e.g. kinetic_constants_brenda_eco.tsv, read by kinetic_data_load)

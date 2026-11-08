@@ -75,19 +75,19 @@ Succinate	Succinate	C00042	False	Succinate
 Sedoheptulose_7_phosphate	Sedoheptulose 7-phosphate	C05382	False	Sedoheptulose 7-phosphate		
 Ext1	Ext1		True	Ext1		
 
-!!SBtab SBtabVersion='1.2' TableID='EnzymeRegulation' TableType='Regulation'
-!RegulationType	!Identifiers:kegg.reaction	!Reaction	!Identifiers:kegg.compound	!Compound
-activation	R04779	PFK_R04779	C00008	ADP
-activation	R04780	FBP_R00762	C00074	Phosphoenolpyruvate
-activation	R04780	FBP_R00762	C00074	Phosphoenolpyruvate
-activation	R00200	PYK_R00200	C00354	D_Fructose_1_6_bisphosphate
-inhibition	R04779	PFK_R04779	C00074	Phosphoenolpyruvate
-inhibition	R04780	FBP_R00762	C00009	Orthophosphate
-inhibition	R04780	FBP_R00762	C00002	ATP
-inhibition	R04780	FBP_R00762	C00008	ADP
-inhibition	R04780	FBP_R00762	C00074	Phosphoenolpyruvate
-inhibition	R00351	CSN_R00351	C00004	NADH
-inhibition	R00351	CSN_R00351	C00026	_2_Oxoglutarate
+!!SBtab SBtabVersion='1.2' TableID='Regulation' TableType='Regulation'
+!RegulationType	!Identifiers:kegg.compound	!Regulator	!Identifiers:kegg.reaction	!Target	!RegulatorType	!TargetType
+activation	C00008	ADP	R04779	PFK_R04779	metabolite	enzyme
+activation	C00074	Phosphoenolpyruvate	R04780	FBP_R00762	metabolite	enzyme
+activation	C00074	Phosphoenolpyruvate	R04780	FBP_R00762	metabolite	enzyme
+activation	C00354	D_Fructose_1_6_bisphosphate	R00200	PYK_R00200	metabolite	enzyme
+inhibition	C00074	Phosphoenolpyruvate	R04779	PFK_R04779	metabolite	enzyme
+inhibition	C00009	Orthophosphate	R04780	FBP_R00762	metabolite	enzyme
+inhibition	C00002	ATP	R04780	FBP_R00762	metabolite	enzyme
+inhibition	C00008	ADP	R04780	FBP_R00762	metabolite	enzyme
+inhibition	C00074	Phosphoenolpyruvate	R04780	FBP_R00762	metabolite	enzyme
+inhibition	C00004	NADH	R00351	CSN_R00351	metabolite	enzyme
+inhibition	C00026	_2_Oxoglutarate	R00351	CSN_R00351	metabolite	enzyme
 
 !!SBtab TableID='Parameter' TableType='Quantity' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.2'						
 !QuantityType	!Reaction	!Compound	!Value	!Unit	!Reaction:Identifiers:kegg.reaction	!Compound:Identifiers:kegg.compound

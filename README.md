@@ -46,7 +46,8 @@ Some functions require further packages:
 ## Contents
 
 - **`stm`**: the main functions
-  - `stm_default_options`: default settings (structs `stm_options` and `stm_constraints`; type `help stm_default_options`)
+  - `stm_default_options`: default settings (structs `stm_options` and `stm_constraints`; type `help stm_default_options`). The STM-specific default values are read from the SBtab Config file `stm/structural-thermokinetic-modelling_Config.tsv`; the general flux and thermodynamic defaults come from the function `flux_constraints_default_options` of the Metabolic Network Toolbox (Config file `flux-constraints_Config.tsv`)
+  - `structural-thermokinetic-modelling_ToolInputOutput.tsv`: input tables of STM (SBtab table type ToolInputOutput; for information)
   - `stm_sample_model`: sample a model (steady state and elasticities) for a given network
   - `stm_sample_steady_state`, `stm_sample_elasticities`: the two steps of `stm_sample_model`
   - `stm_sample_ensemble`, `stm_compare_ensembles`: create model ensembles and compare them statistically

@@ -103,8 +103,9 @@ function [stm_options, stm_constraints] = stm_default_options(N)
 % stm_options.no_equilibrium       boolean    If rates vanish, assume that zero enzyme levels are the reason
 %*stm_options.ind_ignore           vector     Indices of reactions to be ignored when computing thermodynamic
 %                                              loops (only in for flux correction by loop substraction)
-% stm_options.zc                   vector     Metabolite derivative of objective function
-% stm_options.zv                   vector     Flux derivative of objective function
+% stm_options.zc                   vector     Metabolite coefficients of a linear target function z = zc'*c + zv'*v
+% stm_options.zv                   vector     Flux coefficients of the target function (second-order response coefficients
+%                                              of z are returned as result.control.Rtarget_sc_u, Rtarget_sc_uu)
 % stm_options.limit_elasticities_in_multireactions (boolean) normalise scaled elasticities in multireactions (eg biomass reaction) to an sum of absolute values = 1
 %*stm_options.verbose              (boolean)  Verbose output?
 % stm_options.graphics_flag        (boolean)  Show graphics?

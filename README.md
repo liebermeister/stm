@@ -74,7 +74,7 @@ results = runtests('tests')
 
 ## Erratum
 
-Errors found in a code review in October 2026 have been corrected in this repository, and no erratum was sent to the journal. The corrections can change results obtained with earlier versions, including results in published work. Earlier versions are available as git tags.
+Errors found in code reviews in October and November 2026 have been corrected in this repository; no erratum was sent to the journal for these code errors. The corrections can change results obtained with earlier versions, including results in published work. Earlier versions are available as git tags.
 
 - **Thermodynamic forces were not sampled uniformly.** With the sampling method 'v and mu', reaction Gibbs free energies were picked from a few vertices of the feasible polytope. They are now sampled uniformly (`stm_options.mu_sampling_method = 'hit-and-run'`); the old procedure is available as `'extreme_points'`. The default limit `dmu_limit` was lowered from 100 to 50 kJ/mol. Uniform sampling gives typical forces of about half this limit. To use another limit, set `stm_constraints.dmu_min` and `dmu_max` as well, because they are initialised from the default. Ensemble statistics change.
 - **Smoothed variances were too large by a factor of pi** (`spectral_density_to_smooth_variance`). This scales the variances of metabolite fluctuations; their relative values do not change.
@@ -83,6 +83,18 @@ Errors found in a code review in October 2026 have been corrected in this reposi
 - **Fixed random seeds correlated model variables.** With a numerical `stm_options.seed`, variables sampled in different functions were built from identical random numbers. `interaction_statistics` used a fixed seed for every model, so the samples of an ensemble were identical.
 - **Inactive reactions** (v = 0): with `no_equilibrium`, the enzyme was not switched off correctly, and elasticities of reactions at equilibrium were wrong.
 - **Control coefficients of unstable states** were previously returned with values around 10^10. `control_coefficients` now gives an error or, in the STM functions, nan values with `result.control.stable = 0`. Ensembles contain stable models only.
+- **Second-order response coefficients of combined targets** (November 2026; function `compute_modular_response_second` in the Metabolic Network Toolbox, used when `stm_options.zc` or `stm_options.zv` are given): the result was correct only if the target is a single concentration or flux. For a linear combination z = zc'*c + zv'*v, it is now computed correctly. Full second-order response coefficients and synergies (`result.control.RJuu_sc` etc.) were always correct.
+- **Rate laws 'ds' and 'fd'** (`stm_options.kinetic_law`) stopped with an error in `compute_modular_elasticities` (Metabolic Network Toolbox); they work now (November 2026).
+
+### Errors in the article
+
+A check of the formulae in the STM article and its supplement (November 2026) found several errors. They concern the printed formulae only; the code computes the corresponding quantities correctly (in particular, synergies are computed from unscaled second-order elasticities, and then scaled). A correction notice to Metabolites is in preparation. The main points:
+
+- Main text, Eq. (6) (CM rate law): the thermodynamic term must not contain the factor beta_lj; the product in psi runs over metabolites i.
+- Main text, Eq. (8): the elasticity in the irreversible limit is -n_il/(e^theta - 1), not -n_il/(e^-theta - 1).
+- Main text, p. 23: in delta v = C^V E delta e, E denotes enzyme elasticities, not metabolite elasticities.
+- Supplement: the formula for scaled second-order response coefficients (synergies) lacks the terms E_q E_r - delta_qr E_q inside the second-order elasticities; the same applies to the formula for general target functions.
+- Supplement: SM elasticities contain -m^S beta^M (not alpha^M); Wegscheider conditions require N_tot K = 0; the sum of one-way rates is coth(h theta/2) v.
 
 ## Versions
 

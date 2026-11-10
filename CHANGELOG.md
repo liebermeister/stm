@@ -4,6 +4,9 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 
 ## Not released yet
 
+- Help text of `stm_default_options` and `stm_sample_elasticities`: `stm_options.zc`, `stm_options.zv` are the coefficients of a linear target function z = zc'*c + zv'*v. Second-order response coefficients for such targets (`result.control.Rtarget_sc_uu`) are correct for combinations of several variables only with a Metabolic Network Toolbox from November 2026 or later (fixed `compute_modular_response_second`)
+- `README.md`: list of errors in the formulae of the STM article (section "Erratum", "Errors in the article")
+
 - Model files in `resources/models-article/Escherichia_coli_ccm/original_model`: Regulation tables with TableID `Regulation` (was `EnzymeRegulation`) and columns `!Regulator`, `!Target` (were `!Compound`, `!Reaction`; the regulator columns now come first) and new columns `!RegulatorType`, `!TargetType` (`metabolite`, `enzyme`), as in SBtab 1.2 (requires the current development version of the Metabolic Network Toolbox; older versions ignore the regulation)
 - Model files: column `!MetabolicRegulation` of Reaction tables renamed to `!KineticRegulation` (SBtab 1.1 and 1.2; requires the current development version of the Metabolic Network Toolbox, older versions ignore the regulation); the column was removed from `structural-thermokinetic-modelling_Definition.tsv`
 - `stm_default_options` moved from the Metabolic Network Toolbox to STM (`stm/stm_default_options.m`); name, arguments and outputs are unchanged. The general flux and thermodynamic defaults come from the new mnt function `flux_constraints_default_options` (Config file `flux-constraints_Config.tsv` in mnt); the STM-specific default values are read from the SBtab Config file `stm/structural-thermokinetic-modelling_Config.tsv`. Needs a Metabolic Network Toolbox with `flux_constraints_default_options` (later than 1.3.0); the dependency check gives an error otherwise
